@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Doctors } from "@/constants";
 import { getAppointment } from "@/lib/actions/appointment.actions";
 import { formatDateTime } from "@/lib/utils";
+import { SiteFooter } from "@/components/site-footer";
+import * as Sentry from "@sentry/nextjs";
+import { getUser } from "@/lib/actions/patient.actions";
 
 const RequestSuccess = async ({
   searchParams,
@@ -12,14 +15,18 @@ const RequestSuccess = async ({
 }: SearchParamProps) => {
   const appointmentId = (searchParams?.appointmentId as string) || "";
   const appointment = await getAppointment(appointmentId);
-
+  // const getDoctor = async ({}) =>
+  //   Doctors.find((doctor) => doctor.name === appointment.primaryPhysician);
   const doctor = Doctors.find(
     (doctor) => doctor.name === appointment.primaryPhysician
   );
+  const user = await getUser(userId);
+  Sentry.metrics.set("user_view_appointment-sucess", user.name);
 
   return (
-    <div className=" flex h-screen max-h-screen px-[5%]">
-      <div className="success-img">
+    <div className="m-auto mb-4">
+      <div className="success-img m-auto p-2 space-y-1">
+        {/* 
         <Link href="/">
           <Image
             src="/assets/icons/logo-full.svg"
@@ -28,7 +35,8 @@ const RequestSuccess = async ({
             alt="logo"
             className="h-10 w-fit"
           />
-        </Link>
+        </Link> 
+        */}
 
         <section className="flex flex-col items-center">
           <Image
@@ -45,8 +53,8 @@ const RequestSuccess = async ({
         </section>
 
         <section className="request-details">
-          <p>Requested appointment details: </p>
-          <div className="flex items-center gap-3">
+          <p className="text-center"> Requested appointment details: </p>
+          <div className="flex items-center gap-2 m-auto justify-center">
             <Image
               src={doctor?.image!}
               alt="doctor"
@@ -55,25 +63,37 @@ const RequestSuccess = async ({
               className="size-6"
             />
             <p className="whitespace-nowrap">Dr. {doctor?.name}</p>
+            <div className="flex col-2 gap-2">
+              <Image
+                src="/assets/icons/calendar.svg"
+                height={24}
+                width={24}
+                alt="calendar"
+              />
+              <p> {formatDateTime(appointment.schedule).dateTime}</p>
+            </div>
           </div>
-          <div className="flex gap-2">
-            <Image
-              src="/assets/icons/calendar.svg"
-              height={24}
-              width={24}
-              alt="calendar"
-            />
-            <p> {formatDateTime(appointment.schedule).dateTime}</p>
+          <div className="flex flex-col mt-3 space-y-2">
+            <Button
+              variant="outline"
+              className="shad-primary-btn max-w-[60]% "
+              asChild
+            >
+              <Link href={`/patients/${userId}/new-appointment`}>
+                New Appointment
+              </Link>
+            </Button>
+            <Button
+              variant="outline"
+              className="shad-primary-btn max-w-[60]%"
+              asChild
+            >
+              <Link href={`/patients/${userId}/my-appointments`}>
+                Check Appointments
+              </Link>
+            </Button>
           </div>
         </section>
-
-        <Button variant="outline" className="shad-primary-btn" asChild>
-          <Link href={`/patients/${userId}/new-appointment`}>
-            New Appointment
-          </Link>
-        </Button>
-
-        <p className="copyright">© 2024 CarePluse</p>
       </div>
     </div>
   );

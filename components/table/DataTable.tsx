@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  //10 rows per page
   getPaginationRowModel,
   ColumnDef,
   flexRender,
@@ -64,7 +65,7 @@ export function DataTable<TData, TValue>({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 );

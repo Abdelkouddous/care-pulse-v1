@@ -1,48 +1,52 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { PatientForm } from "@/components/forms/PatientForm";
+import PatientForm from "@/components/forms/PatientForm";
+// import { SiteFooter } from "@/components/site-footer";
 import { PasskeyModal } from "@/components/PasskeyModal";
 
-const Home = ({ searchParams }: SearchParamProps) => {
+export default async function Home({ searchParams }: SearchParamProps) {
   const isAdmin = searchParams?.admin === "true";
 
+  // const isPatient = searchParams?.patient === "true";
+
+  // const MyComponent = () => {
+  //   useScrollAnimation(".animate-on-scroll");
+
+  //   return (
+  //     <div>
+  //       <div className="animate-on-scroll fade-in">Content that fades in on scroll</div>
+  //       <div className="animate-on-scroll fade-in">Another content block</div>
+  //     </div>
+  //   );
+  // };
+
+  // export default MyComponent;
   return (
-    <div className="flex h-screen max-h-screen">
-      {isAdmin && <PasskeyModal />}
+    <div>
+      <div className="flex justify-stretch m-auto p-3 h-screen fade-in-page">
+        {/* OTP Verification  */}
 
-      <section className="remove-scrollbar container my-auto">
-        <div className="sub-container max-w-[496px]">
-          <Image
-            src="/assets/icons/logo-full.svg"
-            height={1000}
-            width={1000}
-            alt="patient"
-            className="mb-12 h-10 w-fit"
-          />
+        {isAdmin && <PasskeyModal></PasskeyModal>}
 
-          <PatientForm />
+        <Image
+          src="/assets/main.jpg"
+          height={750}
+          width={750}
+          alt="Doctor"
+          className=" side-img max-w-[50%] m-3 mb-2  opacity-90 border-r-8 border-l-dark-200 border-spacing-10 "
+        ></Image>
 
-          <div className="text-14-regular mt-20 flex justify-between">
-            <p className="justify-items-end text-dark-600 xl:text-left">
-              © 2024 CarePluse
-            </p>
-            <Link href="/?admin=true" className="text-green-500">
-              Admin
-            </Link>
+        <section className="remove-scrollbar container my-auto ">
+          <div className="sub-container max-w-[496px]">
+            <PatientForm></PatientForm>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      <Image
-        src="/assets/images/onboarding-img.png"
-        height={1000}
-        width={1000}
-        alt="patient"
-        className="side-img max-w-[50%]"
-      />
+      <div className="flex justify-center items-center ">
+        {/* <SiteFooter></SiteFooter> */}
+      </div>
     </div>
   );
-};
-
-export default Home;
+}

@@ -3,7 +3,7 @@ import { Models } from "node-appwrite";
 export interface Patient extends Models.Document {
   userId: string;
   name: string;
-  email: string;
+  // email: string;
   phone: string;
   birthDate: Date;
   gender: Gender;
@@ -32,5 +32,6 @@ export interface Appointment extends Models.Document {
   reason: string;
   note: string;
   userId: string;
+  // appointmentId: string;
   cancellationReason: string | null;
 }

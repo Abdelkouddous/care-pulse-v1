@@ -10,10 +10,12 @@ import {
   DATABASE_ID,
   databases,
   messaging,
+  // PATIENT_COLLECTION_ID,
 } from "../appwrite.config";
 import { formatDateTime, parseStringify } from "../utils";
 
-//  CREATE APPOINTMENT
+//CREATE APPOINTMENT
+//backend
 export const createAppointment = async (
   appointment: CreateAppointmentParams
 ) => {
@@ -40,26 +42,6 @@ export const getRecentAppointmentList = async () => {
       APPOINTMENT_COLLECTION_ID!,
       [Query.orderDesc("$createdAt")]
     );
-
-    // const scheduledAppointments = (
-    //   appointments.documents as Appointment[]
-    // ).filter((appointment) => appointment.status === "scheduled");
-
-    // const pendingAppointments = (
-    //   appointments.documents as Appointment[]
-    // ).filter((appointment) => appointment.status === "pending");
-
-    // const cancelledAppointments = (
-    //   appointments.documents as Appointment[]
-    // ).filter((appointment) => appointment.status === "cancelled");
-
-    // const data = {
-    //   totalCount: appointments.total,
-    //   scheduledCount: scheduledAppointments.length,
-    //   pendingCount: pendingAppointments.length,
-    //   cancelledCount: cancelledAppointments.length,
-    //   documents: appointments.documents,
-    // };
 
     const initialCounts = {
       scheduledCount: 0,
@@ -100,6 +82,58 @@ export const getRecentAppointmentList = async () => {
   }
 };
 
+//getting appointments of a singlePatient
+export const getRecentAppointmentsForPatient = async (userId: string) => {
+  try {
+    const appointments = await databases.listDocuments(
+      DATABASE_ID!,
+      APPOINTMENT_COLLECTION_ID!,
+      [
+        Query.equal("userId", userId), // Filter by userId
+        // Query.orderDesc("$createdAt"),
+        Query.orderDesc("status"), // Sort by creation date in descending order
+      ]
+    );
+
+    const initialCounts = {
+      scheduledCount: 0,
+      pendingCount: 0,
+      cancelledCount: 0,
+    };
+
+    const counts = (appointments.documents as Appointment[]).reduce(
+      (acc, appointment) => {
+        switch (appointment.status) {
+          case "scheduled":
+            acc.scheduledCount++;
+            break;
+          case "pending":
+            acc.pendingCount++;
+            break;
+          case "cancelled":
+            acc.cancelledCount++;
+            break;
+        }
+        return acc;
+      },
+      initialCounts
+    );
+
+    const data = {
+      totalCount: appointments.total,
+      ...counts,
+      documents: appointments.documents,
+    };
+
+    return parseStringify(data);
+  } catch (error) {
+    console.error(
+      "An error occurred while retrieving the recent appointments for the user:",
+      error
+    );
+  }
+};
+
 //  SEND SMS NOTIFICATION
 export const sendSMSNotification = async (userId: string, content: string) => {
   try {
@@ -131,10 +165,14 @@ export const updateAppointment = async ({
       appointmentId,
       appointment
     );
-
+    //TODOSMS NOTIF
     if (!updatedAppointment) throw Error;
 
-    const smsMessage = `Greetings from CarePulse. ${type === "schedule" ? `Your appointment is confirmed for ${formatDateTime(appointment.schedule!).dateTime} with Dr. ${appointment.primaryPhysician}` : `We regret to inform that your appointment for ${formatDateTime(appointment.schedule!).dateTime} is cancelled. Reason:  ${appointment.cancellationReason}`}.`;
+    const smsMessage = `Greetings from Pulse. ${
+      type === "schedule"
+        ? `Your appointment is confirmed for ${formatDateTime(appointment.schedule!).dateTime} with Dr. ${appointment.primaryPhysician}`
+        : `We regret to inform that your appointment for ${formatDateTime(appointment.schedule!).dateTime} is cancelled. Reason:  ${appointment.cancellationReason}`
+    }.`;
     await sendSMSNotification(userId, smsMessage);
 
     revalidatePath("/admin");
@@ -161,3 +199,37 @@ export const getAppointment = async (appointmentId: string) => {
     );
   }
 };
+
+// DELETE APPOINTMENT
+export const deleteAppointment = async (appointmentId: string) => {
+  try {
+    await databases.deleteDocument(
+      DATABASE_ID!,
+      APPOINTMENT_COLLECTION_ID!,
+      appointmentId
+    );
+    console.error("Success");
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting appointment:", error);
+    return { success: false, error };
+  }
+};
+// };
+// export const getRecentAppointmentsForPatient = async (userId: string) => {
+//   try {
+//     const appointments = await databases.listDocuments(
+//       DATABASE_ID!,
+//       APPOINTMENT_COLLECTION_ID!,
+//       [
+//         Query.equal('userId', userId),
+//         Query.orderDesc('$createdAt'),
+//       ]
+//     );
+
+//     return appointments.documents as Appointment[]; // Return the list directly
+//   } catch (error) {
+//     console.error("An error occurred while retrieving the recent appointments:", error);
+//     return [];
+//   }
+// };

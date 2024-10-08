@@ -595,7 +595,7 @@ declare type Status = "pending" | "scheduled" | "cancelled";
 
 declare interface CreateUserParams {
   name: string;
-  email: string;
+  // email: string;
   phone: string;
 }
 declare interface User extends CreateUserParams {
@@ -652,7 +652,7 @@ import { Models } from "node-appwrite";
 export interface Patient extends Models.Document {
   userId: string;
   name: string;
-  email: string;
+  // email: string;
   phone: string;
   birthDate: Date;
   gender: Gender;
@@ -783,10 +783,11 @@ export const UserFormValidation = z.object({
     .string()
     .min(2, "Name must be at least 2 characters")
     .max(50, "Name must be at most 50 characters"),
-  email: z.string().email("Invalid email address"),
+  // email: z.string().email("Invalid email address"),
   phone: z
-    .string()
-    .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+    .string()    // /^\+\d{10,15}$/.test(phone)
+    .refine((phone) =>
+    /^\[567]\d{8}$.test(phone), "Invalid phone number"),
 });
 
 export const PatientFormValidation = z.object({
@@ -794,10 +795,14 @@ export const PatientFormValidation = z.object({
     .string()
     .min(2, "Name must be at least 2 characters")
     .max(50, "Name must be at most 50 characters"),
-  email: z.string().email("Invalid email address"),
+  // email: z.string().email("Invalid email address"),
   phone: z
     .string()
-    .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+    .refine(
+      // /^\+\d{9,15}$/.
+      (phone) => /^\[567]\d{8}$.test(phone),
+      alert("Invalid phone number")
+    ),
   birthDate: z.coerce.date(),
   gender: z.enum(["Male", "Female", "Other"]),
   address: z
@@ -907,7 +912,7 @@ export const GenderOptions = ["Male", "Female", "Other"];
 export const PatientFormDefaultValues = {
   firstName: "",
   lastName: "",
-  email: "",
+  // email: "",
   phone: "",
   birthDate: new Date(Date.now()),
   gender: "Male" as Gender,
@@ -986,7 +991,7 @@ export const Doctors = [
 export const StatusIcon = {
   scheduled: "/assets/icons/check.svg",
   pending: "/assets/icons/pending.svg",
-  cancelled: "/assets/icons/cancelled.svg",
+  cancelled: "/assets/icons/cncelled.svg",
 };
 ```
 

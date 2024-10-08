@@ -22,7 +22,14 @@ export const columns: ColumnDef<Appointment>[] = [
     header: "Patient",
     cell: ({ row }) => {
       const appointment = row.original;
-      return <p className="text-14-medium ">{appointment.patient.name}</p>;
+      return (
+        <span className="text-14-medium text-gray-50">
+          {/* {appointment && appointment.patient && appointment.patient.name} */}
+          {appointment.patient?.name
+            ? appointment.patient?.name
+            : "Patient Not Available"}
+        </span>
+      );
     },
   },
   {
@@ -96,6 +103,14 @@ export const columns: ColumnDef<Appointment>[] = [
             type="cancel"
             title="Cancel Appointment"
             description="Are you sure you want to cancel your appointment?"
+          />
+          <AppointmentModal
+            patientId={appointment.patient.$id}
+            userId={appointment.userId}
+            appointment={appointment}
+            type="delete"
+            title="delete Appointment"
+            description="Are you sure you want to delete your appointment?"
           />
         </div>
       );

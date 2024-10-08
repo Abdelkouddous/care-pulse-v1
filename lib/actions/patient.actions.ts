@@ -13,6 +13,9 @@ import {
   users,
 } from "../appwrite.config";
 import { parseStringify } from "../utils";
+import { faker } from "@faker-js/faker";
+
+const roles = ["admin", "patient", "doctor"];
 
 // CREATE APPWRITE USER
 export const createUser = async (user: CreateUserParams) => {
@@ -20,7 +23,7 @@ export const createUser = async (user: CreateUserParams) => {
     // Create new user -> https://appwrite.io/docs/references/1.5.x/server-nodejs/users#create
     const newuser = await users.create(
       ID.unique(),
-      user.email,
+      faker.internet.email(),
       user.phone,
       undefined,
       user.name
@@ -31,7 +34,7 @@ export const createUser = async (user: CreateUserParams) => {
     // Check existing user
     if (error && error?.code === 409) {
       const existingUser = await users.list([
-        Query.equal("email", [user.email]),
+        Query.equal("phone", [user.phone]),
       ]);
 
       return existingUser.users[0];
@@ -40,7 +43,7 @@ export const createUser = async (user: CreateUserParams) => {
   }
 };
 
-// GET USER
+// GET PATIENT
 export const getUser = async (userId: string) => {
   try {
     const user = await users.get(userId);
@@ -93,7 +96,7 @@ export const registerPatient = async ({
   }
 };
 
-// GET PATIENT
+// GET PATIENT from database
 export const getPatient = async (userId: string) => {
   try {
     const patients = await databases.listDocuments(
@@ -110,3 +113,5 @@ export const getPatient = async (userId: string) => {
     );
   }
 };
+
+//authUser
