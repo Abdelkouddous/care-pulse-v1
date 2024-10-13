@@ -49,7 +49,7 @@ export const PasskeyModal = async () =>
           // && admin
         ) {
           setOpen(false);
-          // router.push(`/admin/login`);
+          router.push(`/admin/login`);
         } else {
           setOpen(true);
           setError("Invalid passkey. Please try again.");
@@ -72,11 +72,11 @@ export const PasskeyModal = async () =>
         localStorage.setItem("accessKey", encryptedKey);
         router.push(`/admin/login`);
       } else {
-        setError("Invalid Key. Please try again .");
+        setError("Invalid Key. Please try again in 30 seconds");
         setTimeout(() => {
           setOpen(false);
           router.push("/");
-        }, 3000);
+        }, 30000);
       }
     };
     const closeModal = () => {

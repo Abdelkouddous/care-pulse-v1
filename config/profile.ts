@@ -1,32 +1,27 @@
-let isLoggedIn = false;
+import React from "react";
+import {
+  getRecentAppointmentsForPatient,
+  deleteAppointment,
+} from "@/lib/actions/appointment.actions";
+import { users } from "@/lib/appwrite.config";
 
-export type SiteConfig = typeof siteConfig;
-
-export const siteConfig = {
+export const profile = {
   name: "Pulse",
   description: "A healthcare management app ",
   mainNav: [
     {
-      title: "Home",
-      href: "/",
+      title: "My profile",
+      href: "/profile",
     },
 
     {
-      title: "About",
-      href: "#about",
-    },
-    {
-      title: "Doctors",
-      href: "#doctors",
+      title: "My appointments",
+      href: `patients/${users.get}/new-appointment`,
     },
 
     {
-      title: "Ressources",
-      href: "#ressources",
-    },
-    {
-      title: "Contact",
-      href: "#contact",
+      title: "Edit profile",
+      href: `patients/${users.get}/new-appointment`,
     },
 
     // isLoggedIn
@@ -46,4 +41,3 @@ export const siteConfig = {
     // docs: "https://ui.shadcn.com",
   },
 };
-export default siteConfig;

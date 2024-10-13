@@ -57,7 +57,7 @@ const MyAppointment = async ({
                 (appointment) => appointment.$id !== appointmentId
               ) || []
           );
-          window.alert("Successfully deleted appointment");
+          alert("Successfully deleted appointment");
           //pageRefresh
           // window.location.reload();
         } else {
@@ -112,7 +112,7 @@ const MyAppointment = async ({
               <p>Location: {appointment.location}</p> */}
                 <button
                   onClick={() => handleDelete(appointment.$id)}
-                  className="bg-red-500 text-white p-2 rounded hover:bg-red-700"
+                  className="bg-red-500 text-white p-2 rounded hover:bg-red-700 hover:placeholder-opacity-95 hover:scale-110"
                 >
                   Delete
                 </button>

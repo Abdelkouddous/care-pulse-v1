@@ -1,6 +1,6 @@
+import { Client, Account, ID } from "appwrite";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { Client, Account, ID } from "appwrite";
 
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")

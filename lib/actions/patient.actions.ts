@@ -114,4 +114,20 @@ export const getPatient = async (userId: string) => {
   }
 };
 
+// GET PATIENT COUNT
+export const getPatientCount = async () => {
+  try {
+    const patients = await databases.listDocuments(
+      DATABASE_ID!,
+      PATIENT_COLLECTION_ID!
+    );
+    return patients.total;
+  } catch (error) {
+    console.error(
+      "An error occurred while retrieving the patient count",
+      error
+    );
+  }
+};
+
 //authUser

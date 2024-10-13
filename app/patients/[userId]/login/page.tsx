@@ -13,77 +13,69 @@ import { CustomFormField } from "@/components/forms/CustomFormField";
 import Link from "next/link";
 
 import { signIn } from "next-auth/react";
-import { getPatient } from "@/lib/actions/patient.actions";
+import { Card } from "@/components/ui/card";
+import { Client, Account, ID } from "appwrite";
 
 export enum FormFieldType {
   INPUT = "input",
-  TEXTAREA = "textarea",
   PHONE_INPUT = "phoneInput",
-  DATE_PICKER = "datePicker",
-  SKELETON = "skeleton",
-  SELECT = "select",
-  CHECKBOX = "checkbox",
-  RADIO = "radio",
-  CUSTOM = "custom",
 }
 
 export const Login = () => {
-  // const token = await account.createPhoneToken(ID.unique(), "+14255550123");
-
-  // const userId = token.userId;
-
-  // const session = await account.createSession(userId, "[SECRET]");
   const [isLoading, setIsLoading] = useState(false);
   const [codeSent, setCodeSent] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const router = useRouter();
 
-  // Define the form with `phone` as a field.
+  // Form setup
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
-    defaultValues: {
-      phone: "",
-    },
+    defaultValues: { phone: "" },
   });
 
-  // Send verification code if it hasn't been sent, or verify code if it has.
   const onSubmit = async ({ phone }: z.infer<typeof UserFormValidation>) => {
+    const client = new Client()
+      .setEndpoint("https://cloud.appwrite.io/v1")
+      .setProject("66b93571003a73b1ade3");
+
+    const account = new Account(client);
     setIsLoading(true);
+
     try {
       if (!codeSent) {
-        // Step 1: Send code to phone number
-        const result = await signIn("credentials", {
-          phoneNumber: phone,
-          redirect: false,
-        });
+        // Step 1: Send verification code
+        console.log("Attempting to send verification code to:", phone);
 
-        if (result?.error) {
-          console.error("Error sending verification code.");
-          setIsLoading(false);
+        const token = await account.createPhoneToken(ID.unique(), phone);
+
+        if (token) {
+          console.log("Code sent successfully to:", phone);
+          setCodeSent(true);
         } else {
-          console.log("Code sent successfully!");
-          setCodeSent(true); // Switch to verification step
+          console.error("Failed to send verification code.");
         }
       } else {
-        // Step 2: Verify the entered code
+        // Step 2: Verify code
+        console.log("Attempting to verify with code:", verificationCode);
+
         const result = await signIn("credentials", {
           phoneNumber: phone,
           code: verificationCode,
-          redirect: true, // Redirect upon successful login
-          callbackUrl: "/",
+          redirect: true,
+          callbackUrl: "/", // Where to redirect on success
         });
 
         if (result?.error) {
-          console.error("Invalid verification code.");
+          console.error("Invalid verification code:", result.error);
         } else {
-          console.log("Successfully logged in!");
-          // router.push(`/${userId}}`);
+          console.log("Verification successful! Redirecting...");
           setIsLoggedIn(true);
+          router.push("/");
         }
       }
     } catch (error) {
-      console.error("An error occurred during login:", error);
+      console.error("An unexpected error occurred during login:", error);
     } finally {
       setIsLoading(false);
     }
@@ -91,50 +83,56 @@ export const Login = () => {
 
   return (
     <Form {...form}>
-      <section className="mb-12 mt-10 space-y-4">
-        <h1 className="header text-center">Welcome back! 👋🏻</h1>
-        <p className="text-dark-600 text-center">
-          Please enter your phone number to get OTP verification code
-        </p>
-      </section>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* Phone number field */}
-        <CustomFormField
-          fieldType={FormFieldType.PHONE_INPUT}
-          control={form.control}
-          name="phone"
-          label="Phone number"
-          placeholder="21223456"
-          iconSrc="/assets/icons/user.svg"
-          iconAlt="user"
-          disabled={codeSent} // Disable after sending code
-        />
-
-        {/* Verification code input if code was sent */}
-        {codeSent && (
-          <CustomFormField
-            fieldType={FormFieldType.INPUT}
-            control={form.control}
-            // onChange={(e: any) => setVerificationCode(e.target.value)}
-            name="verificationCode"
-            label="Verification Code"
-            placeholder="Enter code here"
-          />
-        )}
-
-        <SubmitButton isLoading={isLoading}>
-          {codeSent ? "Verify Code" : "Send Verification Code"}
-        </SubmitButton>
-
-        <div className="m-auto place-items-center grid">
-          <p className="text-dark-600 text-center ">
-            Are you an <span className="text-green-400">Admin?</span> <br></br>
-            <Link href="/?admin=true" className="text-green-400 text-center ">
-              <SubmitButton isLoading={false}>Login as Admin</SubmitButton>
-            </Link>
+      <Card className="p-4 h-screen mx-4 my-2">
+        <section className="my-10 space-y-4">
+          <h1 className="header text-center">Welcome back! 👋🏻</h1>
+          <p className="text-dark-600 text-center">
+            Please enter your phone number to get OTP verification code
           </p>
-        </div>
-      </form>
+        </section>
+
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          {/* Phone number field */}
+          <CustomFormField
+            fieldType={FormFieldType.PHONE_INPUT}
+            control={form.control}
+            name="phone"
+            label="Phone number"
+            placeholder="21223456"
+            iconSrc="/assets/icons/user.svg"
+            iconAlt="user"
+            disabled={codeSent} // Disable after sending code
+          />
+
+          {/* Verification code input if code was sent */}
+          {codeSent && (
+            <CustomFormField
+              fieldType={FormFieldType.INPUT}
+              control={form.control}
+              name="verificationCode"
+              label="Verification Code"
+              placeholder="Enter code here"
+              onChange={(e) => {
+                console.log("Verification code input:", e.target.value);
+                setVerificationCode(e.target.value);
+              }}
+            />
+          )}
+
+          <SubmitButton isLoading={isLoading}>
+            {codeSent ? "Verify Code" : "Send Verification Code"}
+          </SubmitButton>
+
+          <div className="m-auto place-items-center grid">
+            <p className="text-dark-600 text-center ">
+              Are you an <span className="text-green-400">Admin?</span> <br />
+              <Link href="/?admin=true" className="text-green-400 text-center">
+                <SubmitButton isLoading={false}>Login as Admin</SubmitButton>
+              </Link>
+            </p>
+          </div>
+        </form>
+      </Card>
     </Form>
   );
 };

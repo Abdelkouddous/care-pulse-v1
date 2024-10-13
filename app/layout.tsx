@@ -1,50 +1,7 @@
-// import type { Metadata } from "next";
-// import "./globals.css";
-// import { Plus_Jakarta_Sans as FontSans } from "next/font/google";
-// import { ThemeProvider } from "next-themes";
-
-// import { cn } from "@/lib/utils";
-
-// const fontSans = FontSans({
-//   subsets: ["latin"],
-//   weight: ["300", "400", "500", "600", "700"],
-//   variable: "--font-sans",
-// });
-
-// export const metadata: Metadata = {
-//   title: "CarePulse",
-//   description:
-//     "A healthcare patient management System designed to streamline patient registration, appointment scheduling, and medical records management for healthcare providers.",
-//   icons: {
-//     icon: "/assets/icons/logo-icon.svg",
-//   },
-// };
-
-// export default function RootLayout({
-//   children,
-// }: Readonly<{
-//   children: React.ReactNode;
-// }>) {
-//   return (
-//     <html lang="en">
-//       <body
-//         className={cn(
-//           "min-h-screen bg-dark-300 font-sans antialiased",
-//           fontSans.variable
-//         )}
-//       >
-//         <ThemeProvider attribute="class" defaultTheme="dark">
-//           {children}
-//         </ThemeProvider>
-//       </body>
-//     </html>
-//   );
-// }
-
 import "@/styles/globals.css";
+import "@/app/globals.css";
 import { Metadata } from "next";
 import { siteConfig } from "@/config/site";
-
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { SiteHeader } from "@/components/site-header";
@@ -90,8 +47,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className=" flex flex-col max-w-screen fade-in-page">
-            <SiteHeader />
+          <div className=" flex flex-col w-screen relative ">
+            <div
+              className=" sticky top-0 z-50 w-screen 
+            
+            
+            "
+            >
+              <SiteHeader />
+            </div>
 
             {children}
 
@@ -99,7 +63,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           </div>
           {/* <TailwindIndicator /> */}
         </ThemeProvider>
-        <div className=" min-h-full min-w-screen bottom-0 flex justify-center items-center mt-2 ">
+        <div className=" min-h-full min-w-screen bottom-0 flex justify-center items-center mt-2  ">
           <SiteFooter></SiteFooter>
         </div>
       </body>
