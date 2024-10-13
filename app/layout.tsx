@@ -46,17 +46,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className=" flex flex-col w-screen relative ">
-            <div className=" sticky top-0 z-50 w-screen">
-              <SiteHeader />
-            </div>
-
+          <div className=" sticky top-0 z-50 w-screen">
+            <SiteHeader />
+          </div>
+          <div className="min-h-screen bg-background font-sans antialiased fade-in-page">
             {children}
           </div>
         </ThemeProvider>
-        <div className=" min-h-full min-w-screen bottom-0 flex justify-center items-center mt-2  ">
-          <SiteFooter></SiteFooter>
-        </div>
+        <SiteFooter></SiteFooter>
       </body>
     </html>
   );

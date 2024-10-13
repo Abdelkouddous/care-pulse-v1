@@ -4,8 +4,9 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 const Ressources = () => {
   return (
     <div
-      className=" flex flex-col m-auto max-w-screen  relative my-3
+      className=" flex flex-col m-auto max-w-screen  h-screen relative my-3
 "
+      id="ressources"
     >
       <Card x-chunk="dashboard-01-chunk-1 " className="p-5 fade-in">
         <CardHeader className="flex flex-row items-center justify-center space-y-0 pb-2">

@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 const DoctorsCard = () => {
   return (
     <div
-      className=" h-screen flex flex-col m-auto max-w-screen  relative my-3  justify-center
+      className=" h-screen flex m-auto flex-col  max-w-screen  relative my-3  justify-center
 "
       id="doctors"
     >

@@ -73,74 +73,69 @@ export function PatientForm() {
     );
   }
   return (
-    <div>
-      <h1 className=" font-serif text-4xl m-4 fade-in "> Welcome to Pulse</h1>
+    <div className="relative h-screen">
+      <h1 className=" font-serif text-4xl m-4 fade-in  "> Welcome to Pulse</h1>
       <div
-        className=" flex m-auto max-w-screen relative space-x-1 
+        className=" flex m-auto max-w-screen  space-x-1 
       justify-between fade-in
 "
       >
         <Card
-          className="relative flex flex-1 m-auto w-screen  my-2 space-x-1
-      justify-center md:bg-none md:w-screen md:p-5"
+          className=" flex flex-1 m-auto w-screen  my-2 space-x-1
+      justify-center md:bg-none md:w-screen md:p-5 p-auto items-center"
         >
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="min-w-64 my-2 mx-2 p-2 "
             >
-              <Card
-                x-chunk="dashboard-01-chunk-1 "
-                className="fade-in my-2 mx-2 p-2 space-y-2 min-h-screen min-w-screen items-center"
-              >
-                <CardHeader className="flex flex-col items-center justify-center space-y-0 pb-2">
-                  <h1 className="header text-center">Hello 👋🏻 </h1>
-                  <span className="text-dark-600 text-center ">
-                    Are you looking to schedule an appointment?
-                  </span>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <CustomFormField
-                    fieldType={FormFieldType.INPUT}
-                    control={form.control}
-                    name="name"
-                    label="Full Name"
-                    placeholder="Hml Tech"
-                    iconSrc="/assets/icons/user.svg"
-                    iconAlt="user"
-                  ></CustomFormField>
-                  <CustomFormField
-                    fieldType={FormFieldType.PHONE_INPUT}
-                    control={form.control}
-                    name="phone"
-                    label="Phone number"
-                    placeholder="+213550123456"
-                    iconSrc="/assets/icons/user.svg"
-                    iconAlt="user"
-                  ></CustomFormField>
-                  <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
-                  <div className="m-auto place-items-center grid ">
-                    {" "}
-                    <p className="text-dark-600 text-center ">
-                      Are you an <span className="text-green-400">Admin?</span>{" "}
-                      <br></br>
-                      {/* <Link href="/?admin=true" className="text-green-400 text-center ">
-                       */}
-                      <Link
-                        href="/?admin=true"
-                        className="text-green-400 text-center "
+              <CardHeader className="flex flex-col items-center justify-center space-y-0 pb-2">
+                <h1 className="header text-center">Hello 👋🏻 </h1>
+                <span className="text-dark-600 text-center ">
+                  Are you looking to schedule an appointment?
+                </span>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <CustomFormField
+                  fieldType={FormFieldType.INPUT}
+                  control={form.control}
+                  name="name"
+                  label="Full Name"
+                  placeholder="Hml Tech"
+                  iconSrc="/assets/icons/user.svg"
+                  iconAlt="user"
+                ></CustomFormField>
+                <CustomFormField
+                  fieldType={FormFieldType.PHONE_INPUT}
+                  control={form.control}
+                  name="phone"
+                  label="Phone number"
+                  placeholder="+213550123456"
+                  iconSrc="/assets/icons/user.svg"
+                  iconAlt="user"
+                ></CustomFormField>
+                <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
+                <div className="m-auto place-items-center grid ">
+                  {" "}
+                  <p className="text-dark-600 text-center ">
+                    Are you an <span className="text-green-400">Admin?</span>{" "}
+                    <br></br>
+                    {/* <Link href="/?admin=true" className="text-green-400 text-center ">
+                     */}
+                    <Link
+                      href="/?admin=true"
+                      className="text-green-400 text-center "
+                    >
+                      <SubmitButton
+                        isLoading={false}
+                        // className="text-green-400 shad-primary-btn max-w"
                       >
-                        <SubmitButton
-                          isLoading={false}
-                          // className="text-green-400 shad-primary-btn max-w"
-                        >
-                          Login as Admin
-                        </SubmitButton>
-                      </Link>
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>{" "}
+                        Login as Admin
+                      </SubmitButton>
+                    </Link>
+                  </p>
+                </div>
+              </CardContent>
             </form>
           </Form>
           <Image
@@ -148,7 +143,7 @@ export function PatientForm() {
             height={1000}
             width={1000}
             alt="Doctor"
-            className=" hidden md:m-auto md:fade-in md:flex  md:max-w-[50%] my-2 mx-2 p-2 md:min-h-screen md:rounded-3xl md:shadow-gray-400 dark:shadow-slate-300 md:shadow-sm opacity-95"
+            className=" hidden md:m-auto md:fade-in md:flex  md:max-w-[50%] my-2 mx-2 p-2 md:min-h-full md:rounded-3xl md:shadow-gray-400 dark:shadow-slate-300 md:shadow-sm opacity-95"
           />{" "}
         </Card>
       </div>

@@ -1,42 +1,70 @@
-import Image from "next/image";
-import Link from "next/link";
-
+"use client";
+import { useEffect, useRef } from "react";
+import About from "@/components/About";
 import PatientForm from "@/components/forms/PatientForm";
-// import { SiteFooter } from "@/components/site-footer";
 import { PasskeyModal } from "@/components/PasskeyModal";
+import CustomCard from "@/components/card/Card";
 
-export default async function Home({ searchParams }: SearchParamProps) {
+export default function Home({ searchParams }: SearchParamProps) {
   const isAdmin = searchParams?.admin === "true";
+  const sectionsRef = useRef<HTMLDivElement[]>([]);
 
-  // const isPatient = searchParams?.patient === "true";
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animate-on-scroll-visible");
+          } else {
+            entry.target.classList.remove("animate-on-scroll-visible");
+          }
+        });
+      },
+      {
+        threshold: 0.01,
+      } // 50% visibility triggers the animation
+    );
 
-  // const MyComponent = () => {
-  //   useScrollAnimation(".animate-on-scroll");
+    sectionsRef.current.forEach((section) => {
+      if (section) {
+        observer.observe(section);
+      }
+    });
 
-  //   return (
-  //     <div>
-  //       <div className="animate-on-scroll fade-in">Content that fades in on scroll</div>
-  //       <div className="animate-on-scroll fade-in">Another content block</div>
-  //     </div>
-  //   );
-  // };
+    return () => {
+      sectionsRef.current.forEach((section) => {
+        if (section) {
+          observer.unobserve(section);
+        }
+      });
+    };
+  }, []);
 
-  // export default MyComponent;
   return (
-    <div>
-      <div className="flex justify-stretch m-auto p-3 h-screen fade-in-page">
-        {/* OTP Verification  */}
+    <div className="flex justify-center flex-col m-auto p-3 min-h-screen fade-in-page">
+      {/* OTP Verification */}
+      {isAdmin && <PasskeyModal />}
 
-        {isAdmin && <PasskeyModal></PasskeyModal>}
+      <section
+        ref={(el) => (sectionsRef.current[0] = el!)}
+        className="remove-scrollbar container  animate-on-scroll"
+      >
+        <PatientForm />
+      </section>
 
-        <section className="remove-scrollbar container my-auto ">
-          <PatientForm></PatientForm>
-        </section>
-      </div>
+      <section
+        ref={(el) => (sectionsRef.current[1] = el!)}
+        className="remove-scrollbar container  animate-on-scroll"
+      >
+        <About />
+      </section>
 
-      <div className="flex justify-center items-center ">
-        {/* <SiteFooter></SiteFooter> */}
-      </div>
+      <section
+        ref={(el) => (sectionsRef.current[2] = el!)}
+        className="remove-scrollbar container  animate-on-scroll"
+      >
+        <CustomCard></CustomCard>
+      </section>
     </div>
   );
 }
