@@ -24,7 +24,6 @@ export enum FormFieldType {
 export const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [codeSent, setCodeSent] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const router = useRouter();
 
@@ -70,12 +69,12 @@ export const Login = () => {
           console.error("Invalid verification code:", result.error);
         } else {
           console.log("Verification successful! Redirecting...");
-          setIsLoggedIn(true);
           router.push("/");
         }
       }
     } catch (error) {
       console.error("An unexpected error occurred during login:", error);
+      alert("An error occurred: " + error);
     } finally {
       setIsLoading(false);
     }

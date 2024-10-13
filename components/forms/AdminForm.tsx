@@ -34,7 +34,6 @@ export function AdminForm() {
       const fetchedAdmin = await getAdmin(adminId);
       console.log("Admin ID submitted", adminId);
       console.log("fetchedAdmin ID being fetched:", fetchedAdmin);
-
       // Check if fetchedAdmin exists and matches the provided adminId
       if (fetchedAdmin?.$id === adminId) {
         // Redirect to admin dashboard

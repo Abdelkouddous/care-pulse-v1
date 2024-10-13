@@ -1,16 +1,13 @@
 "use client";
 
-//used for validation
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { createUser } from "@/lib/actions/patient.actions";
 import { UserFormValidation } from "@/lib/validation";
 import { Form } from "@/components/ui/form";
-
 import { SubmitButton } from "../ui/SubmitButton";
 import { CustomFormField } from "./CustomFormField";
 import Link from "next/link";
@@ -78,13 +75,6 @@ export function PatientForm() {
   return (
     <div>
       <h1 className=" font-serif text-4xl m-4 fade-in"> Welcome to Pulse</h1>
-      {/* <Card
-        className="relative flex flex-1 m-auto w-screen  my-2 space-x-1
-      justify-center md:bg-none md:w-screen md:p-5 border-collapse"
-      >
-        <CardHeader>Welcome to pulse</CardHeader>
-      </Card> */}
-
       <div
         className=" flex m-auto max-w-screen relative space-x-1 
       justify-between fade-in
@@ -94,13 +84,6 @@ export function PatientForm() {
           className="relative flex flex-1 m-auto w-screen  my-2 space-x-1
       justify-center md:bg-none md:w-screen md:p-5"
         >
-          {/* <Image
-          src="/assets/main.jpg"
-          height={1000}
-          width={1000}
-          alt="Doctor"
-          className="hidden md:block max-w-[40%] my-2 mx-2 p-2 m-auto"
-        />{" "} */}
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -138,17 +121,6 @@ export function PatientForm() {
                   <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
                   <div className="m-auto place-items-center grid ">
                     {" "}
-                    {/* <p className="text-dark-600 text-center ">
-            Already registered ? <br></br>{" "}
-          </p>
-          <Link href="/?login=true" className="text-center ">
-            <SubmitButton
-              isLoading={false}
-              className="mb-4 shad-primary-btn max-w"
-            >
-              Login
-            </SubmitButton>{" "}
-          </Link> */}
                     <p className="text-dark-600 text-center ">
                       Are you an <span className="text-green-400">Admin?</span>{" "}
                       <br></br>
@@ -168,17 +140,6 @@ export function PatientForm() {
                     </p>
                   </div>
                 </CardContent>
-                {/* name */}
-
-                {/* {email} */}
-                {/* <CustomFormField
-          fieldType={FormFieldType.INPUT}
-          control={form.control}
-          name="email"
-          label="email"
-          placeholder="mail@mail.com"
-        ></CustomFormField> */}
-                {/* phone number */}
               </Card>{" "}
             </form>
           </Form>

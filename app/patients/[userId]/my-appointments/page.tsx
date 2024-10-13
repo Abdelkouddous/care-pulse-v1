@@ -4,7 +4,6 @@ import {
   getRecentAppointmentsForPatient,
   deleteAppointment,
 } from "@/lib/actions/appointment.actions";
-// import { getRecentAppointmentsForPatient, deleteAppointment } from "@/lib/actions/appointment.actions";
 import type { Appointment } from "@/types/appwrite.types";
 import { useEffect, useState } from "react";
 import Image from "next/image";

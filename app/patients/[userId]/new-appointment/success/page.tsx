@@ -1,11 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import { Doctors } from "@/constants";
 import { getAppointment } from "@/lib/actions/appointment.actions";
 import { formatDateTime } from "@/lib/utils";
-import { SiteFooter } from "@/components/site-footer";
 import * as Sentry from "@sentry/nextjs";
 import { getUser } from "@/lib/actions/patient.actions";
 
@@ -26,18 +24,6 @@ const RequestSuccess = async ({
   return (
     <div className="m-auto mb-4">
       <div className="success-img m-auto p-2 space-y-1">
-        {/* 
-        <Link href="/">
-          <Image
-            src="/assets/icons/logo-full.svg"
-            height={1000}
-            width={1000}
-            alt="logo"
-            className="h-10 w-fit"
-          />
-        </Link> 
-        */}
-
         <section className="flex flex-col items-center">
           <Image
             src="/assets/gifs/success.gif"

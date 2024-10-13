@@ -5,7 +5,6 @@ import { siteConfig } from "@/config/site";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { SiteHeader } from "@/components/site-header";
-// import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteFooter } from "@/components/site-footer";
 
@@ -48,20 +47,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className=" flex flex-col w-screen relative ">
-            <div
-              className=" sticky top-0 z-50 w-screen 
-            
-            
-            "
-            >
+            <div className=" sticky top-0 z-50 w-screen">
               <SiteHeader />
             </div>
 
             {children}
-
-            {/* <SiteFooter></SiteFooter> */}
           </div>
-          {/* <TailwindIndicator /> */}
         </ThemeProvider>
         <div className=" min-h-full min-w-screen bottom-0 flex justify-center items-center mt-2  ">
           <SiteFooter></SiteFooter>

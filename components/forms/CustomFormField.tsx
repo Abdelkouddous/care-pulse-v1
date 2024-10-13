@@ -73,16 +73,6 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
         </FormControl>
       );
   }
-  {
-    /* // return (
-  //   <Input
-  //     type="text"
-  //     placeholder="HML Tech"
-  //     // iconSrc="#"
-  //     // iconAlt="user"
-  //   ></Input>
-  // ) */
-  }
 };
 
 export const CustomFormField = (props: CustomProps) => {

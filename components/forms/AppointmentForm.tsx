@@ -27,8 +27,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import CustomFormField, { FormFieldType } from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
 import { Form } from "../ui/form";
-// import { SiteFooter } from "../site-footer";
-// import type { faker } from "@faker-js/faker";
 
 export const AppointmentForm = ({
   userId,
@@ -122,9 +120,7 @@ export const AppointmentForm = ({
       //================================================================
       if (type === "create" && patientId) {
         const appointment = {
-          // appointment data
           userId,
-          // appointmentId : appointmentId,
           patient: patientId,
           primaryPhysician: values.primaryPhysician,
           schedule: new Date(values.schedule),

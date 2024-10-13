@@ -1,7 +1,5 @@
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Link } from "lucide-react";
 
 export function AlertDestructive() {
   const alert = (

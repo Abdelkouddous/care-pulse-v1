@@ -39,19 +39,6 @@ const CustomCard: React.FC = () => {
           We offered & offer
         </h1>
         <div className=" grid gap-4 md:grid-cols-3 md:gap-8 lg:grid-cols-3 ">
-          {/* <div className="min-w-full max-w-screen grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4"> */}
-          {/* <Card x-chunk="dashboard-01-chunk-0">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Patients</CardTitle>
-          <DollarSign className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">$45,231.89</div>
-          <p className="text-xs text-muted-foreground">
-            +20.1% from last month
-          </p>
-        </CardContent>
-      </Card> */}
           <Card x-chunk="dashboard-01-chunk-1 fade-in">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Patients</CardTitle>
