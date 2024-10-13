@@ -74,7 +74,7 @@ export function PatientForm() {
   }
   return (
     <div>
-      <h1 className=" font-serif text-4xl m-4 fade-in"> Welcome to Pulse</h1>
+      <h1 className=" font-serif text-4xl m-4 fade-in "> Welcome to Pulse</h1>
       <div
         className=" flex m-auto max-w-screen relative space-x-1 
       justify-between fade-in

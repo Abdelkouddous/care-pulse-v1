@@ -29,14 +29,6 @@ export default async function Home({ searchParams }: SearchParamProps) {
 
         {isAdmin && <PasskeyModal></PasskeyModal>}
 
-        <Image
-          src="/assets/main.jpg"
-          height={750}
-          width={750}
-          alt="Doctor"
-          className=" side-img max-w-[50%] m-3 mb-2  opacity-90 border-r-8 border-l-dark-200 border-spacing-10 "
-        ></Image>
-
         <section className="remove-scrollbar container my-auto ">
           <PatientForm></PatientForm>
         </section>
