@@ -25,7 +25,7 @@ const AdminPage = async ({ params: { adminId } }: SearchParamProps) => {
           </p>
         </section>
 
-        <section className=" overflow-auto admin-stat flex space-x-6 items-center  justify-center ">
+        <section className=" overflow-auto m-auto admin-stat flex space-x-6 items-center mx-4 justify-center ">
           <StatCard
             type="appointments"
             count={appointments.scheduledCount}

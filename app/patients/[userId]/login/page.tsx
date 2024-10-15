@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -12,7 +11,6 @@ import { SubmitButton } from "@/components/ui/SubmitButton";
 import { CustomFormField } from "@/components/forms/CustomFormField";
 import Link from "next/link";
 
-import { signIn } from "next-auth/react";
 import { Card } from "@/components/ui/card";
 import { Client, Account, ID } from "appwrite";
 
@@ -24,61 +22,53 @@ export enum FormFieldType {
 export const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [codeSent, setCodeSent] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
-  const router = useRouter();
+  const [userId, setUserId] = useState<string | null>(null); // Store the user ID
+  const [phone, setPhone] = useState("");
+
+  const client = new Client()
+    .setEndpoint("https://cloud.appwrite.io/v1")
+    .setProject("66b93571003a73b1ade3");
+
+  const account = new Account(client);
+
+  // Function to send OTP
+  const sendOtp = async (phone: z.infer<typeof UserFormValidation>) => {
+    try {
+      setIsLoading(true);
+      const token = await account.createPhoneToken(ID.unique(), phone.phone);
+      setUserId(token.userId); // Save the userId for later verification
+      setCodeSent(true);
+      console.log("OTP sent successfully");
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Function to verify OTP
+  const verifyOtp = async (verificationCode: string) => {
+    if (!userId) return;
+    try {
+      setIsLoading(true);
+      const session = await account.updatePhoneSession(
+        userId,
+        verificationCode
+      );
+      console.log("Session created successfully", session);
+      // Redirect or show success message after verification
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Form setup
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
     defaultValues: { phone: "" },
   });
-
-  const onSubmit = async ({ phone }: z.infer<typeof UserFormValidation>) => {
-    const client = new Client()
-      .setEndpoint("https://cloud.appwrite.io/v1")
-      .setProject("66b93571003a73b1ade3");
-
-    const account = new Account(client);
-    setIsLoading(true);
-
-    try {
-      if (!codeSent) {
-        // Step 1: Send verification code
-        console.log("Attempting to send verification code to:", phone);
-
-        const token = await account.createPhoneToken(ID.unique(), phone);
-
-        if (token) {
-          console.log("Code sent successfully to:", phone);
-          setCodeSent(true);
-        } else {
-          console.error("Failed to send verification code.");
-        }
-      } else {
-        // Step 2: Verify code
-        console.log("Attempting to verify with code:", verificationCode);
-
-        const result = await signIn("credentials", {
-          phoneNumber: phone,
-          code: verificationCode,
-          redirect: true,
-          callbackUrl: "/", // Where to redirect on success
-        });
-
-        if (result?.error) {
-          console.error("Invalid verification code:", result.error);
-        } else {
-          console.log("Verification successful! Redirecting...");
-          router.push("/");
-        }
-      }
-    } catch (error) {
-      console.error("An unexpected error occurred during login:", error);
-      alert("An error occurred: " + error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <Form {...form}>
@@ -90,14 +80,28 @@ export const Login = () => {
           </p>
         </section>
 
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form
+          className="space-y-8"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!codeSent) {
+              const phoneValue = form.getValues("phone");
+              setPhone(phoneValue);
+              sendOtp({ phone: phoneValue });
+              console.log(sendOtp);
+            } else {
+              const verificationCode = form.getValues("verificationCode");
+              verifyOtp(verificationCode);
+            }
+          }}
+        >
           {/* Phone number field */}
           <CustomFormField
             fieldType={FormFieldType.PHONE_INPUT}
             control={form.control}
             name="phone"
             label="Phone number"
-            placeholder="21223456"
+            placeholder="+14255550123"
             iconSrc="/assets/icons/user.svg"
             iconAlt="user"
             disabled={codeSent} // Disable after sending code
@@ -111,10 +115,6 @@ export const Login = () => {
               name="verificationCode"
               label="Verification Code"
               placeholder="Enter code here"
-              onChange={(e) => {
-                console.log("Verification code input:", e.target.value);
-                setVerificationCode(e.target.value);
-              }}
             />
           )}
 

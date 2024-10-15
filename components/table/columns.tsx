@@ -2,17 +2,15 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
-
 import { Doctors } from "@/constants";
 import { formatDateTime } from "@/lib/utils";
 import { Appointment } from "@/types/appwrite.types";
-
 import { AppointmentModal } from "../AppointmentModal";
 import { StatusBadge } from "../StatusBadge";
 
 export const columns: ColumnDef<Appointment>[] = [
   {
-    header: "#",
+    header: "ID",
     cell: ({ row }) => {
       return <p className="text-14-medium ">{row.index + 1}</p>;
     },
@@ -20,17 +18,11 @@ export const columns: ColumnDef<Appointment>[] = [
   {
     accessorKey: "patient",
     header: "Patient",
-    cell: ({ row }) => {
-      const appointment = row.original;
-      return (
-        <span className="text-14-medium text-gray-50">
-          {/* {appointment && appointment.patient && appointment.patient.name} */}
-          {appointment.patient?.name
-            ? appointment.patient?.name
-            : "Patient Not Available"}
-        </span>
-      );
-    },
+    cell: ({ row }) => (
+      <p className="text-14-medium text-gray-50 text-center">
+        {row.original.patient.name || "Unknown Patient"}
+      </p>
+    ),
   },
   {
     accessorKey: "status",

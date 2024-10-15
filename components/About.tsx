@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import CustomCard from "./card/Card";
 const About = () => {
   return (
     <div

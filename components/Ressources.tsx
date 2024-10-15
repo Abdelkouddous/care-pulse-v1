@@ -3,8 +3,13 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 const Ressources = () => {
   return (
+    //     <div
+    //       className=" flex flex-col m-auto max-w-screen  h-screen relative my-3
+    // "
+    //       id="ressources"
+    //     >
     <div
-      className=" flex flex-col m-auto max-w-screen  h-screen relative my-3
+      className=" h-screen flex m-auto flex-col  max-w-screen  relative my-3  justify-center
 "
       id="ressources"
     >

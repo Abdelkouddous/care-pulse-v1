@@ -17,7 +17,9 @@ export const SubmitButton = ({
     <Button
       type="submit"
       disabled={isLoading}
-      className={className ?? "shad-primary-btn w-full"}
+      className={
+        className ?? "shad-primary-btn w-full hover:scale-105 hover:shadow-sm"
+      }
     >
       {isLoading ? (
         <div className="flex items-center gap-4">

@@ -33,7 +33,7 @@ export const AppointmentModal = ({
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="overflow-scroll">
+    <div className="overflow-auto m-auto">
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button

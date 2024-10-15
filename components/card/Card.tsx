@@ -30,7 +30,7 @@ const CustomCard: React.FC = () => {
   }, []);
   return (
     <div
-      className=" flex flex-col m-auto max-w-screen  relative my-3
+      className=" flex flex-col m-auto max-w-screen  relative my-3 p-4
     "
     >
       <Card x-chunk="dashboard-01-chunk-1 " className="p-5 fade-in">
