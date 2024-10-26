@@ -135,13 +135,19 @@ import Link from "next/link";
 import { ThemeToggle } from "./theme-toggle";
 import { FiAlignJustify } from "react-icons/fi";
 import { Button } from "./ui/button";
+import { User } from "lucide-react";
 
 interface MainNavProps {
   items?: NavItem[];
 }
 
-export function MainNav({ items }: MainNavProps) {
+export function MainNav(
+  { items }: MainNavProps,
+  { searchParams }: SearchParamProps
+) {
   //variables and states ....
+  const isAdmin = searchParams?.admin === "true";
+  const isDoctor = searchParams?.doctor === "true";
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isScrolling, setIsScrolling] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -263,7 +269,10 @@ export function MainNav({ items }: MainNavProps) {
                 </div>
               )}
             </div>
+            {(isAdmin || isDoctor) && <User />}
             <ThemeToggle />
+
+            {/* <MessageSquareDashedIcon className="relative top-2 right-2 h-6 w-6 text-gray-500 dark:text-gray-200" /> */}
           </>
         ) : null}
       </div>

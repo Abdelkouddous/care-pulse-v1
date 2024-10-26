@@ -16,18 +16,47 @@ const CustomCard: React.FC = () => {
   const [docCount, setDocCount] = useState<number | undefined>(undefined);
   const [activeDocs, setActiveDocs] = useState<number | undefined>(undefined);
 
-  useEffect(() => {
-    const fetchCount = async () => {
-      const count = await getPatientCount();
-      const docCount = await getDoctorCount();
-      const activeDocs = await getActiveDoctorCount();
-      setPatientCount(count);
-      setDocCount(docCount);
-      setActiveDocs(activeDocs);
-    };
+  // useEffect(() => {
+  //   const fetchCount = async () => {
+  //     const count = await getPatientCount();
+  //     const docCount = await getDoctorCount();
+  //     const activeDocs = await getActiveDoctorCount();
+  //     setPatientCount(count);
+  //     setDocCount(docCount);
+  //     setActiveDocs(activeDocs);
+  //   };
 
-    fetchCount();
-  }, []);
+  //   fetchCount();
+  // }, []);
+  useEffect(
+    () => {
+      const fetchCount = async () => {
+        const count = await getPatientCount();
+        const docCount = await getDoctorCount();
+        const activeDocs = await getActiveDoctorCount();
+        setPatientCount(count);
+        setDocCount(docCount);
+        setActiveDocs(activeDocs);
+      };
+
+      // Function to repeatedly fetch data every hour
+      const intervalFetch = () => {
+        fetchCount();
+        setInterval(intervalFetch, 1000 * 60 * 60); // Set timeout for 5 seconds
+      };
+
+      // Start the initial fetch and interval setup
+      intervalFetch();
+    },
+
+    // // Optionally, cleanup function to avoid memory leaks
+    //   return () => {
+    //     clearTimeout(intervalFetch); // Clear the timeout if the component unmounts
+    //   };
+    // }
+    []
+  );
+
   return (
     <div
       className=" flex flex-col m-auto max-w-screen  relative my-3 p-4

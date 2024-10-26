@@ -11,7 +11,7 @@ export default function Loading() {
           height={3240}
           className="animate-spin mr-2"
         />
-        Loading...
+        <span className="text-gray-900 dark:text-gray-50">Loading...</span>
       </div>
     </div>
   );

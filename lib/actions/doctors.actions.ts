@@ -1,9 +1,7 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { ID, Query } from "node-appwrite";
-
-import { Appointment } from "@/types/appwrite.types";
+import { users } from "@/lib/appwrite.config";
 
 import {
   DATABASE_ID,
@@ -12,6 +10,46 @@ import {
 } from "../appwrite.config";
 import { formatDateTime, parseStringify } from "../utils";
 
+const enum Specilaity {
+  CARDIO = "Cardiologist",
+  OPHTALMO = "Ophtalmologist",
+  ORTHO = "Orthopedic Surgeon",
+  PEDIATRICS = "Pediatrician",
+  GENERAL_PRACTITIONER = "General Practitioner",
+  DENTIST = "Dentist",
+  GYNAECOLOGY = "Gynaecologist",
+  NEUROLOGY = "Neurologist",
+  GASTRO = "Gastrologist",
+}
+export async function createDoctor({
+  name,
+  email,
+  password,
+  specialty,
+}: {
+  name: string;
+  email: string;
+  password: string;
+  specialty: Specilaity;
+}) {
+  try {
+    // Create the doctor user
+    const newDoctor = await users.create(ID.unique(), email, password, name);
+
+    // Add doctor details (including specialty) to the database
+    await databases.createDocument(
+      DATABASE_ID!,
+      DOCTOR_COLLECTION_ID!,
+      newDoctor.$id,
+      { name, email, specialty }
+    );
+
+    return newDoctor;
+  } catch (error) {
+    console.error("Error creating doctor:", error);
+    throw error;
+  }
+}
 // GET ALL DOCTORS AND COUNT THEM
 export const getDoctorCount = async () => {
   try {
@@ -30,6 +68,7 @@ export const getDoctorCount = async () => {
 };
 
 //GET ALL ACTIVE DOCTORS
+// Very important !!
 export const getActiveDoctorCount = async () => {
   try {
     const appointment = await databases.listDocuments(

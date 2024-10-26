@@ -3,14 +3,11 @@ export const GenderOptions = ["Male", "Female"];
 export const PatientFormDefaultValues = {
   firstName: "",
   lastName: "",
-
   phone: "",
   birthDate: new Date(Date.now()),
   gender: "Male" as Gender,
   address: "",
-
   primaryPhysician: "",
-
   identificationDocument: [],
   treatmentConsent: false,
   disclosureConsent: false,
@@ -76,7 +73,7 @@ export const Doctors = [
   },
   {
     image: "/assets/images/dr-sharma.png",
-    name: "Hardik Sharma",
+    name: `hardik ${"sharmra"} `,
   },
 ];
 

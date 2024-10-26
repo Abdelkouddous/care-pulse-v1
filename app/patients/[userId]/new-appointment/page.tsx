@@ -1,3 +1,4 @@
+"use server";
 import { AppointmentForm } from "@/components/forms/AppointmentForm";
 import { getPatient } from "@/lib/actions/patient.actions";
 
@@ -5,7 +6,7 @@ const Appointment = async ({ params: { userId } }: SearchParamProps) => {
   const patient = await getPatient(userId);
 
   return (
-    <div className="flex flex-col h-screen ">
+    <div className="flex flex-col min-h-screen ">
       <section className="remove-scrollbar container m-2 ">
         <span className="font-sans flex justify-between my-3">
           Welcome back

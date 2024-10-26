@@ -4,11 +4,17 @@ export const AdminFormValidation = z.object({
   adminId: z.string().min(20, "ID must be at exactly 20 characters"),
   // email: z.string().email("Invalid email address"),
 });
+
+export const DoctorFormValidation = z.object({
+  doctorId: z.string().min(20, "ID must be at exactly 20 characters"),
+  // email: z.string().email("Invalid email address"),
+});
 export const UserFormValidation = z.object({
   name: z
     .string()
     .min(2, "Name must be at least 2 characters")
-    .max(50, "Name must be at most 50 characters"),
+    .max(50, "Name must be at most 50 characters")
+    .optional(),
   // email: z.string().email("Invalid email address"),
   phone: z.string().refine(
     (

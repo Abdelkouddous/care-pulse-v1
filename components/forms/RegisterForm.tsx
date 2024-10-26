@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { SelectItem } from "@/components/ui/select";
 import { Doctors, GenderOptions, PatientFormDefaultValues } from "@/constants";
-import { registerPatient } from "@/lib/actions/patient.actions";
+import { registerPatient, createUser } from "@/lib/actions/patient.actions";
 import { PatientFormValidation } from "@/lib/validation";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -57,33 +57,38 @@ const RegisterForm = ({ user }: { user: User }) => {
       const patient = {
         userId: user.$id,
         name: values.name,
-        // email: values.email,
         phone: values.phone,
         birthDate: new Date(values.birthDate),
         gender: values.gender,
         address: values.address,
-        // occupation: values.occupation,
-        // emergencyContactName: values.emergencyContactName,
-        // emergencyContactNumber: values.emergencyContactNumber,
         primaryPhysician: values.primaryPhysician,
-        // insuranceProvider: values.insuranceProvider,
-        // insurancePolicyNumber: values.insurancePolicyNumber,
-        // allergies: values.allergies,
-        // currentMedication: values.currentMedication,
-        // familyMedicalHistory: values.familyMedicalHistory,
-        // pastMedicalHistory: values.pastMedicalHistory,
-        // identificationType: values.identificationType,
-        // identificationNumber: values.identificationNumber,
         identificationDocument: values.identificationDocument
           ? formData
           : undefined,
         privacyConsent: values.privacyConsent,
       };
-
+      // email: values.email,
+      // occupation: values.occupation,
+      // emergencyContactName: values.emergencyContactName,
+      // emergencyContactNumber: values.emergencyContactNumber,
+      // insuranceProvider: values.insuranceProvider,
+      // insurancePolicyNumber: values.insurancePolicyNumber,
+      // allergies: values.allergies,
+      // currentMedication: values.currentMedication,
+      // familyMedicalHistory: values.familyMedicalHistory,
+      // pastMedicalHistory: values.pastMedicalHistory,
+      // identificationType: values.identificationType,
+      // identificationNumber: values.identificationNumber,
       const newPatient = await registerPatient(patient);
-
+      const newUser = await createUser(patient);
+      if (newUser) {
+        router.push(`/patients/${user.$id}/login`);
+        // return redirect(`/patients/${user.$id}/login`);
+        // router.push(`/patients/${user.$id}/new-appointment`);
+      }
       if (newPatient) {
         router.push(`/patients/${user.$id}/new-appointment`);
+        // router.push(`../../`);
       }
     } catch (error) {
       console.log(error);
@@ -182,7 +187,7 @@ const RegisterForm = ({ user }: { user: User }) => {
                 control={form.control}
                 name="address"
                 label="Address"
-                placeholder="14 street, New york, NY - 5101"
+                placeholder="Micro acitivity zone 13, Algiers, Algeria"
               />
               <CustomFormField
                 fieldType={FormFieldType.SKELETON}

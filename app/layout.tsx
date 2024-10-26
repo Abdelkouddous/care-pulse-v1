@@ -41,7 +41,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head />
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased fade-in-page",
+          "min-h-screen bg-background font-sans antialiased ",
           fontSans.variable
         )}
       >
@@ -49,11 +49,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <div className=" sticky top-0 z-50 w-screen">
             <SiteHeader />
           </div>
-          <div className="min-h-screen bg-background font-sans antialiased fade-in-page">
+          <div className="min-h-screen bg-background font-sans antialiased ">
             {children}
           </div>
+
+          <SiteFooter></SiteFooter>
         </ThemeProvider>
-        <SiteFooter></SiteFooter>
       </body>
     </html>
   );
