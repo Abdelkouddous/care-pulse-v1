@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import RegisterForm from "@/components/forms/RegisterForm";
 import { getPatient } from "@/lib/actions/patient.actions";
 import Login from "../login/page";
@@ -12,8 +11,6 @@ const Register = async ({ params: { userId } }: SearchParamProps) => {
         <Login user={patient} />
       </div>
     );
-    // return redirect(`/patients/${userId}/login`);
-    // return redirect(`/patients/${userId}/new-appointment`);
   } else {
     return (
       <div className=" relative flex-col h-full max-h-full m-4 p-4  ">

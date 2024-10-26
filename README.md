@@ -14,6 +14,7 @@
 
   <h3 align="center">A HealthCare Management System</h3>
   <h3 align="center"> Rebuilt by abdelkouddous</h3>
+  <h2 > This project was made at start by javascript mastery youtube channel owner, I have been working on it and updating it to a better version, while including more features </h2>
    <div align="center">
      Build this project step by step with our detailed tutorial on <a href="https://www.youtube.com/@javascriptmastery/videos" target="_blank"><b>JavaScript Mastery</b></a> YouTube. Join the JSM family!
     </div>
@@ -91,8 +92,8 @@ Make sure you have the following installed on your machine:
 **Cloning the Repository**
 
 ```bash
-git clone https://github.com/adrianhajdin/healthcare.git
-cd healthcare
+git clone https://github.com/Abdelkouddous/book-appointment-app.git
+cd book-appointment-app
 ```
 
 **Installation**
