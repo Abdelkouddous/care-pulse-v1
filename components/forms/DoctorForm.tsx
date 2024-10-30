@@ -54,24 +54,22 @@ export function DoctorForm() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center">
-      <Form {...form}>
-        <section className="mb-6 space-y-2 m-12">
-          <p className="text-dark-600 text-center ">Input your doctor ID</p>
-        </section>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 m-12">
-          <CustomFormField
-            fieldType={FormFieldType.INPUT}
-            control={form.control}
-            name="doctorId" // Ensure this matches the form state
-            label="Doctor ID"
-            placeholder="example: 66fef3z40dd29b9ab761"
-            iconSrc="/assets/icons/user.svg"
-            iconAlt="user"
-          />
-          <SubmitButton isLoading={isLoading}>Login</SubmitButton>
-        </form>
-      </Form>
+    <Form {...form}>
+      <section className="mb-6 space-y-2 m-12">
+        <p className="text-dark-600 text-center ">Input your doctor ID</p>
+      </section>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 m-12">
+        <CustomFormField
+          fieldType={FormFieldType.INPUT}
+          control={form.control}
+          name="doctorId" // Ensure this matches the form state
+          label="Doctor ID"
+          placeholder="example: 66fef3z40dd29b9ab761"
+          iconSrc="/assets/icons/user.svg"
+          iconAlt="user"
+        />
+        <SubmitButton isLoading={isLoading}>Login</SubmitButton>
+      </form>
       <div>
         <p className="text-center">
           Don't have an ID? <br></br>
@@ -81,6 +79,6 @@ export function DoctorForm() {
           </span>
         </p>
       </div>
-    </div>
+    </Form>
   );
 }

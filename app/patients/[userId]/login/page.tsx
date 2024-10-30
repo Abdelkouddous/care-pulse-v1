@@ -43,8 +43,10 @@ export const Login = ({ user }: { user: User }) => {
   const [phone, setPhone] = useState<string>("");
 
   const client = new Client()
-    .setEndpoint("https://cloud.appwrite.io/v1")
-    .setProject("66b93571003a73b1ade3");
+    // .setEndpoint("https://cloud.appwrite.io/v1")
+    // .setProject("66b93571003a73b1ade3");
+    .setEndpoint(process.env.NEXT_PUBLIC_ENDPOINT!)
+    .setProject(process.env.NEXT_PUBLIC_PROJECT_ID!);
 
   const account = new Account(client);
 

@@ -1,5 +1,5 @@
 // lib/appwrite.ts
-import { Client, Account, ID } from "appwrite";
+import { Client, Account } from "appwrite";
 
 export const {
   NEXT_PUBLIC_ENDPOINT: ENDPOINT,

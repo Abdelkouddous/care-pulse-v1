@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { cn } from "@/lib/utils";
-import { SiteHeader } from "@/components/site-header";
+
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteFooter } from "@/components/site-footer";
 
@@ -46,13 +46,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className=" sticky top-0 z-50 w-screen">
-            <SiteHeader />
-          </div>
           <div className="min-h-screen bg-background font-sans antialiased ">
             {children}
           </div>
-
           <SiteFooter></SiteFooter>
         </ThemeProvider>
       </body>

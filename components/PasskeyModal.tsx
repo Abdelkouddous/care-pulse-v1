@@ -20,7 +20,6 @@ import {
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { decryptKey, encryptKey } from "@/lib/utils";
-import { getAdmin } from "@/lib/actions/admin.actions";
 
 export const PasskeyModal = () => {
   const router = useRouter();

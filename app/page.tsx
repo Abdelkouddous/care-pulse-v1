@@ -1,15 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import About from "@/components/About";
+
 import PatientForm from "@/components/forms/PatientForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
 import { PasskeyDoctorModal } from "@/components/PassKeyDoctorModal";
-import CustomCard from "@/components/card/Card";
-import Ressources from "@/components/Ressources";
-import DoctorsCard from "./doctors/doctorsCard";
-import { Contact } from "lucide-react";
+import { SiteHeader } from "@/components/site-header";
 import Transitions from "./Transitions";
-import { getPatient } from "@/lib/actions/patient.actions";
 
 export default async function Home(
   // { params: { userId } }: SearchParamProps,
@@ -78,6 +74,9 @@ export default async function Home(
 
   return (
     <div className="flex justify-center flex-col m-auto p-3 min-h-screen">
+      <div className=" sticky top-0 z-50 w-screen">
+        <SiteHeader />
+      </div>
       {/* Show offline notification */}
       {isOffline && (
         <div className="bg-red-500 text-white p-4 mb-4 rounded-md">

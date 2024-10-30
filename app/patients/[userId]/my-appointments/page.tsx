@@ -7,6 +7,7 @@ import {
 import type { Appointment } from "@/types/appwrite.types";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 // Define the response structure from the API call
 // interface AppointmentsResponse {
@@ -91,7 +92,9 @@ const MyAppointment = async ({
   return (
     <div className="flex flex-col h-full max-h-full m-auto w-screen p-4">
       <h1 className="text-2xl font-bold mb-4">My Appointments</h1>
-
+      <h1 className="text-2xl font-bold mb-4">
+        <Link href="/"> Back home</Link>
+      </h1>
       {appointments && appointments.length > 0 ? (
         <div className="overflow-y-auto max-h-full">
           {appointments.map((appointment: Appointment) => (

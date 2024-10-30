@@ -68,6 +68,15 @@ export function AdminForm() {
           iconAlt="user"
         />
         <SubmitButton isLoading={isLoading}>Login</SubmitButton>
+        <div>
+          <p className="text-center">
+            Don't have an admin ID? <br></br>
+            <span className="hover:font-bold hover:scale-105 hover:cursor-pointer">
+              {" "}
+              Contact us
+            </span>
+          </p>
+        </div>
       </form>
     </Form>
   );

@@ -3,8 +3,8 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const client = new Client()
-  .setEndpoint("https://cloud.appwrite.io/v1")
-  .setProject("<PROJECT_ID>"); // Replace with your Appwrite project ID
+  .setEndpoint(process.env.ENDPOINT!)
+  .setProject(process.env.PROJECT_ID!); // Replace with your Appwrite project ID
 
 const account = new Account(client);
 
