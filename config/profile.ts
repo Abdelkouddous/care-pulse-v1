@@ -1,27 +1,29 @@
-import React from "react";
-import {
-  getRecentAppointmentsForPatient,
-  deleteAppointment,
-} from "@/lib/actions/appointment.actions";
 import { users } from "@/lib/appwrite.config";
 
-export const profile = {
-  name: "Pulse",
+export type profileConfig = typeof profileConfig;
+
+// Define the response structure from the API call
+export const profileConfig = {
+  name: "Profile",
   description: "A healthcare management app ",
   mainNav: [
     {
       title: "My profile",
-      href: "/profile",
+      href: "profile",
     },
 
     {
       title: "My appointments",
-      href: `patients/${users.get}/new-appointment`,
+      href: `my-appointments`,
     },
 
     {
       title: "Edit profile",
-      href: `patients/${users.get}/new-appointment`,
+      href: `edit-profile`,
+    },
+    {
+      title: "Logout",
+      href: `logout`,
     },
 
     // isLoggedIn
@@ -41,3 +43,5 @@ export const profile = {
     // docs: "https://ui.shadcn.com",
   },
 };
+
+export default profileConfig;

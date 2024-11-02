@@ -82,12 +82,12 @@ const RegisterForm = ({ user }: { user: User }) => {
       const newPatient = await registerPatient(patient);
       const newUser = await createUser(patient);
       if (newUser) {
-        router.push(`/patients/${user.$id}/login`);
+        router.push(`/dashboard/patients/${user.$id}/login`);
         // return redirect(`/patients/${user.$id}/login`);
         // router.push(`/patients/${user.$id}/new-appointment`);
       }
       if (newPatient) {
-        router.push(`/patients/${user.$id}/new-appointment`);
+        router.push(`/dashboard/patients/${user.$id}/new-appointment`);
         // router.push(`../../`);
       }
     } catch (error) {

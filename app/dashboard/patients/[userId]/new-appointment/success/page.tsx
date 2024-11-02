@@ -65,7 +65,7 @@ const RequestSuccess = async ({
               className="shad-primary-btn max-w-[60]% "
               asChild
             >
-              <Link href={`/patients/${userId}/new-appointment`}>
+              <Link href={`/dashboard/patients/${userId}/new-appointment`}>
                 New Appointment
               </Link>
             </Button>
@@ -74,7 +74,7 @@ const RequestSuccess = async ({
               className="shad-primary-btn max-w-[60]%"
               asChild
             >
-              <Link href={`/patients/${userId}/my-appointments`}>
+              <Link href={`/dashboard/patients/${userId}/my-appointments`}>
                 Check Appointments
               </Link>
             </Button>

@@ -79,7 +79,7 @@ export default async function Home(
       </div>
       {/* Show offline notification */}
       {isOffline && (
-        <div className="bg-red-500 text-white p-4 mb-4 rounded-md">
+        <div className="bg-red-500 sticky text-white p-4 mb-4 rounded-md">
           Connection not set
         </div>
       )}

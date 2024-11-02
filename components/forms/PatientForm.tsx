@@ -62,11 +62,11 @@ export async function PatientForm() {
       //this is logic to register user and put it in the db
       const newUser = await createUser(userData);
       if (newUser) {
-        router.push(`/patients/${newUser.$id}/register`);
+        router.push(`/dashboard/patients/${newUser.$id}/register`);
         setIsLoading(false);
         // setIsLoggedIn(true);
       } else {
-        router.push(`/patients/${newUser.$id}/login`);
+        router.push(`/dashboard/patients/${newUser.$id}/login`);
       }
     } catch (err) {
       console.log(err);
@@ -87,7 +87,7 @@ export async function PatientForm() {
       >
         <Card
           className=" flex flex-1 m-auto w-screen  my-2 space-x-1
-      justify-center md:bg-none md:w-screen md:p-5 p-auto items-center"
+      justify-center md:bg-none  md:p-5 p-auto items-center"
         >
           <Form {...form}>
             <form

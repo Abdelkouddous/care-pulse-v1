@@ -102,7 +102,7 @@ export const Login = ({ user }: { user: User }) => {
       console.log("Session created successfully", session);
       // Redirect or show success message after verification
       // redirect(`/patients/${userId}/new-appointment`);
-      router.push(`/patients/${userId}/new-appointment`);
+      router.push(`/dashboard/patients/${userId}/new-appointment`);
     } catch (error) {
       setError("Invalid OTP. Please try again.");
       console.error("Error verifying OTP:", error);
