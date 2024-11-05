@@ -1,11 +1,10 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-
-import PatientForm from "@/components/forms/PatientForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
 import { PasskeyDoctorModal } from "@/components/PassKeyDoctorModal";
 import { SiteHeader } from "@/components/site-header";
 import Transitions from "./Transitions";
+import PatientForm from "@/components/forms/PatientForm";
 
 export default async function Home(
   // { params: { userId } }: SearchParamProps,
