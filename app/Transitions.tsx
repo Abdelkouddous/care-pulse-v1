@@ -1,14 +1,16 @@
 "use client";
-import { useEffect, useRef } from "react"; // 1. Third-party imports (no changes needed here)
+import { useEffect, useRef } from "react"; // Third-party imports
 
-import About from "@/components/About"; // 2. Absolute imports
+// Absolute imports
+import About from "@/components/About";
 import CustomCard from "@/components/card/Card";
 import DoctorsCard from "./doctors/doctorsCard";
-import Ressources from "@/components/Ressources";
-import ContactAdmin from "@/components/ContactAdmin"; // Make sure ContactAdmin is above Ressources
+import ContactAdmin from "@/components/ContactAdmin"; // Correct order: ContactAdmin should be before Ressources
+import Ressources from "@/components/Ressources"; // Correct order: ContactAdmin should be above Ressources
 
 export const Transitions = () => {
   const sectionsRef = useRef<HTMLDivElement[]>([]);
+
   useEffect(() => {
     // Observer for scroll animations
     const observer = new IntersectionObserver(
