@@ -4,9 +4,11 @@ import { useEffect, useRef } from "react"; // Third-party imports
 // Absolute imports
 import About from "@/components/About";
 import CustomCard from "@/components/card/Card";
-import DoctorsCard from "./doctors/doctorsCard";
-import ContactAdmin from "@/components/ContactAdmin"; // Correct order: ContactAdmin should be before Ressources
-import Ressources from "@/components/Ressources"; // Correct order: ContactAdmin should be above Ressources
+import ContactAdmin from "@/components/ContactAdmin"; // Ensure this is above Ressources
+import Ressources from "@/components/Ressources";
+
+// Relative imports
+import DoctorsCard from "./doctors/doctorsCard"; // This should be below absolute imports
 
 export const Transitions = () => {
   const sectionsRef = useRef<HTMLDivElement[]>([]);
