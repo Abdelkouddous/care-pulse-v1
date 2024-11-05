@@ -1,12 +1,11 @@
 "use client";
-import { useEffect, useRef } from "react";
-import About from "@/components/About";
+import { useEffect, useRef } from "react"; // 1. Third-party imports (no changes needed here)
+
+import About from "@/components/About"; // 2. Absolute imports
 import CustomCard from "@/components/card/Card";
-import Ressources from "@/components/Ressources";
 import DoctorsCard from "./doctors/doctorsCard";
-import ContactAdmin from "@/components/ContactAdmin";
-// import { getPatient } from "@/lib/actions/patient.actions";
-// import { redirect } from "next/navigation";
+import Ressources from "@/components/Ressources";
+import ContactAdmin from "@/components/ContactAdmin"; // Make sure ContactAdmin is above Ressources
 
 export const Transitions = () => {
   const sectionsRef = useRef<HTMLDivElement[]>([]);
@@ -41,17 +40,15 @@ export const Transitions = () => {
       });
     };
   }, []);
+
   return (
     <>
-      {" "}
       <section
         ref={(el: HTMLDivElement | null) => {
-          //+
           if (el) {
-            //+
-            sectionsRef.current[0] = el; //+
-          } //+
-        }} //+
+            sectionsRef.current[0] = el;
+          }
+        }}
         className="remove-scrollbar container animate-on-scroll"
       >
         <About />
@@ -86,7 +83,7 @@ export const Transitions = () => {
         }}
         className="remove-scrollbar container animate-on-scroll"
       >
-        <ContactAdmin></ContactAdmin>
+        <ContactAdmin />
       </section>
     </>
   );
