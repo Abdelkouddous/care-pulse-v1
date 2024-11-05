@@ -1,5 +1,13 @@
 import React from "react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { CarouselDApiDemo } from "./components/CarouselCard";
 
 const DoctorsCard = () => {
   return (
@@ -15,14 +23,11 @@ const DoctorsCard = () => {
             {" "}
             Our Doctors
           </h1>
-          <p> Cardiologists </p>
-          <p> Cardiologists </p>
-          <p> Cardiologists </p>
-          <p> Cardiologists </p>
-          <p> Cardiologists </p>
-          <p> Cardiologists </p>
         </CardHeader>
       </Card>
+      <div>
+        <CarouselDApiDemo></CarouselDApiDemo>
+      </div>
     </div>
   );
 };

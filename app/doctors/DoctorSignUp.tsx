@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { createDoctor } from "@/lib/actions/doctors.actions";
+import { Speciality } from "@/lib/actions/doctors.actions";
 
 export const DoctorSignUp: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [specialty, setSpecialty] = useState("");
+  const [specialty, setSpecialty] = useState<Speciality>(Speciality.CARDIO);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,13 +48,26 @@ export const DoctorSignUp: React.FC = () => {
         placeholder="Password"
         required
       />
-      <input
-        type="text"
+
+      <select
+        title="speciality"
         value={specialty}
-        onChange={(e) => setSpecialty(e.target.value)}
-        placeholder="Specialty"
-        required
-      />
+        onChange={(e) => setSpecialty(e.target.value as Speciality)}
+      >
+        <option value={""}>Select Specialty</option>
+        <option value={Speciality.CARDIO}>{Speciality.CARDIO}</option>
+        <option value={Speciality.OPHTALMO}>{Speciality.OPHTALMO}</option>
+        <option value={Speciality.ORTHO}>{Speciality.ORTHO}</option>
+        <option value={Speciality.PEDIATRICS}>{Speciality.PEDIATRICS}</option>
+        <option value={Speciality.GENERAL_PRACTITIONER}>
+          {Speciality.GENERAL_PRACTITIONER}
+        </option>
+        <option value={Speciality.DENTIST}>{Speciality.DENTIST}</option>
+        <option value={Speciality.GYNAECOLOGY}>{Speciality.GYNAECOLOGY}</option>
+        <option value={Speciality.NEUROLOGY}>{Speciality.NEUROLOGY}</option>
+        <option value={Speciality.GASTRO}>{Speciality.GASTRO}</option>
+      </select>
+
       <button type="submit" disabled={isLoading}>
         {isLoading ? "Creating..." : "Sign Up as Doctor"}
       </button>

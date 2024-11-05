@@ -10,7 +10,7 @@ import {
 } from "../appwrite.config";
 import { formatDateTime, parseStringify } from "../utils";
 
-const enum Specilaity {
+export const enum Speciality {
   CARDIO = "Cardiologist",
   OPHTALMO = "Ophtalmologist",
   ORTHO = "Orthopedic Surgeon",
@@ -30,7 +30,7 @@ export async function createDoctor({
   name: string;
   email: string;
   password: string;
-  specialty: Specilaity;
+  specialty: Speciality;
 }) {
   try {
     // Create the doctor user
