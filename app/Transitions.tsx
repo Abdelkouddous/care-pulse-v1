@@ -48,23 +48,23 @@ export const Transitions = () => {
   return (
     <>
       <section
-        ref={(el: HTMLDivElement | null) => {
-          el ? (sectionsRef.current[1] = el!) : null;
+        ref={(el: HTMLDivElement) => {
+          sectionsRef.current[1] = el!;
         }}
         className="remove-scrollbar container animate-on-scroll"
       >
         <About />
       </section>
       <section
-        ref={(el: HTMLDivElement | null) => {
-          el ? (sectionsRef.current[2] = el!) : null;
+        ref={(el: HTMLDivElement) => {
+          sectionsRef.current[2] = el!;
         }}
         className="remove-scrollbar container animate-on-scroll"
       >
         <CustomCard />
       </section>
       <section
-        ref={(el: HTMLDivElement | null) => {
+        ref={(el: HTMLDivElement) => {
           sectionsRef.current[3] = el!;
         }}
         className="remove-scrollbar container animate-on-scroll"
@@ -72,7 +72,7 @@ export const Transitions = () => {
         <DoctorsCard />
       </section>
       <section
-        ref={(el: HTMLDivElement | null) => {
+        ref={(el: HTMLDivElement) => {
           sectionsRef.current[4] = el!;
         }}
         className="remove-scrollbar container animate-on-scroll"
