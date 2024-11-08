@@ -44,9 +44,9 @@ export function CarouselDApiDemo() {
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
-      <div className="py-2 text-center text-sm text-muted-foreground">
+      <CardContent className="flex items-center justify-center p-6">
         Slide {current} of {count}
-      </div>
+      </CardContent>
     </div>
   );
 }

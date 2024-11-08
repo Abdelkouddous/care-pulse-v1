@@ -49,9 +49,7 @@ export const Transitions = () => {
     <>
       <section
         ref={(el: HTMLDivElement | null) => {
-          if (el) {
-            sectionsRef.current[0] = el;
-          }
+          el ? (sectionsRef.current[1] = el!) : null;
         }}
         className="remove-scrollbar container animate-on-scroll"
       >
@@ -59,7 +57,7 @@ export const Transitions = () => {
       </section>
       <section
         ref={(el: HTMLDivElement | null) => {
-          el ? (sectionsRef.current[1] = el!) : null;
+          el ? (sectionsRef.current[2] = el!) : null;
         }}
         className="remove-scrollbar container animate-on-scroll"
       >
@@ -67,7 +65,7 @@ export const Transitions = () => {
       </section>
       <section
         ref={(el: HTMLDivElement | null) => {
-          sectionsRef.current[2] = el!;
+          sectionsRef.current[3] = el!;
         }}
         className="remove-scrollbar container animate-on-scroll"
       >
@@ -75,7 +73,7 @@ export const Transitions = () => {
       </section>
       <section
         ref={(el: HTMLDivElement | null) => {
-          sectionsRef.current[3] = el!;
+          sectionsRef.current[4] = el!;
         }}
         className="remove-scrollbar container animate-on-scroll"
       >
@@ -83,7 +81,7 @@ export const Transitions = () => {
       </section>
       <section
         ref={(el: HTMLDivElement | null) => {
-          sectionsRef.current[4] = el!;
+          sectionsRef.current[5] = el!;
         }}
         className="remove-scrollbar container animate-on-scroll"
       >

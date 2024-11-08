@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -24,10 +24,10 @@ const DoctorsCard = () => {
             Our Doctors
           </h1>
         </CardHeader>
+        <CardContent>
+          <CarouselDApiDemo></CarouselDApiDemo>
+        </CardContent>
       </Card>
-      <div>
-        <CarouselDApiDemo></CarouselDApiDemo>
-      </div>
     </div>
   );
 };
