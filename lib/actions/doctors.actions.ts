@@ -10,7 +10,7 @@ import {
 } from "../appwrite.config";
 import { formatDateTime, parseStringify } from "../utils";
 
-const enum Speciality {
+export const enum Speciality {
   CARDIO = "Cardiologist",
   OPHTALMO = "Ophtalmologist",
   ORTHO = "Orthopedic Surgeon",
