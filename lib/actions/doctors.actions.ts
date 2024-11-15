@@ -1,5 +1,4 @@
 "use server";
-
 import { ID, Query } from "node-appwrite";
 import { users } from "@/lib/appwrite.config";
 
@@ -8,7 +7,7 @@ import {
   databases,
   DOCTOR_COLLECTION_ID,
 } from "../appwrite.config";
-import { formatDateTime, parseStringify } from "../utils";
+import { parseStringify } from "../utils";
 
 export const enum Speciality {
   CARDIO = "Cardiologist",

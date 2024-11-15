@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 
-import { DollarSign, Activity, CreditCard, Users } from "lucide-react";
+import { Activity, Users } from "lucide-react";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { getPatientCount } from "@/lib/actions/patient.actions";
