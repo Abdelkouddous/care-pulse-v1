@@ -21,8 +21,8 @@ export const siteConfig = {
     },
 
     {
-      title: "Ressources",
-      href: "#ressources",
+      title: "Services",
+      href: "#Services",
     },
     {
       title: "Contact",

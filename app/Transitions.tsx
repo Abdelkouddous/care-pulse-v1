@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react"; // Third-party imports
 // Absolute imports
 import About from "@/components/About";
 import CustomCard from "@/components/card/Card";
-import ContactAdmin from "@/components/ContactAdmin"; // Ensure this is above Ressources
-import Ressources from "@/components/Ressources";
+import ContactAdmin from "@/components/ContactAdmin"; // Ensure this is above Services
+import Services from "@/components/Ressources";
 
 // Relative imports
 import DoctorsCard from "./doctors/doctorsCard"; // This should be below absolute imports
@@ -26,7 +26,8 @@ export const Transitions = () => {
         });
       },
       {
-        threshold: 0.5,
+        threshold: 0.3, // Trigger the animation when 10% of the section is visible
+        rootMargin: "0px 0px -50px 0px", // Adjust the root margin to trigger the animation earlier
       }
     );
 
@@ -77,13 +78,13 @@ export const Transitions = () => {
         }}
         className="remove-scrollbar container animate-on-scroll"
       >
-        <Ressources />
+        <Services />
       </section>
       <section
         ref={(el: HTMLDivElement | null) => {
           sectionsRef.current[5] = el!;
         }}
-        className="remove-scrollbar container animate-on-scroll"
+        className="remove-scrollbar container animate-on-scroll-bot"
       >
         <ContactAdmin />
       </section>

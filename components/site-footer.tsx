@@ -13,7 +13,7 @@ export const SiteFooter = async () => {
         </div>
         <div className="flex flex-1 m-2 items-center">
           <Link></Link>
-          <span>Ressources</span>
+          <span>Services</span>
         </div>
       </div>
       <p className=" mt-1 mb-1 text-dark-600 xxl:text-left text-center">
