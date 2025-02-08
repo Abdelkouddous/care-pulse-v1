@@ -70,7 +70,7 @@ export function MainNav(
   const handleMouseEnter = () => setIsScrolling(true); // HIDES THE NAVBAR WHEN WE CLICK OUTSIDE THE DIV ITSELF
 
   return (
-    <div className=" ">
+    <div className="w-full ">
       <div
         className={`${
           isScrolling ? "opacity-100" : "opacity-0"
@@ -87,7 +87,7 @@ export function MainNav(
         {items?.length ? (
           <>
             {/* Horizontal navigation, hidden on screens under 767px */}
-            <nav className="hidden md:flex md:flex-row md:justify-center md:gap-6 ">
+            <nav className="hidden md:flex md:flex-row md:justify-center md:gap-6  ">
               {items.map(
                 (item, index) =>
                   item.href && (
@@ -144,14 +144,16 @@ export function MainNav(
               )}
             </div>
             {(isAdmin || isDoctor) && <User className="h-6 w-6" />}
-            <Button
-              variant="default"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg transition-all"
-            >
-              <User className="h-4 w-4 mr-2" />
-              Sign In
-            </Button>
-            <ThemeToggle />
+            <div className="flex justify-end items-center ">
+              <Button
+                variant="default"
+                className=" bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-700 hover:to-purple-700 text-white dark:text-black shadow-lg transition-all"
+              >
+                <User className="h-4 w-4 mr-2" />
+                Sign In
+              </Button>
+              <ThemeToggle />
+            </div>
 
             {/* <MessageSquareDashedIcon className="relative top-2 right-2 h-6 w-6 text-gray-500 dark:text-gray-200" /> */}
           </>
