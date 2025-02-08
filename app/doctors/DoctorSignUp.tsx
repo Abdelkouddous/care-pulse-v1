@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { createDoctor } from "@/lib/actions/doctors.actions";
-import { Speciality } from "@/lib/actions/doctors.actions";
+// import { Speciality } from "@/lib/actions/doctors.actions";
 
 export const DoctorSignUp: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [specialty, setSpecialty] = useState<Speciality>(Speciality.CARDIO);
+  // const [specialty, setSpecialty] = useState<Speciality>(Speciality.CARDIO);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -14,7 +14,8 @@ export const DoctorSignUp: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const doctorData = { name, email, password, specialty };
+      const doctorData = { name, email, password };
+      // , specialty };
       const response = await createDoctor(doctorData);
       console.log("Doctor created:", response);
       // Redirect or show success message here
@@ -49,7 +50,7 @@ export const DoctorSignUp: React.FC = () => {
         required
       />
 
-      <select
+      {/* <select
         title="speciality"
         value={specialty}
         onChange={(e) => setSpecialty(e.target.value as Speciality)}
@@ -66,7 +67,7 @@ export const DoctorSignUp: React.FC = () => {
         <option value={Speciality.GYNAECOLOGY}>{Speciality.GYNAECOLOGY}</option>
         <option value={Speciality.NEUROLOGY}>{Speciality.NEUROLOGY}</option>
         <option value={Speciality.GASTRO}>{Speciality.GASTRO}</option>
-      </select>
+      </select> */}
 
       <button type="submit" disabled={isLoading}>
         {isLoading ? "Creating..." : "Sign Up as Doctor"}

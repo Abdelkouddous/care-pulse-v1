@@ -51,6 +51,20 @@ declare interface Admin extends CreateAdminParams {
 declare interface RegisterAdminParams extends CreateAdminParams {
   adminId: string;
 }
+/// doctors
+// declare interface Doctors extends CreateDoctorParams{
+// const enum Speciality  {
+//   CARDIO = "Cardiologist",
+//   OPHTALMO = "Ophtalmologist",
+//   ORTHO = "Orthopedic Surgeon",
+//   PEDIATRICS = "Pediatrician",
+//   GENERAL_PRACTITIONER = "General Practitioner",
+//   DENTIST = "Dentist",
+//   GYNAECOLOGY = "Gynaecologist",
+//   NEUROLOGY = "Neurologist",
+//   GASTRO = "Gastrologist",
+// }}
+//====
 //Appointments=========================================================
 declare type CreateAppointmentParams = {
   userId: string;

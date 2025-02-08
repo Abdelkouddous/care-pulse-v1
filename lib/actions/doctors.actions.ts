@@ -9,27 +9,27 @@ import {
 } from "../appwrite.config";
 import { parseStringify } from "../utils";
 
-export const enum Speciality {
-  CARDIO = "Cardiologist",
-  OPHTALMO = "Ophtalmologist",
-  ORTHO = "Orthopedic Surgeon",
-  PEDIATRICS = "Pediatrician",
-  GENERAL_PRACTITIONER = "General Practitioner",
-  DENTIST = "Dentist",
-  GYNAECOLOGY = "Gynaecologist",
-  NEUROLOGY = "Neurologist",
-  GASTRO = "Gastrologist",
-}
+// export const enum Speciality {
+//   CARDIO = "Cardiologist",
+//   OPHTALMO = "Ophtalmologist",
+//   ORTHO = "Orthopedic Surgeon",
+//   PEDIATRICS = "Pediatrician",
+//   GENERAL_PRACTITIONER = "General Practitioner",
+//   DENTIST = "Dentist",
+//   GYNAECOLOGY = "Gynaecologist",
+//   NEUROLOGY = "Neurologist",
+//   GASTRO = "Gastrologist",
+// }
 export async function createDoctor({
   name,
   email,
   password,
-  specialty,
+  // specialty,
 }: {
   name: string;
   email: string;
   password: string;
-  specialty: Speciality;
+  // specialty: Speciality;
 }) {
   try {
     // Create the doctor user
@@ -40,7 +40,8 @@ export async function createDoctor({
       DATABASE_ID!,
       DOCTOR_COLLECTION_ID!,
       newDoctor.$id,
-      { name, email, specialty }
+      { name, email }
+      // specialty }
     );
 
     return newDoctor;

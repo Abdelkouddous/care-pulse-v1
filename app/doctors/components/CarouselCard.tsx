@@ -11,7 +11,7 @@ import { type CarouselApi } from "@/components/ui/carousel";
 import { Doctors } from "@/constants";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Icon, LocateIcon } from "lucide-react";
+import { LocateIcon } from "lucide-react";
 // import { getDoctors } from "@/lib/actions/doctors.actions";
 
 export function CarouselDApiDemo() {
@@ -51,6 +51,7 @@ export function CarouselDApiDemo() {
       api.off("select", handleSelect);
     };
   }, [api, count]);
+  // Client-side only carousel
 
   return (
     <div className="mx-auto max-w-xs h-screen">
@@ -105,3 +106,5 @@ export function CarouselDApiDemo() {
     </div>
   );
 }
+
+export default CarouselDApiDemo;
