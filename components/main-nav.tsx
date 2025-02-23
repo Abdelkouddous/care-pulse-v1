@@ -70,11 +70,11 @@ export function MainNav(
   const handleMouseEnter = () => setIsScrolling(true); // HIDES THE NAVBAR WHEN WE CLICK OUTSIDE THE DIV ITSELF
 
   return (
-    <div className="w-full ">
+    <div className="w-screen flex items-center justify-between ">
       <div
         className={`${
           isScrolling ? "opacity-100" : "opacity-0"
-        } transition-opacity duration-300 ease-in-out flex justify-between flex-1 px-4 m-2 gap-10 md:gap-6 items-center p-1 shadow-md dark:shadow-gray-900 dark:text-slate-50 dark:bg-slate-900 text-slate-900 bg-slate-50`}
+        } transition-opacity duration-300 ease-in-out flex justify-between flex-1 px-4 m-2 gap-10 md:gap-6 items-center p-1 shadow-md `}
         onMouseEnter={handleMouseEnter} // Show navbar on hover
       >
         <Link
@@ -95,7 +95,7 @@ export function MainNav(
                       key={index}
                       href={item.href}
                       className={cn(
-                        "flex items-center text-sm font-medium text-muted-foreground hover:scale-110 hover:opacity-85 dark:shadow-gray-900 dark:text-slate-50 dark:bg-slate-900 text-slate-900 bg-slate-50",
+                        "flex items-center text-sm font-medium text-muted-foreground hover:scale-110 hover:opacity-85 ",
                         item.disabled && "cursor-not-allowed opacity-80"
                       )}
                     >
@@ -108,13 +108,13 @@ export function MainNav(
             {/* Dropdown for smaller screens, visible only on screens <767px */}
             <div
               ref={dropdownRef}
-              className="md:hidden m-auto relative z-50 "
+              className="md:hidden m-auto relative z-50 items-center justify-between"
               // dark:text-slate-50 dark:bg-slate-900 text-slate-900 bg-slate-50
             >
               <Button
                 onClick={toggleDropdown}
                 variant="ghost"
-                className="flex items-center text-sm font-medium text-muted-foreground dark:text-slate-50 text-slate-900"
+                className="flex items-center text-sm font-medium text-muted-foreground "
               >
                 <FiAlignJustify className="h-6 w-6 hover:scale-105 ">
                   {/* dark:text-slate-50 text-slate-900 */}
@@ -123,7 +123,7 @@ export function MainNav(
 
               {/* Conditionally render dropdown if `isDropdownOpen` is true */}
               {isDropdownOpen && (
-                <div className="absolute left-1/2 transform -translate-x-1/2 dark:text-slate-50 hover:bg-dark text-slate-900 dark:bg-slate-900 bg-slate-50 shadow-md rounded-md mt-2 space-y-1 p-1">
+                <div className="absolute left-1/2 transform -translate-x-1/2  bg-medical-light shadow-md rounded-md mt-2 space-y-1 p-1">
                   {items?.map(
                     (item, index) =>
                       item.href && (
@@ -131,7 +131,7 @@ export function MainNav(
                           key={index}
                           href={item.href}
                           className={cn(
-                            "flex flex-row justify-center items-center text-sm font-medium text-muted-foreground hover:scale-105 p-3 my-1 dark:text-slate-50 text-slate-900",
+                            "flex flex-row justify-center items-center text-sm font-medium text-muted-foreground hover:scale-105 p-3 my-1 ",
                             item.disabled && "cursor-not-allowed opacity-80"
                           )}
                         >
@@ -146,8 +146,8 @@ export function MainNav(
             {(isAdmin || isDoctor) && <User className="h-6 w-6" />}
             <div className="flex justify-end items-center ">
               <Button
-                variant="default"
-                className=" bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-700 hover:to-purple-700 text-white dark:text-black shadow-lg transition-all"
+                variant="ghost"
+                className="  shadow-lg transition-all m-2 border-s"
               >
                 <User className="h-4 w-4 mr-2" />
                 Sign In

@@ -39,17 +39,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased ",
-          fontSans.variable
-        )}
-      >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="min-h-screen bg-background font-sans antialiased ">
-            {children}
-          </div>
-          <SiteFooter></SiteFooter>
+      <body className={cn("font-sans antialiased", fontSans.variable)}>
+        <ThemeProvider
+          attribute="data-theme" // Changed from 'class' to 'data-theme'
+          defaultTheme="medical-light"
+          enableSystem={false}
+          themes={["medical-light", "medical-dark"]}
+        >
+          <div className="min-h-screen">{children}</div>
+          <SiteFooter />
         </ThemeProvider>
       </body>
     </html>

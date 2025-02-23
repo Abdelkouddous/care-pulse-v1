@@ -2,7 +2,14 @@ const { fontFamily } = require("tailwindcss/defaultTheme");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ["class"],
+  // Remove the darkMode class and use data attribute instead
+  darkMode: ["class", '[data-theme="medical-dark"]'],
+
+  // Update primary color reference
+  primary: {
+    DEFAULT: "var(--medical-primary)", // Remove hsl() wrapper
+    foreground: "var(--primary-foreground)",
+  },
   content: ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"],
   theme: {
     container: {
@@ -14,13 +21,19 @@ module.exports = {
     },
     extend: {
       colors: {
+        "medical-primary": "var(--medical-primary)",
+        "medical-secondary": "var(--medical-secondary)",
+        "medical-accent": "var(--medical-accent)",
+        "medical-light": "var(--medical-light)",
+        "medical-dark": "var(--medical-dark)",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+
+        background: "var(--background)",
+        foreground: "var(--foreground)",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "hsl(var(--medical-primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
@@ -72,8 +85,8 @@ module.exports = {
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        "accordion-down": "accordion-down 0.4s ease-out",
+        "accordion-up": "accordion-up 0.4s ease-out",
       },
     },
   },
