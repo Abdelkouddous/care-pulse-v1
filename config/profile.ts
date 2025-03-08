@@ -3,19 +3,22 @@ import { users } from "@/lib/appwrite.config";
 export type profileConfig = typeof profileConfig;
 
 // Define the response structure from the API call
+//this is the navbar content after the user logs in, u can find the specifications in the dashboard cfolder
 export const profileConfig = {
   name: "Profile",
   description: "A healthcare management app ",
   mainNav: [
     {
+      title: "My appointments",
+      href: `my-appointments`,
+    },
+
+    {
       title: "My profile",
       href: "profile",
     },
 
-    {
-      title: "My appointments",
-      href: `my-appointments`,
-    },
+    
 
     {
       title: "Edit profile",

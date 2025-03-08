@@ -4,7 +4,7 @@ export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
   name: "Pulse",
-  description: "A healthcare management app ",
+  description: "A healthcare appointement management app ",
   mainNav: [
     {
       title: "Home",

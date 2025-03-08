@@ -1,11 +1,11 @@
-import { Github, Twitter, Linkedin, Mail, Link2 } from "lucide-react";
+import { Github, Twitter, X, Linkedin, Mail, Link2 } from "lucide-react";
 import Link from "next/link";
 
 export const SiteFooter = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="m-auto bg-gray-900 text-gray-300 py-8 mt-16">
+    <footer className="m-auto border-t bg-blue-950 text-gray-300 py-8 mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col justify-center items-stretch md:flex-row md:justify-between gap-8">
           {/* Company Info */}
@@ -28,7 +28,7 @@ export const SiteFooter = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Twitter className="h-5 w-5 hover:text-blue-400 transition-colors" />
+                <X className="h-5 w-5 hover:text-blue-400 transition-colors" />
               </a>
               <a
                 href="https://linkedin.com"
@@ -128,7 +128,7 @@ export const SiteFooter = () => {
 
         {/* Copyright */}
         <div className="m-auto flex-col justify-center items-center border-t border-gray-800 mt-8 pt-6 text-sm text-gray-400">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="m-auto text-center flex flex-col md:flex-row justify-between items-center gap-4">
             <p>
               © {currentYear} HML Soft. All rights reserved.
               <br />

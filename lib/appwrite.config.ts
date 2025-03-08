@@ -34,6 +34,8 @@
 // export const messaging = new sdk.Messaging(client);
 // export const storage = new sdk.Storage(client);
 
+//this is the backend ENDPOINT configuration
+
 import * as sdk from "node-appwrite";
 
 // Environment variables setup

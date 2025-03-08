@@ -1,6 +1,7 @@
 "use server";
 
 // import { admins } from "../appwrite.config";
+//Server side 
 import { parseStringify } from "../utils";
 import {
   DATABASE_ID,
