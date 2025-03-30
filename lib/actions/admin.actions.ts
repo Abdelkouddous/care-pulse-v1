@@ -1,14 +1,14 @@
 "use server";
+import { Query } from "node-appwrite";
 
 // import { admins } from "../appwrite.config";
-//Server side 
-import { parseStringify } from "../utils";
+// Server side
 import {
   DATABASE_ID,
   ADMIN_COLLECTION_ID,
   databases,
 } from "../appwrite.config";
-import { Query } from "node-appwrite";
+import { parseStringify } from "../utils";
 
 export const getAdmin = async (adminId: string) => {
   console.log("Fetching admin with ID:", adminId); // Log the input adminId
@@ -16,7 +16,7 @@ export const getAdmin = async (adminId: string) => {
     const patients = await databases.listDocuments(
       DATABASE_ID!,
       ADMIN_COLLECTION_ID!,
-      [Query.equal("adminId", [adminId])],
+      [Query.equal("adminId", [adminId])]
     );
 
     console.log("Documents found:", patients.documents.length); // Log how many documents were found
@@ -34,6 +34,6 @@ export const getAdmin = async (adminId: string) => {
   }
 };
 
-//66feedc6002cfce162d2
+// 66feedc6002cfce162d2
 
-//66feedc6002cfce162d2
+// 66feedc6002cfce162d2
