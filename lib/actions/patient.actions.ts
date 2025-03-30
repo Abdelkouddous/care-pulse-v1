@@ -1,5 +1,5 @@
 "use server";
-//backend logics
+import { faker } from "@faker-js/faker";
 import { ID, InputFile, Query } from "node-appwrite";
 
 import {
@@ -13,11 +13,7 @@ import {
   users,
 } from "../appwrite.config";
 import { parseStringify } from "../utils";
-import { faker } from "@faker-js/faker";
 
-const roles = ["admin", "patient", "doctor"];
-
-// CREATE APPWRITE USER
 export const createUser = async (user: CreateUserParams) => {
   try {
     // Create new user -> https://appwrite.io/docs/references/1.5.x/server-nodejs/users#create
@@ -128,5 +124,3 @@ export const getPatientCount = async () => {
     );
   }
 };
-
-//authUser

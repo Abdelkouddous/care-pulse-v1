@@ -1,11 +1,11 @@
 "use server";
 import { ID, Query } from "node-appwrite";
-import { users } from "@/lib/appwrite.config";
 
 import {
   DATABASE_ID,
   databases,
   DOCTOR_COLLECTION_ID,
+  users,
 } from "../appwrite.config";
 import { parseStringify } from "../utils";
 
@@ -67,8 +67,6 @@ export const getDoctorCount = async () => {
   }
 };
 
-//GET ALL ACTIVE DOCTORS
-// Very important !!
 export const getActiveDoctorCount = async () => {
   try {
     const appointment = await databases.listDocuments(
@@ -85,7 +83,7 @@ export const getActiveDoctorCount = async () => {
     );
   }
 };
-//GET DOCTORS NAMES
+
 export const getDoctors = async () => {
   try {
     const appointment = await databases.listDocuments(

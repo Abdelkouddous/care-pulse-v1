@@ -14,8 +14,6 @@ import {
 } from "../appwrite.config";
 import { formatDateTime, parseStringify } from "../utils";
 
-//CREATE APPOINTMENT
-//backend
 export const createAppointment = async (
   appointment: CreateAppointmentParams
 ) => {
@@ -82,7 +80,6 @@ export const getRecentAppointmentList = async () => {
   }
 };
 
-//getting appointments of a singlePatient
 export const getRecentAppointmentsForPatient = async (userId: string) => {
   try {
     const appointments = await databases.listDocuments(
@@ -165,7 +162,7 @@ export const updateAppointment = async ({
       appointmentId,
       appointment
     );
-    //TODOSMS NOTIF
+
     if (!updatedAppointment) throw Error;
 
     const smsMessage = `Greetings from Pulse. ${
