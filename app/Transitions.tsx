@@ -5,6 +5,8 @@ import { useEffect, useRef } from "react"; // Third-party imports
 import About from "@/components/About";
 import CustomCard from "@/components/card/Card";
 import ContactAdmin from "@/components/ContactAdmin"; // Ensure this is above Services
+import NewsLetter from "@/components/newsletter/NewsLetter";
+import Plans from "@/components/payment/Plans";
 import Services from "@/components/Ressources";
 
 // Relative imports
@@ -52,7 +54,7 @@ export const Transitions = () => {
         ref={(el: HTMLDivElement) => {
           sectionsRef.current[1] = el!;
         }}
-        className="remove-scrollbar container animate-on-scroll"
+        className="remove-scrollbar animate-on-scroll container"
       >
         <About />
       </section>
@@ -60,7 +62,7 @@ export const Transitions = () => {
         ref={(el: HTMLDivElement) => {
           sectionsRef.current[2] = el!;
         }}
-        className="remove-scrollbar container animate-on-scroll"
+        className="remove-scrollbar animate-on-scroll container"
       >
         <CustomCard />
       </section>
@@ -68,7 +70,7 @@ export const Transitions = () => {
         ref={(el: HTMLDivElement) => {
           sectionsRef.current[3] = el!;
         }}
-        className="remove-scrollbar container animate-on-scroll"
+        className="remove-scrollbar animate-on-scroll container"
       >
         <DoctorsCard />
       </section>
@@ -76,7 +78,7 @@ export const Transitions = () => {
         ref={(el: HTMLDivElement) => {
           sectionsRef.current[4] = el!;
         }}
-        className="remove-scrollbar container animate-on-scroll"
+        className="remove-scrollbar animate-on-scroll container"
       >
         <Services />
       </section>
@@ -84,7 +86,23 @@ export const Transitions = () => {
         ref={(el: HTMLDivElement | null) => {
           sectionsRef.current[5] = el!;
         }}
-        className="remove-scrollbar container animate-on-scroll-bot"
+        className="remove-scrollbar animate-on-scroll-bot container"
+      >
+        <Plans></Plans>
+      </section>
+      <section
+        ref={(el: HTMLDivElement | null) => {
+          sectionsRef.current[6] = el!;
+        }}
+        className="remove-scrollbar animate-on-scroll-bot container"
+      >
+        <NewsLetter />
+      </section>
+      <section
+        ref={(el: HTMLDivElement | null) => {
+          sectionsRef.current[7] = el!;
+        }}
+        className="remove-scrollbar animate-on-scroll-bot container"
       >
         <ContactAdmin />
       </section>

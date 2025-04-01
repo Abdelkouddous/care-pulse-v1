@@ -1,34 +1,59 @@
+import { motion } from "framer-motion";
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 import { CarouselDApiDemo } from "./components/CarouselCard";
 
 const DoctorsCard = () => {
-  return (
-    <div
-      className=" min-h-screen flex m-auto flex-col  max-w-screen  relative my-3  justify-center
-"
-      id="doctors"
-    >
-      <Card
-        x-chunk="dashboard-01-chunk-1"
-        className=" border-none p-5 fade-in "
-      >
-        <CardHeader className="flex flex-col items-center justify-center space-y-0 pb-2">
-          <CardTitle className="flex text-sm font-medium items-center text-center ">
-            <h1 className="text-center font-serif text-4xl m-4  fade-in">
-              {" "}
-              Our Doctors
-            </h1>
-          </CardTitle>
-        </CardHeader>
+  const fadeInVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.6, 0.05, -0.01, 0.9],
+      },
+    },
+  };
 
-        <CardContent>
-          <CarouselDApiDemo></CarouselDApiDemo>
+  return (
+    <section id="doctors">
+      <Card className="my-12 overflow-hidden border-0  bg-white shadow-xl dark:bg-gray-800">
+        <CardHeader>
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-12 space-y-4 lg:mb-16">
+              <CardTitle>
+                <span className="text-sm font-semibold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
+                  Healthcare Experts
+                </span>
+              </CardTitle>
+              <h2 className="font-serif text-4xl font-bold text-gray-900 dark:text-white lg:text-5xl">
+                Meet Our Medical Specialists
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-300 lg:text-xl">
+                Board-certified professionals dedicated to your health and
+                wellness
+              </p>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="px-0 py-8 sm:px-8">
+          <div className="mx-auto max-w-7xl">
+            <CarouselDApiDemo />
+          </div>
         </CardContent>
       </Card>
-    </div>
+    </section>
   );
 };
 
 export default DoctorsCard;
+// import React from "react";
+
+// const doctorsCard = () => {
+//   return <div>doctorsCard</div>;
+// };
+
+// export default doctorsCard;

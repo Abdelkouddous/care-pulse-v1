@@ -9,7 +9,7 @@ const AdminPage = async ({ params: { adminId } }: SearchParamProps) => {
   const admin = await getAdmin(adminId);
 
   return (
-    <div className="mx-auto overflow-auto flex max-w-[95%] flex-col space-y-22">
+    <div className="space-y-22 mx-auto flex max-w-[95%] flex-col overflow-auto">
       <header className="admin-header text-right">
         <h1 className="header">
           Welcome 👋
@@ -25,7 +25,7 @@ const AdminPage = async ({ params: { adminId } }: SearchParamProps) => {
           </p>
         </section>
 
-        <section className=" overflow-auto m-auto admin-stat flex space-x-6 items-center mx-4 justify-center ">
+        <section className=" admin-stat m-auto mx-4 flex items-center justify-center space-x-6 overflow-auto ">
           <StatCard
             type="appointments"
             count={appointments.scheduledCount}

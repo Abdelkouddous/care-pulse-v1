@@ -1,157 +1,183 @@
-import { Github, Twitter, X, Linkedin, Mail, Link2 } from "lucide-react";
-import Link from "next/link";
+import {
+  Twitter,
+  Linkedin,
+  Mail,
+  Calendar,
+  Clock,
+  Facebook,
+  Instagram,
+  Phone,
+  MapPin,
+  Heart,
+} from "lucide-react";
 
 export const SiteFooter = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="m-auto border-t bg-blue-950 text-gray-300 py-8 mt-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col justify-center items-stretch md:flex-row md:justify-between gap-8">
-          {/* Company Info */}
-          <div className="space-y-4 max-w-xs">
-            <div className="flex items-center gap-2">
-              <Link2 className="h-6 w-6 text-blue-400" />
-              <span className="text-xl font-bold text-white">HML Soft</span>
+    <footer className="bg-gray-900 pt-16 text-gray-200">
+      <div className="container mx-auto px-6">
+        <div className="grid gap-12 md:grid-cols-3 lg:grid-cols-3">
+          {/* Column 1: About */}
+          <div className="flex flex-col space-y-4">
+            <h3 className="text-2xl font-bold text-white">
+              <span className="text-emerald-400">Pulse</span> Health
+            </h3>
+            <p className="text-sm leading-relaxed">
+              Pulse is a comprehensive healthcare appointment system designed to
+              connect patients with trusted healthcare professionals efficiently
+              and securely.
+            </p>
+            <div className="flex space-x-4 pt-2">
+              <a
+                href="#"
+                className="rounded-full bg-gray-800 p-2 transition-colors hover:bg-emerald-600"
+              >
+                <Facebook className="size-4" />
+              </a>
+              <a
+                href="#"
+                className="rounded-full bg-gray-800 p-2 transition-colors hover:bg-emerald-600"
+              >
+                <Twitter className="size-4" />
+              </a>
+              <a
+                href="#"
+                className="rounded-full bg-gray-800 p-2 transition-colors hover:bg-emerald-600"
+              >
+                <Instagram className="size-4" />
+              </a>
+              <a
+                href="#"
+                className="rounded-full bg-gray-800 p-2 transition-colors hover:bg-emerald-600"
+              >
+                <Linkedin className="size-4" />
+              </a>
             </div>
-            <p className="text-sm">Building the Future, One Line at a Time.</p>
-            <div className="flex space-x-4">
+          </div>
+
+          {/* Column 2: Quick Links */}
+          <div className="flex flex-col space-y-4">
+            <h3 className="text-lg font-semibold text-white">Quick Links</h3>
+            <div className="flex flex-col space-y-2">
               <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#"
+                className="text-sm transition-colors hover:text-emerald-400"
               >
-                <Github className="h-5 w-5 hover:text-blue-400 transition-colors" />
+                Find a Doctor
               </a>
               <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#"
+                className="text-sm transition-colors hover:text-emerald-400"
               >
-                <X className="h-5 w-5 hover:text-blue-400 transition-colors" />
+                Book Appointment
               </a>
               <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#"
+                className="text-sm transition-colors hover:text-emerald-400"
               >
-                <Linkedin className="h-5 w-5 hover:text-blue-400 transition-colors" />
+                Our Services
+              </a>
+              <a
+                href="#"
+                className="text-sm transition-colors hover:text-emerald-400"
+              >
+                Health Blog
+              </a>
+              <a
+                href="#"
+                className="text-sm transition-colors hover:text-emerald-400"
+              >
+                Medical Records
+              </a>
+              <a
+                href="#"
+                className="text-sm transition-colors hover:text-emerald-400"
+              >
+                Patient Portal
               </a>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="grid grid-cols-2 gap-8">
-            <div className="space-y-3">
-              <h3 className="text-white font-semibold">Company</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link
-                    href="/about"
-                    className="hover:text-blue-400 transition-colors"
-                  >
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/services"
-                    className="hover:text-blue-400 transition-colors"
-                  >
-                    Services
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/blog"
-                    className="hover:text-blue-400 transition-colors"
-                  >
-                    Blog
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/careers"
-                    className="hover:text-blue-400 transition-colors"
-                  >
-                    Careers
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div className="space-y-3">
-              <h3 className="text-white font-semibold">Legal</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link
-                    href="/privacy"
-                    className="hover:text-blue-400 transition-colors"
-                  >
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/terms"
-                    className="hover:text-blue-400 transition-colors"
-                  >
-                    Terms of Service
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/cookies"
-                    className="hover:text-blue-400 transition-colors"
-                  >
-                    Cookie Policy
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Contact Info */}
-          <div className="space-y-3">
-            <h3 className="text-white font-semibold">Get in Touch</h3>
-            <div className="flex items-center gap-2">
-              <Mail className="h-5 w-5" />
-              <a
-                href="mailto:contact@hmlsoft.com"
-                className="text-sm hover:text-blue-400 transition-colors"
-              >
-                contact@hmlsoft.com
-              </a>
+          {/* Column 3: Contact Info */}
+          <div className="flex flex-col space-y-4">
+            <h3 className="text-lg font-semibold text-white">Contact Us</h3>
+            <div className="flex flex-col space-y-3">
+              <div className="flex items-start space-x-3">
+                <MapPin className="mt-0.5 size-4 text-emerald-400" />
+                <span className="text-sm">
+                  123 Healthcare Avenue, Medical District, NY 10001
+                </span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Phone className="size-4 text-emerald-400" />
+                <span className="text-sm">+1 (800) PULSE-HEALTH</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Mail className="size-4 text-emerald-400" />
+                <span className="text-sm">support@pulsehealth.com</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Clock className="size-4 text-emerald-400" />
+                <span className="text-sm">24/7 Customer Support</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="m-auto flex-col justify-center items-center border-t border-gray-800 mt-8 pt-6 text-sm text-gray-400">
-          <div className="m-auto text-center flex flex-col md:flex-row justify-between items-center gap-4">
-            <p>
-              © {currentYear} HML Soft. All rights reserved.
-              <br />
-              Crafted with passion by Hamel Aymene Abdelkouddous
-            </p>
-            <div className="flex space-x-4">
-              <Link
-                href="/sitemap"
-                className="hover:text-blue-400 transition-colors"
-              >
-                Sitemap
-              </Link>
-              <span>|</span>
-              <Link
-                href="/status"
-                className="hover:text-blue-400 transition-colors"
-              >
-                System Status
-              </Link>
+        {/* Bottom section */}
+        <div className="mt-12 border-t border-gray-800 py-6">
+          <div className="flex flex-col items-center justify-between space-y-4 md:flex-row md:space-y-0">
+            <div className="text-sm text-gray-400">
+              © {currentYear}{" "}
+              <span className="font-medium text-white">Pulse Health</span>.
+              Developed by{" "}
+              <span className="font-medium text-emerald-400">HML Soft</span>.
+              All rights reserved.
             </div>
+            <div className="flex space-x-6 text-sm">
+              <a href="#" className="transition-colors hover:text-emerald-400">
+                Privacy Policy
+              </a>
+              <a href="#" className="transition-colors hover:text-emerald-400">
+                Terms of Service
+              </a>
+              <a href="#" className="transition-colors hover:text-emerald-400">
+                Cookie Policy
+              </a>
+              <a href="#" className="transition-colors hover:text-emerald-400">
+                HIPAA Compliance
+              </a>
+            </div>
+          </div>
+          <div className="mt-4 text-center text-xs text-gray-500">
+            Made with <Heart className="inline size-3 text-red-500" /> for
+            better healthcare access. This website is for informational purposes
+            only and not a substitute for professional medical advice.
           </div>
         </div>
       </div>
     </footer>
   );
 };
+
+// import {
+//   Calendar,
+//   Clock,
+//   Facebook,
+//   Twitter,
+//   Instagram,
+//   Linkedin,
+//   Mail,
+//   Phone,
+//   MapPin,
+//   Heart,
+// } from "lucide-react";
+// import React from "react";
+
+// const SiteFooter: React.FC = () => {
+
+//   );
+// };
+
+// export default SiteFooter;

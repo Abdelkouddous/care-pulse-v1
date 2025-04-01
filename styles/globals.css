@@ -22,9 +22,9 @@
   [data-theme="medical-dark"] {
     --medical-primary: #2b6cb0;
     --medical-secondary: #4299e1;
-    --medical-accent: #4fd1c5;
-    --medical-light: #1a365d;
-    --medical-dark: #ebf8ff;
+    --medical-accent: #b0cfcc;
+    --medical-light: #0e1e34;
+    --medical-dark: #fcfeff;
 
     --background: var(--medical-light);
     --foreground: var(--medical-dark);
@@ -48,5 +48,9 @@
     transition:
       background-color 0.5s ease,
       color 0.5s ease;
+  }
+  input {
+    background-color: var(--medical-light);
+    transition: 0.2s ease-in;
   }
 }

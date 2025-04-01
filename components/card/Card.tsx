@@ -1,100 +1,142 @@
-import React from "react";
-import { useEffect, useState } from "react";
-
-import { Activity, Users } from "lucide-react";
+import { motion } from "framer-motion";
+import { Activity, Users, UserPlus } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { getPatientCount } from "@/lib/actions/patient.actions";
 import {
   getActiveDoctorCount,
   getDoctorCount,
 } from "@/lib/actions/doctors.actions";
+import { getPatientCount } from "@/lib/actions/patient.actions";
 import "@/app/globals.css";
 
-const CustomCard: React.FC = () => {
-  const [patientCount, setPatientCount] = useState<number | undefined>(
-    undefined
-  );
-  const [docCount, setDocCount] = useState<number | undefined>(undefined);
-  const [activeDocs, setActiveDocs] = useState<number | undefined>(undefined);
+const DashboardOverview: React.FC = () => {
+  const [metrics, setMetrics] = useState({
+    patientCount: 0,
+    doctorCount: 0,
+    activeDoctors: 0,
+    isLoading: true,
+  });
+
+  const fadeInVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6 },
+    },
+  };
 
   useEffect(() => {
-    const fetchCount = async () => {
-      const count = await getPatientCount();
-      const docCount = await getDoctorCount();
-      const activeDocs = await getActiveDoctorCount();
-      setPatientCount(count);
-      setDocCount(docCount);
-      setActiveDocs(activeDocs);
+    let intervalId: NodeJS.Timeout;
+
+    const fetchMetrics = async () => {
+      try {
+        const [patientCount, doctorCount, activeDoctors] = await Promise.all([
+          getPatientCount(),
+          getDoctorCount(),
+          getActiveDoctorCount(),
+        ]);
+
+        setMetrics({
+          patientCount: patientCount || 0,
+          doctorCount: doctorCount || 0,
+          activeDoctors: activeDoctors || 0,
+          isLoading: false,
+        });
+      } catch (error) {
+        console.error("Error fetching dashboard metrics:", error);
+        setMetrics((prev) => ({ ...prev, isLoading: false }));
+      }
     };
 
-    // Function to repeatedly fetch data every hour
-    const intervalFetch = () => {
-      fetchCount();
-      setInterval(intervalFetch, 1000 * 60 * 60); // Set timeout for 5 seconds
-    };
+    // Initial fetch
+    fetchMetrics();
 
-    // Start the initial fetch and interval setup
-    intervalFetch();
+    // Set up hourly refresh interval
+    intervalId = setInterval(fetchMetrics, 60 * 60 * 1000);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
-  return (
-    <div
-      className="flex flex-col m-auto max-w-screen h-screen relative p-4
-    "
-    >
-      <Card x-chunk="dashboard-01-chunk-1 " className="p-8 fade-in">
-        <h1 className="text-center font-serif text-5xl m-4  fade-in">
-          {" "}
-          We offered & offer
-        </h1>
-        <div className=" grid gap-4 md:grid-cols-3 md:gap-8 lg:grid-cols-3 ">
-          <Card x-chunk=" dashboard-01-chunk-1 fade-in">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Patients</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold fade-in">
-                + {patientCount !== undefined ? patientCount : "0"}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                +180.1% treated & diagnosed from last month
-              </p>
-            </CardContent>
-          </Card>
-          <Card x-chunk="dashboard-01-chunk-2 fade-in">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Doctors</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold fade-in">
-                + {docCount !== undefined ? docCount : "0"}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                +18.1% signed doctors
-              </p>
-            </CardContent>
-          </Card>
-          <Card x-chunk="dashboard-01-chunk-3 fade-in">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Now</CardTitle>
-              <Activity className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold fade-in">
-                + {activeDocs !== undefined ? activeDocs : "0"}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                +1 since last hour
-              </p>
-            </CardContent>
-          </Card>
+  const MetricCard = ({
+    title,
+    value,
+    change,
+    icon: Icon,
+  }: {
+    title: string;
+    value: number;
+    change: string;
+    icon: React.ElementType;
+  }) => (
+    <Card className="overflow-hidden border-0 shadow-lg transition-all duration-300 hover:shadow-md dark:bg-gray-800">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 border-b border-gray-100 pb-2 dark:border-gray-700">
+        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        <Icon className="size-5 text-emerald-600 dark:text-emerald-400" />
+      </CardHeader>
+      <CardContent className="px-6 pb-6 pt-4">
+        <div className="flex items-baseline">
+          <span className="text-3xl font-bold tracking-tight text-gray-800 dark:text-white">
+            {metrics.isLoading ? "—" : value.toLocaleString()}
+          </span>
         </div>
-      </Card>
-    </div>
+        <p className="mt-2 text-xs text-gray-600 dark:text-gray-300">
+          {change}
+        </p>
+      </CardContent>
+    </Card>
+  );
+
+  return (
+    <section className="mt-16 md:mt-16">
+      <div className="">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInVariants}
+          className="flex flex-col space-y-6"
+        >
+          <Card className="overflow-hidden border-0 shadow-lg dark:bg-gray-800">
+            <CardHeader className="border-b border-gray-100 pb-2 text-center dark:border-gray-700">
+              <CardTitle className="flex flex-col items-center justify-center">
+                <span className="mb-2 text-sm font-medium uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                  NETWORK OVERVIEW
+                </span>
+                <h2 className="font-serif text-3xl font-bold text-gray-800 dark:text-white md:text-4xl">
+                  Healthcare Statistics
+                </h2>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="px-6 pb-8 pt-6 md:px-8">
+              <div className="grid gap-6 md:grid-cols-3">
+                <MetricCard
+                  title="Total Treated Patients"
+                  value={metrics.patientCount}
+                  change="+180.1% from previous month"
+                  icon={Users}
+                />
+                <MetricCard
+                  title="Network Physicians"
+                  value={metrics.doctorCount}
+                  change="+18.1% growth in provider network"
+                  icon={UserPlus}
+                />
+                <MetricCard
+                  title="Currently Active Doctors"
+                  value={metrics.activeDoctors}
+                  change="Real-time provider availability"
+                  icon={Activity}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+    </section>
   );
 };
 
-export default CustomCard;
+export default DashboardOverview;

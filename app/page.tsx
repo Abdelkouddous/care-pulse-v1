@@ -1,16 +1,19 @@
 "use client";
+
 import { useEffect, useRef, useState } from "react";
-import { PasskeyModal } from "@/components/PasskeyModal";
-import { PasskeyDoctorModal } from "@/components/PassKeyDoctorModal";
-import { SiteHeader } from "@/components/site-header";
-import Transitions from "./Transitions";
+
 import PatientForm from "@/components/forms/PatientForm";
+import { PasskeyDoctorModal } from "@/components/PassKeyDoctorModal";
+import { PasskeyModal } from "@/components/PasskeyModal";
+import { SiteHeader } from "@/components/site-header";
+
+import Transitions from "./Transitions";
 
 export default async function Home(
   // { params: { userId } }: SearchParamProps,
   { searchParams }: SearchParamProps
 ) {
-  //logic when we click admin or doctor
+  // logic when we click admin or doctor
   const isAdmin = searchParams?.admin === "true";
   const isDoctor = searchParams?.doctor === "true";
 
@@ -72,13 +75,13 @@ export default async function Home(
   // }
 
   return (
-    <div className="flex justify-center flex-col m-auto p-3 min-h-screen">
+    <div className="m-auto flex min-h-screen flex-col justify-center p-3">
       <div className=" sticky top-0 z-50 w-screen">
         <SiteHeader />
       </div>
       {/* Show offline notification */}
       {isOffline && (
-        <div className="bg-red-500 sticky text-white p-4 mb-4 rounded-md">
+        <div className="sticky mb-4 rounded-md bg-red-500 p-4 text-white">
           Connection not set
         </div>
       )}
@@ -86,7 +89,8 @@ export default async function Home(
       {isDoctor && <PasskeyDoctorModal />}
       {isAdmin && <PasskeyModal />}
       {/* Patient form */}
-      <PatientForm /> <Transitions />{" "}
+      <PatientForm />
+      <Transitions />{" "}
     </div>
   );
 }

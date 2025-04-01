@@ -1,7 +1,3 @@
-let isLoggedIn = false;
-
-export type SiteConfig = typeof siteConfig;
-
 export const siteConfig = {
   name: "Pulse",
   description: "A healthcare appointement management app ",
