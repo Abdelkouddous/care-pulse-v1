@@ -9,10 +9,7 @@ export const TokenManager = {
   // Set token with expiration
   setToken: (userId: string) => {
     const expirationTime = new Date().getTime() + 24 * 60 * 60 * 1000; // 24 hours from now
-    const tokenData = {
-      userId,
-      expiresAt: expirationTime,
-    };
+    const tokenData = { userId, expiresAt: expirationTime };
 
     // Store in cookie (accessible by both client and middleware)
     Cookies.set("authToken", JSON.stringify(tokenData), {
@@ -29,7 +26,7 @@ export const TokenManager = {
     const timeUntilExpiration = expirationTime - new Date().getTime();
     setTimeout(() => {
       TokenManager.removeToken();
-      window.location.href = "/login";
+      window.location.href = "/";
       toast({
         title: "Session Expired",
         description: "Your session has expired. Please log in again.",
@@ -98,7 +95,7 @@ export const logout = async () => {
     });
 
     // Redirect to login page
-    window.location.href = "/login";
+    window.location.href = "/";
   } catch (error) {
     console.error("Error during logout:", error);
     toast({

@@ -1,5 +1,5 @@
 // lib/profile-config.ts
-import { users } from "@/lib/appwrite.config";
+
 import { logout } from "@/lib/auth";
 
 // Define a type for navigation items
@@ -23,22 +23,10 @@ export const profileConfig: ProfileConfig = {
   name: "Profile",
   description: "A healthcare management app",
   mainNav: [
-    {
-      title: "My appointments",
-      href: `my-appointments`,
-    },
-    {
-      title: "New appointment",
-      href: "new-appointment",
-    },
-    {
-      title: "My profile",
-      href: "profile",
-    },
-    {
-      title: "Edit profile",
-      href: `edit-profile`,
-    },
+    { title: "My appointments", href: `my-appointments` },
+    { title: "New appointment", href: "new-appointment" },
+    { title: "My profile", href: "profile" },
+    { title: "Edit profile", href: `edit-profile` },
     {
       title: "Logout",
       onClick: logout, // Use the logout function instead of a href

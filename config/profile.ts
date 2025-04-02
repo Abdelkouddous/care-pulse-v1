@@ -8,27 +8,12 @@ export const profileConfig = {
   name: "Profile",
   description: "A healthcare management app ",
   mainNav: [
-    {
-      title: "My appointments",
-      href: `my-appointments`,
-    },
-    {
-      title: "New appointment",
-      href: "new-appointment",
-    },
-    {
-      title: "My profile",
-      href: "profile",
-    },
+    { title: "My appointments", href: `my-appointments` },
+    { title: "New appointment", href: "new-appointment" },
+    { title: "My profile", href: "profile" },
 
-    {
-      title: "Edit profile",
-      href: `edit-profile`,
-    },
-    {
-      title: "Logout",
-      href: `logout`,
-    },
+    { title: "Edit profile", href: `edit-profile` },
+    { title: "Logout", href: `/` },
 
     // isLoggedIn
     //   ? {

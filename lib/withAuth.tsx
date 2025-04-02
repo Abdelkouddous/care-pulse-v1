@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 import { toast } from "@/hooks/use-toast";
 import { TokenManager } from "@/lib/auth";
+import { User } from "lucide-react";
 
 // Loading component to show while checking authentication
 const LoadingScreen = () => (
@@ -16,7 +17,8 @@ const LoadingScreen = () => (
 
 // HOC to protect routes
 export function withAuth<P extends object>(
-  Component: React.ComponentType<P>
+  Component: React.ComponentType<P>,
+  { user }: { user: User }
 ): React.FC<P> {
   return function ProtectedRoute(props: P) {
     const router = useRouter();
@@ -35,7 +37,7 @@ export function withAuth<P extends object>(
           description: "Please log in to access this page.",
           variant: "destructive",
         });
-        router.push("/login");
+        router.push(`/dashboard/patients/${user.$id}/login`);
       } else {
         setIsAuthenticated(true);
       }
