@@ -34,7 +34,7 @@ const Appointment = async ({ params: { userId } }: SearchParamProps) => {
               </p>
             </div>
 
-            <div className="dark:bg-gray-750 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700">
+            <div className="e p-6 shadow-sm ">
               <AppointmentForm
                 patientId={patient?.$id}
                 userId={userId}
