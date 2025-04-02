@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 
 //setting up text to plus jarakrta
 const fontSans = Plus_Jakarta_Sans({
@@ -15,10 +16,7 @@ const fontSans = Plus_Jakarta_Sans({
   variable: "--font-sans",
 });
 export const metadata: Metadata = {
-  title: {
-    default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
-  },
+  title: { default: siteConfig.name, template: `%s - ${siteConfig.name}` },
   description: siteConfig.description,
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
@@ -47,7 +45,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           themes={["medical-light", "medical-dark"]}
         >
           <div className="min-h-screen">{children}</div>
-          <SiteFooter />
+          <SiteFooter></SiteFooter>
         </ThemeProvider>
       </body>
     </html>

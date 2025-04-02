@@ -85,16 +85,13 @@ export function CarouselDApiDemo() {
   };
 
   return (
-    <section className="py-6 md:py-3">
-      <div className="container mx-auto px-4">
+    <section className="py-3 md:py-2">
+      <div className="container mx-auto px-4 justify-center flex-col">
         <div className="relative mx-auto max-w-md">
           <Carousel
             setApi={setApi}
             className="w-full"
-            opts={{
-              loop: true,
-              align: "center",
-            }}
+            opts={{ loop: true, align: "center" }}
           >
             <CarouselContent className="-ml-2 md:-ml-4">
               {Doctors.map((doctor, i) => (
@@ -156,7 +153,7 @@ export function CarouselDApiDemo() {
             </CarouselContent>
 
             {/* Carousel navigation indicators */}
-            <div className="absolute inset-x-0 -bottom-12 flex justify-center space-x-2">
+            <div className="absolute inset-x-0 -bottom-12 flex text-center justify-center space-x-2">
               {Array.from({ length: count }).map((_, index) => (
                 <button
                   key={index}
@@ -176,9 +173,7 @@ export function CarouselDApiDemo() {
             <CarouselNext className="absolute -right-4 top-1/2 size-8 border-0 bg-white shadow-md dark:bg-gray-800" />
           </Carousel>
         </div>
-      </div>
-      <div className="my-8 text-center text-sm text-gray-500">
-        <p>Swipe or use arrows to see more specialists</p>
+        <p className="my-8 text-center text-sm text-gray-500"></p>
       </div>
     </section>
   );
