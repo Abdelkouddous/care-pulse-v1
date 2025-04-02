@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import "@/app/globals.css";
+
 import { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import { Plus_Jakarta_Sans } from "next/font/google";
@@ -7,7 +8,6 @@ import { cn } from "@/lib/utils";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
 
 //setting up text to plus jarakrta
 const fontSans = Plus_Jakarta_Sans({

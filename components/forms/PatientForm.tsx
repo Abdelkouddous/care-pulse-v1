@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-// import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -37,9 +36,7 @@ export function PatientForm() {
   // Define form with zod resolver
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
-    defaultValues: {
-      phone: "",
-    },
+    defaultValues: { phone: "" },
   });
 
   // Submit handler with proper typing and error handling
@@ -49,10 +46,7 @@ export function PatientForm() {
     setIsLoading(true);
 
     try {
-      const userData = {
-        name: "Your Name",
-        phone,
-      };
+      const userData = { name: "Your Name", phone };
 
       const newUser = await createUser(userData);
 

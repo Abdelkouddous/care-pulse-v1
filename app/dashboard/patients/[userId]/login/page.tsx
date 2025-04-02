@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/input-otp";
 import { SubmitButton } from "@/components/ui/SubmitButton";
 import { toast } from "@/hooks/use-toast"; // Import toast for notifications
-import { TokenManager, logout } from "@/lib/auth"; // Import both TokenManager and logout
+import { TokenManager } from "@/lib/auth"; // Import both TokenManager and logout
 import { UserFormValidation } from "@/lib/validation";
 
 export const Login = ({ user }: { user: User }) => {
@@ -177,7 +177,7 @@ export const Login = ({ user }: { user: User }) => {
                       Welcome back, {user.name}!
                     </h2>
                     <p className="text-center text-base text-gray-600 dark:text-gray-300 md:text-lg">
-                      We'll send an OTP to verify your identity
+                      We will send an OTP to verify your identity
                     </p>
                   </CardHeader>
 

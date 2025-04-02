@@ -1,13 +1,10 @@
 "use client";
 import {
-  User,
   Bell,
   Settings,
-  LogOut,
   CalendarCheck,
   ClipboardList,
   Pill,
-  Allergy,
   Stethoscope,
 } from "lucide-react";
 import React from "react";
@@ -35,7 +32,7 @@ const PatientProfile = () => {
     { label: "Upcoming Appointments", value: "2", icon: CalendarCheck },
     { label: "Medical History Items", value: "5", icon: ClipboardList },
     { label: "Current Medications", value: "3", icon: Pill },
-    { label: "Allergies", value: "2", icon: Allergy },
+    // { label: "Allergies", value: "2", icon: Allergy },
   ];
 
   return (

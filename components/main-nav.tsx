@@ -1,7 +1,7 @@
 "use client";
 
 // components/main-nav.tsx
-import { Moon, Sun, UserCircle } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";

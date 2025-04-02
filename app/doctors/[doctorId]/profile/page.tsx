@@ -2,7 +2,6 @@ import {
   User,
   Bell,
   Settings,
-  LogOut,
   Calendar,
   ClipboardList,
   HeartPulse,
