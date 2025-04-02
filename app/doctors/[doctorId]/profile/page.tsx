@@ -1,41 +1,35 @@
-"use client";
 import {
   User,
   Bell,
   Settings,
   LogOut,
-  CalendarCheck,
+  Calendar,
   ClipboardList,
-  Pill,
-  Allergy,
-  Stethoscope,
+  HeartPulse,
 } from "lucide-react";
 import React from "react";
 
-// Import UI components
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-const PatientProfile = () => {
-  const patientData = {
-    name: "Emily Johnson",
-    email: "emily.j@example.com",
-    role: "Patient",
-    patientId: "PT-2345-6789",
+const DoctorProfile = () => {
+  const userData = {
+    name: "Dr. Sarah Johnson",
+    email: "s.johnson@medicalclinic.com",
+    role: "Primary Care Physician",
+    specialty: "Internal Medicine",
     phone: "+1 (555) 123-4567",
-    joinedDate: "January 10, 2020",
-    bloodType: "O+",
-    primaryPhysician: "Dr. Sarah Johnson",
+    joinedDate: "March 15, 2018",
   };
 
-  const healthStats = [
-    { label: "Upcoming Appointments", value: "2", icon: CalendarCheck },
-    { label: "Medical History Items", value: "5", icon: ClipboardList },
-    { label: "Current Medications", value: "3", icon: Pill },
-    { label: "Allergies", value: "2", icon: Allergy },
+  const stats = [
+    { label: "Patients", value: "243", icon: User },
+    { label: "Appointments", value: "12", icon: Calendar },
+    { label: "Prescriptions", value: "8", icon: ClipboardList },
+    { label: "Health Plans", value: "5", icon: HeartPulse },
   ];
 
   return (
@@ -44,7 +38,7 @@ const PatientProfile = () => {
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Health Profile
+            Profile Dashboard
           </h1>
           <div className="flex gap-2">
             <Button variant="outline" size="icon">
@@ -63,16 +57,16 @@ const PatientProfile = () => {
             <CardHeader>
               <div className="flex flex-col items-center space-y-4">
                 <Avatar className="size-24">
-                  <AvatarImage src="/avatars/emily-johnson.jpg" />
-                  <AvatarFallback>EJ</AvatarFallback>
+                  <AvatarImage src="/avatars/sarah-johnson.jpg" />
+                  <AvatarFallback>SJ</AvatarFallback>
                 </Avatar>
                 <div className="text-center">
-                  <CardTitle className="text-2xl">{patientData.name}</CardTitle>
+                  <CardTitle className="text-2xl">{userData.name}</CardTitle>
                   <p className="text-gray-600 dark:text-gray-300">
-                    {patientData.role}
+                    {userData.role}
                   </p>
                   <Badge variant="secondary" className="mt-2">
-                    Patient ID: {patientData.patientId}
+                    {userData.specialty}
                   </Badge>
                 </div>
               </div>
@@ -81,45 +75,43 @@ const PatientProfile = () => {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-500 dark:text-gray-400">
-                    Blood Type
+                    Email
                   </span>
-                  <Badge variant="destructive">{patientData.bloodType}</Badge>
+                  <span>{userData.email}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between">
                   <span className="text-gray-500 dark:text-gray-400">
-                    Primary Physician
+                    Phone
                   </span>
-                  <span>{patientData.primaryPhysician}</span>
+                  <span>{userData.phone}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between">
                   <span className="text-gray-500 dark:text-gray-400">
                     Member Since
                   </span>
-                  <span>{patientData.joinedDate}</span>
+                  <span>{userData.joinedDate}</span>
                 </div>
               </div>
               <Button variant="outline" className="mt-4 w-full">
-                Request Records
+                Edit Profile
               </Button>
             </CardContent>
           </Card>
 
-          {/* Health Overview */}
+          {/* Stats and Activity */}
           <div className="space-y-6 lg:col-span-2">
-            {/* Health Stats */}
+            {/* Stats Cards */}
             <div className="grid grid-cols-2 gap-4">
-              {healthStats.map((stat, index) => (
+              {stats.map((stat, index) => (
                 <Card key={index}>
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
                         {stat.label}
                       </span>
-                      {stat.icon && (
-                        <stat.icon className="size-5 text-gray-400" />
-                      )}
+                      <stat.icon className="size-5 text-gray-400" />
                     </div>
                   </CardHeader>
                   <CardContent>
@@ -129,27 +121,24 @@ const PatientProfile = () => {
               ))}
             </div>
 
-            {/* Recent Medical Activity */}
+            {/* Recent Activity */}
             <Card>
               <CardHeader>
-                <CardTitle>Medical History</CardTitle>
+                <CardTitle>Recent Activity</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {[
-                    "Annual Physical Checkup - Completed",
-                    "Blood Test Results - Reviewed",
-                    "Allergy Consultation - Completed",
-                    "Diabetes Management Plan - Updated",
-                  ].map((item, index) => (
-                    <div key={index} className="flex items-start gap-4">
+                  {[1, 2, 3].map((item) => (
+                    <div key={item} className="flex items-start gap-4">
                       <div className="rounded-full bg-gray-100 p-2 dark:bg-gray-800">
-                        <Stethoscope className="size-5" />
+                        <Calendar className="size-5" />
                       </div>
                       <div>
-                        <h4 className="font-medium">{item}</h4>
+                        <h4 className="font-medium">
+                          Appointment with Patient #{item}
+                        </h4>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Last updated {index + 1} week(s) ago
+                          {item} day{item !== 1 ? "s" : ""} ago
                         </p>
                       </div>
                     </div>
@@ -158,20 +147,20 @@ const PatientProfile = () => {
               </CardContent>
             </Card>
 
-            {/* Health Actions */}
+            {/* Quick Actions */}
             <Card>
               <CardHeader>
-                <CardTitle>Health Services</CardTitle>
+                <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
                   <Button variant="outline" className="h-24">
-                    <CalendarCheck className="mr-2 size-5" />
-                    Book Appointment
+                    <ClipboardList className="mr-2 size-5" />
+                    New Prescription
                   </Button>
                   <Button variant="outline" className="h-24">
-                    <ClipboardList className="mr-2 size-5" />
-                    View Medical Records
+                    <Calendar className="mr-2 size-5" />
+                    Schedule Appointment
                   </Button>
                 </div>
               </CardContent>
@@ -183,4 +172,4 @@ const PatientProfile = () => {
   );
 };
 
-export default PatientProfile;
+export default DoctorProfile;

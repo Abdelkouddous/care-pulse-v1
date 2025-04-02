@@ -26,6 +26,8 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { SubmitButton } from "@/components/ui/SubmitButton";
+import { toast } from "@/hooks/use-toast"; // Import toast for notifications
+import { TokenManager, logout } from "@/lib/auth"; // Import both TokenManager and logout
 import { UserFormValidation } from "@/lib/validation";
 
 export const Login = ({ user }: { user: User }) => {
@@ -44,6 +46,15 @@ export const Login = ({ user }: { user: User }) => {
 
   const account = new Account(client);
   const router = useRouter();
+
+  // Check for existing token on component mount
+  useEffect(() => {
+    const existingToken = TokenManager.getToken();
+    if (existingToken) {
+      // User is already logged in, redirect to dashboard
+      router.push(`/dashboard/patients/${existingToken}/new-appointment`);
+    }
+  }, [router]);
 
   // Start countdown timer when OTP is sent
   useEffect(() => {
@@ -90,6 +101,11 @@ export const Login = ({ user }: { user: User }) => {
       console.log("OTP sent successfully");
     } catch (error) {
       console.error("Error sending OTP:", error);
+      toast({
+        title: "Error",
+        description: "Failed to send verification code. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -104,7 +120,15 @@ export const Login = ({ user }: { user: User }) => {
         verificationCode
       );
       console.log("Session created successfully", session);
+
+      // Store the token with 24-hour expiration
+      TokenManager.setToken(userId);
+
       setOpen(false); // Close modal on successful OTP verification
+      toast({
+        title: "Login Successful",
+        description: "You have been successfully logged in.",
+      });
       router.push(`/dashboard/patients/${userId}/new-appointment`);
     } catch (error) {
       setError("Incorrect OTP. Please try again.");

@@ -1,12 +1,27 @@
+// lib/profile-config.ts
 import { users } from "@/lib/appwrite.config";
+import { logout } from "@/lib/auth";
 
-export type profileConfig = typeof profileConfig;
+// Define a type for navigation items
+type NavItem = {
+  title: string;
+  href?: string;
+  onClick?: () => void;
+  disabled?: boolean;
+  external?: boolean;
+};
 
-// Define the response structure from the API call
-// this is the navbar content after the user logs in, u can find the specifications in the dashboard cfolder
-export const profileConfig = {
+export type ProfileConfig = {
+  name: string;
+  description: string;
+  mainNav: NavItem[];
+  links: Record<string, string>;
+};
+
+// Define the profile configuration
+export const profileConfig: ProfileConfig = {
   name: "Profile",
-  description: "A healthcare management app ",
+  description: "A healthcare management app",
   mainNav: [
     {
       title: "My appointments",
@@ -20,26 +35,14 @@ export const profileConfig = {
       title: "My profile",
       href: "profile",
     },
-
     {
       title: "Edit profile",
       href: `edit-profile`,
     },
     {
       title: "Logout",
-      href: `logout`,
+      onClick: logout, // Use the logout function instead of a href
     },
-
-    // isLoggedIn
-    //   ? {
-    //       title: "My Appointments",
-    //       href: `patients/${""}/new-appointment`,
-    //     }
-    //   : ((isLoggedIn = true),
-    //     {
-    //       title: "Login",
-    //       href: "/",
-    //     }),
   ],
   links: {
     // twitter: "https://twitter.com/shadcn",
