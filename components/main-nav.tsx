@@ -77,7 +77,7 @@ export function MainNav({ items, userId }: MainNavProps) {
           >
             <Icons.logo className="size-8 text-emerald-600 dark:text-emerald-400" />
             <span className="text-xl font-bold text-gray-900 dark:text-white">
-              Care Pulse
+              Pulse
             </span>
           </Link>
 

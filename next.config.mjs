@@ -7,7 +7,7 @@ export default withSentryConfig(
     // For all available options, see:
     // https://github.com/getsentry/sentry-webpack-plugin#options
 
-    org: "javascript-mastery",
+    org: "hml-tech",
     project: "care-pulse",
 
     // Only print logs for uploading source maps in CI
@@ -54,9 +54,7 @@ export default withSentryConfig(
     widenClientFileUpload: true,
 
     // Automatically annotate React components to show their full name in breadcrumbs and session replay
-    reactComponentAnnotation: {
-      enabled: true,
-    },
+    reactComponentAnnotation: { enabled: true },
 
     // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
     // This can increase your server load as well as your hosting bill.
@@ -75,5 +73,5 @@ export default withSentryConfig(
     // https://docs.sentry.io/product/crons/
     // https://vercel.com/docs/cron-jobs
     automaticVercelMonitors: true,
-  },
+  }
 );
