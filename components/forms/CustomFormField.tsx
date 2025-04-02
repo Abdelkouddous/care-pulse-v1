@@ -17,6 +17,13 @@ import { Input } from "@/components/ui/input";
 
 import { FormFieldType } from "./PatientForm";
 
+// Import DatePicker correctly
+import ReactDatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+const DatePicker = ReactDatePicker as unknown as React.FC<
+  ReactDatePicker["props"] & React.RefAttributes<ReactDatePicker>
+>;
 interface CustomProps {
   control: Control<any>;
   fieldType: FormFieldType;
@@ -32,9 +39,61 @@ interface CustomProps {
   renderSkeleton?: (field: any) => React.ReactNode;
 }
 
+interface DatePickerFieldProps {
+  field: any;
+  showTimeSelect?: boolean;
+  dateFormat?: string;
+  placeholderText?: string;
+}
+
+// Create a separate DatePickerField component
+const DatePickerField: React.FC<DatePickerFieldProps> = ({
+  field,
+  showTimeSelect = false,
+  dateFormat = "MM/dd/yyyy",
+  placeholderText = "Select date",
+}) => {
+  return (
+    <div className="flex rounded-md border border-dark-500 bg-dark-400">
+      <Image
+        src="/assets/icons/calendar.svg"
+        height={24}
+        width={24}
+        alt="calendar"
+        className="ml-2 my-auto"
+      />
+      <FormControl>
+        <div className="w-full">
+          <DatePicker
+            selected={field.value}
+            onChange={(date: Date | null) => field.onChange(date)}
+            onBlur={field.onBlur}
+            showTimeSelect={showTimeSelect}
+            timeCaption="Time"
+            dateFormat={dateFormat}
+            placeholderText={placeholderText}
+            className="w-full bg-transparent border-0 focus:ring-0 focus:outline-none p-2"
+            wrapperClassName="date-picker w-full"
+            name={field.name}
+          />
+        </div>
+      </FormControl>
+    </div>
+  );
+};
+
 const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
   const { fieldType, iconSrc, iconAlt, placeholder } = props;
   switch (fieldType) {
+    case FormFieldType.DATE_PICKER:
+      return (
+        <DatePickerField
+          field={field}
+          showTimeSelect={props.showTimeSelect ?? false}
+          dateFormat={props.dateFormat ?? "MM/dd/yyyy"}
+          placeholderText={props.placeholder || "MM/DD/YYYY"}
+        />
+      );
     case FormFieldType.INPUT:
       return (
         <div className="flex rounded-md border border-dark-500 bg-dark-400">
@@ -69,10 +128,11 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
             value={field.value as E164Number | undefined}
             onChange={field.onChange}
             className="input-phone"
-            // onKeyDown={onkeydown}
           />
         </FormControl>
       );
+    default:
+      return null;
   }
 };
 
@@ -88,10 +148,12 @@ export const CustomFormField = (props: CustomProps) => {
           {fieldType !== FormFieldType.CHECKBOX && label && (
             <FormLabel>{label}</FormLabel>
           )}
-          <RenderField field={field} props={props}></RenderField>
-          <FormMessage className="shad-error"></FormMessage>
+          <RenderField field={field} props={props} />
+          <FormMessage className="shad-error" />
         </FormItem>
       )}
     />
   );
 };
+
+export default CustomFormField;
