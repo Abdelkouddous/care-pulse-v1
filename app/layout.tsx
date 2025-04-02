@@ -2,14 +2,14 @@ import "@/styles/globals.css";
 import "@/app/globals.css";
 
 import { Metadata } from "next";
-import { siteConfig } from "@/config/site";
 import { Plus_Jakarta_Sans } from "next/font/google";
+
+import { SiteFooter } from "@/components/site-footer";
+import { ThemeProvider } from "@/components/theme-provider";
+import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
-import { ThemeProvider } from "@/components/theme-provider";
-import { SiteFooter } from "@/components/site-footer";
-
-//setting up text to plus jarakrta
+// setting up text to plus jarakrta
 const fontSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],

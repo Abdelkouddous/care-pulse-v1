@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
 import { E164Number } from "libphonenumber-js/core";
 import Image from "next/image";
+import React from "react";
 import ReactDatePicker from "react-datepicker"; // Import only once with the correct name
 import "react-datepicker/dist/react-datepicker.css";
 import { Control } from "react-hook-form";
@@ -59,7 +59,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
   switch (props.fieldType) {
     case FormFieldType.INPUT:
       return (
-        <div className="flex rounded-md border border-dark-500 bg-dark-400">
+        <div className="border-dark-500 bg-dark-400 flex rounded-md border">
           {props.iconSrc && (
             <Image
               src={props.iconSrc}
@@ -118,16 +118,16 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
           </div>
         </FormControl>
       );
-    case FormFieldType.DATE_PICKER:
+
     case FormFieldType.DATE_PICKER:
       return (
-        <div className="flex rounded-md border border-dark-500 bg-dark-400">
+        <div className="border-dark-500 bg-dark-400 flex rounded-md border">
           <Image
             src="/assets/icons/calendar.svg"
             height={24}
             width={24}
             alt="calendar"
-            className="ml-2 my-auto"
+            className="my-auto ml-2"
           />
           <FormControl>
             <div className="w-full">
@@ -144,7 +144,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
                 filterDate={props.filterDate}
                 placeholderText={props.placeholder ?? "Select date"}
                 disabled={props.disabled}
-                className="w-full bg-transparent border-0 focus:ring-0 focus:outline-none p-2"
+                className="w-full border-0 bg-transparent p-2 focus:outline-none focus:ring-0"
                 wrapperClassName="date-picker w-full"
                 popperClassName="react-datepicker-right"
                 popperPlacement="bottom-end"

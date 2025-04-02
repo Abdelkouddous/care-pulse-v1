@@ -1,18 +1,3 @@
-// import React from "react";
-
-// const Services = () => {
-//   return <div>Ressources</div>;
-// };
-
-// export default Services;
-
-import React from "react";
-import Slider from "react-slick";
-
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-
 import {
   HeartPulse,
   Stethoscope,
@@ -21,8 +6,16 @@ import {
   Microscope,
   Pill,
 } from "lucide-react";
+import React from "react";
+import Slider from "react-slick";
+import type { Settings } from "react-slick"; // Import Settings type
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 const Services = () => {
+  // const Slider = Slider as React.ComponentType<Settings>;
   const services = [
     {
       title: "Emergency Care",
@@ -61,8 +54,7 @@ const Services = () => {
       icon: <Pill className="mb-4 size-12 text-emerald-600" />,
     },
   ];
-
-  const settings = {
+  const settings: Settings = {
     dots: true,
     infinite: true,
     speed: 500,
@@ -74,15 +66,11 @@ const Services = () => {
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
+          infinite: true,
+          dots: true,
         },
       },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
+      { breakpoint: 600, settings: { slidesToShow: 1, slidesToScroll: 1 } },
     ],
   };
 
