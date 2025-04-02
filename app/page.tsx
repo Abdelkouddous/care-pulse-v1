@@ -9,20 +9,28 @@ import { SiteHeader } from "@/components/site-header";
 
 import Transitions from "./Transitions";
 
-export default async function Home(
-  // { params: { userId } }: SearchParamProps,
-  { searchParams }: SearchParamProps
-) {
+// Add the missing type definition
+interface SearchParamProps {
+  searchParams: { admin?: string; doctor?: string; user?: string };
+}
+
+export default function Home({ searchParams }: SearchParamProps) {
   // logic when we click admin or doctor
   const isAdmin = searchParams?.admin === "true";
   const isDoctor = searchParams?.doctor === "true";
 
-  //  searchParams?.user === 'true'
-  // const patient = await getPatient(userId);
-  //
   const sectionsRef = useRef<HTMLDivElement[]>([]);
+
+  // Initialize isOffline state but don't render it immediately
   const [isOffline, setIsOffline] = useState(false);
+
+  // Add a state to track if we're in the browser
+  const [isMounted, setIsMounted] = useState(false);
+
   useEffect(() => {
+    // Mark component as mounted
+    setIsMounted(true);
+
     // Observer for scroll animations
     const observer = new IntersectionObserver(
       (entries) => {
@@ -34,9 +42,7 @@ export default async function Home(
           }
         });
       },
-      {
-        threshold: 0.25,
-      }
+      { threshold: 0.25 }
     );
 
     sectionsRef.current.forEach((section) => {
@@ -53,10 +59,14 @@ export default async function Home(
       });
     };
   }, []);
+
   // Network status listener
   useEffect(() => {
     const handleOffline = () => setIsOffline(true);
     const handleOnline = () => setIsOffline(false);
+
+    // Set initial offline status
+    setIsOffline(!window.navigator.onLine);
 
     window.addEventListener("offline", handleOffline);
     window.addEventListener("online", handleOnline);
@@ -66,21 +76,15 @@ export default async function Home(
       window.removeEventListener("offline", handleOffline);
       window.removeEventListener("online", handleOnline);
     };
-  });
-
-  // Get patient data on component mount
-  // const patient = await getPatient(userId);
-  // if (patient) {
-  //   redirect(`/patients/${userId}/new-appointment`);
-  // }
+  }, []);
 
   return (
     <div className="m-auto flex min-h-screen flex-col justify-center p-3">
-      <div className=" sticky top-0 z-50 w-screen">
+      <div className="sticky top-0 z-50 w-screen">
         <SiteHeader />
       </div>
-      {/* Show offline notification */}
-      {isOffline && (
+      {/* Show offline notification only after component is mounted */}
+      {isMounted && isOffline && (
         <div className="sticky mb-4 rounded-md bg-red-500 p-4 text-white">
           Connection not set
         </div>
@@ -90,7 +94,7 @@ export default async function Home(
       {isAdmin && <PasskeyModal />}
       {/* Patient form */}
       <PatientForm />
-      <Transitions />{" "}
+      <Transitions />
     </div>
   );
 }

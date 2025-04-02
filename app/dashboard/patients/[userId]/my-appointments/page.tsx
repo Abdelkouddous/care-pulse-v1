@@ -9,18 +9,13 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// Define the response structure from the API call
-// interface AppointmentsResponse {
-//   totalCount: number;
-//   documents: Appointment[];
-// }
-
-const MyAppointment = async ({
+// Remove the async from the component definition since client components
+// shouldn't be async functions
+const MyAppointment = ({
   params: { userId },
 }: {
   params: { userId: string };
 }) => {
-  // const appointments = await getRecentAppointmentsForPatient(userId);
   const [appointments, setAppointments] = useState<Appointment[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -71,13 +66,13 @@ const MyAppointment = async ({
 
   if (loading) {
     return (
-      <div className="grid place-items-center  h-screen text-white">
+      <div className="grid place-items-center h-screen text-white">
         <div className="flex align-center items-center">
           <Image
             src="/assets/icons/loader.svg"
             alt="loader"
             width={40}
-            height={3240}
+            height={40}
             className="animate-spin mr-2"
           />
           Loading...
