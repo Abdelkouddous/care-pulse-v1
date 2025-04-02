@@ -27,7 +27,8 @@ export default function DashboardLayout({
           description: "Please log in to access this page.",
           variant: "destructive",
         });
-        router.push("/login");
+        // router.push(`/dashboard/patients/${user.$id}/login`);
+        router.push("/");
       } else {
         setIsAuthenticated(true);
       }
