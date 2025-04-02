@@ -53,6 +53,7 @@ interface CustomProps {
   maxDate?: Date;
   filterDate?: (date: Date) => boolean;
   timeIntervals?: number;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
