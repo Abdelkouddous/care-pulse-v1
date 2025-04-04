@@ -102,10 +102,10 @@
 git clone https://github.com/hmlsoft/Pulse-pro.git
 cd Pulse-pro
 ```
-````
+
 
 **2. Install Dependencies**
-
+```
 ```bash
 npm install
 ```
