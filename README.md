@@ -1,9 +1,7 @@
 
 <div align="center">
   <br />
-  <a href="https://hmlsoft.com" target="_blank">
-    <img src="https://github.com/JavaScript-Mastery-Pro/Pulse-dev/assets/151519281/160a9367-29e8-4e63-ae78-29476b04bff3" alt="Pulse Pro Banner">
-  </a>
+  
   <br />
 
   <div>
