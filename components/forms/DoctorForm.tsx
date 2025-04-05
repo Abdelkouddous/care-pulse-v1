@@ -112,7 +112,7 @@ export function DoctorForm() {
 
                     <div className="mt-4 flex flex-col gap-2 border-t border-gray-200 pt-4 text-center dark:border-gray-700">
                       <p className="text-gray-600 dark:text-gray-300">
-                        Don't have an ID?{" "}
+                        Dont have an ID?{" "}
                         <Link
                           href="/contact"
                           className="font-semibold text-sky-600 hover:underline dark:text-sky-400"
