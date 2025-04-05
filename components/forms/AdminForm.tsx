@@ -107,9 +107,9 @@ export function AdminForm() {
                       Authenticate
                     </SubmitButton>
 
-                  <div className="mt-4 border-t border-gray-200 pt-4 text-center dark:border-gray-700">
+                        <div className="mt-4 border-t border-gray-200 pt-4 text-center dark:border-gray-700">
   <p className="text-gray-600 dark:text-gray-300">
-    Don&apos;t have an admin ID?{" "}
+    {"Don't have an admin ID? "}
     <Link
       href="/contact"
       className="font-semibold text-emerald-600 hover:underline dark:text-emerald-400"
