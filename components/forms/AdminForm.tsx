@@ -1,25 +1,3 @@
-"use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Form } from "@/components/ui/form";
-import { getAdmin } from "@/lib/actions/admin.actions";
-import { AdminFormValidation } from "@/lib/validation";
-
-import { SubmitButton } from "../ui/SubmitButton";
-
-import { CustomFormField } from "./CustomFormField";
-
-export enum FormFieldType {
-  INPUT = "input",
-}
-
 export function AdminForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -107,17 +85,16 @@ export function AdminForm() {
                       Authenticate
                     </SubmitButton>
 
-                        <div className="mt-4 border-t border-gray-200 pt-4 text-center dark:border-gray-700">
-  <p className="text-gray-600 dark:text-gray-300">
-    {"Don't have an admin ID? "}
-    <Link
-      href="/contact"
-      className="font-semibold text-emerald-600 hover:underline dark:text-emerald-400"
-    >
-      Contact us
-    </Link>
-  </p>
-</div>
+                    <div className="mt-4 border-t border-gray-200 pt-4 text-center dark:border-gray-700">
+                      <p className="text-gray-600 dark:text-gray-300">
+                        {"Don't have an admin ID? "}
+                        <Link
+                          href="/contact"
+                          className="font-semibold text-emerald-600 hover:underline dark:text-emerald-400"
+                        >
+                          Contact us
+                        </Link>
+                      </p>
                       <p className="text-gray-600 dark:text-gray-300">
                         Not an admin?{" "}
                         <Link
