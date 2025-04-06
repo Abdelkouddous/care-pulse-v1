@@ -9,12 +9,13 @@ import { z } from "zod";
 
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
-import { createUser } from "@/lib/actions/patient.actions";
+import { createUser, getPatient } from "@/lib/actions/patient.actions";
 import { UserFormValidation } from "@/lib/validation";
 
 import { SubmitButton } from "../ui/SubmitButton";
 
 import { CustomFormField } from "./CustomFormField";
+import { toast } from "@/hooks/use-toast";
 
 export enum FormFieldType {
   INPUT = "input",
@@ -28,10 +29,12 @@ export enum FormFieldType {
   CUSTOM = "custom",
 }
 
+// components/forms/PatientForm.tsx
+// ... other imports remain the same
+
 export function PatientForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const currentYear = new Date().getFullYear();
 
   // Define form with zod resolver
   const form = useForm<z.infer<typeof UserFormValidation>>({
@@ -39,7 +42,6 @@ export function PatientForm() {
     defaultValues: { phone: "" },
   });
 
-  // Submit handler with proper typing and error handling
   const onSubmit = async ({
     phone,
   }: z.infer<typeof UserFormValidation>): Promise<void> => {
@@ -47,18 +49,37 @@ export function PatientForm() {
 
     try {
       const userData = { name: "Your Name", phone };
+      const user = await createUser(userData);
 
-      const newUser = await createUser(userData);
+      if (user) {
+        // Check if the user has a patient record
+        const patient = await getPatient(user.$id);
 
-      if (newUser) {
-        router.push(`/dashboard/patients/${newUser.$id}/register`);
-        setIsLoading(false);
+        if (patient) {
+          // User exists and has completed registration - redirect to login/OTP
+          router.push(
+            `/dashboard/patients/${user.$id}/login?phone=${encodeURIComponent(phone)}`
+          );
+        } else {
+          // New user or incomplete registration - redirect to registration
+          router.push(
+            `/dashboard/patients/${user.$id}/register?phone=${encodeURIComponent(phone)}`
+          );
+        }
       }
     } catch (error) {
       console.error("Error creating user:", error);
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
     }
   };
+
+  // Rest of the component remains the same
 
   // Prevent form submission on Enter key
   const handleKeyDown = (
@@ -86,17 +107,17 @@ export function PatientForm() {
           </p>
 
           <div className="mx-auto my-2 flex max-w-6xl justify-between px-4 fade-in md:px-8">
-            <Card className="mx-auto w-full overflow-hidden border-0 shadow-lg dark:bg-gray-800 md:max-w-md">
+            <Card className="mx-auto w-full overflow-hidden border-0 shadow-lg  md:max-w-md">
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}
                   className="p-1 md:p-2"
                 >
                   <CardHeader className="flex flex-col items-center justify-center space-y-2 pb-4 pt-6">
-                    <h2 className="text-center text-2xl font-bold text-gray-800 dark:text-white md:text-3xl">
+                    <h2 className="text-center text-2xl font-bold  md:text-3xl">
                       Book Your Appointment
                     </h2>
-                    <p className="text-center text-base text-gray-600 dark:text-gray-300 md:text-lg">
+                    <p className="text-center text-base  md:text-lg">
                       Enter your phone number to get started
                     </p>
                   </CardHeader>

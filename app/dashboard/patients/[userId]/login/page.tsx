@@ -26,11 +26,13 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { SubmitButton } from "@/components/ui/SubmitButton";
-import { toast } from "@/hooks/use-toast"; // Import toast for notifications
-import { TokenManager } from "@/lib/auth"; // Import both TokenManager and logout
+import { toast } from "@/hooks/use-toast";
+import { TokenManager } from "@/lib/auth";
 import { UserFormValidation } from "@/lib/validation";
+import Loading from "@/app/loading";
 
-export const Login = ({ user }: { user: User }) => {
+// Create a separate component for the login functionality
+const LoginComponent = ({ user }: { user: User }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [codeSent, setCodeSent] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
@@ -65,11 +67,32 @@ export const Login = ({ user }: { user: User }) => {
       setOpen(false); // Close modal if time runs out
       setCodeSent(false); // Reset code sent state
       setTimeLeft(45); // Reset timer for next OTP request
+      toast({
+        title: "Time Expired",
+        description: "Verification code has expired. Please request a new one.",
+        variant: "destructive",
+      });
     }
     return () => {
       if (timer) clearInterval(timer);
     };
   }, [codeSent, timeLeft]);
+
+  // Get phone number from URL and auto-trigger OTP
+  useEffect(() => {
+    // Get phone number from URL
+    const params = new URLSearchParams(window.location.search);
+    const phoneFromURL = params.get("phone");
+
+    if (phoneFromURL) {
+      // Set the phone number in the form
+      form.setValue("phone", phoneFromURL);
+      setPhone(phoneFromURL);
+
+      // Automatically trigger OTP send
+      sendOtp(phoneFromURL);
+    }
+  }, []);
 
   const closeModal = () => {
     setOpen(false);
@@ -98,7 +121,11 @@ export const Login = ({ user }: { user: User }) => {
       setCodeSent(true);
       setOpen(true);
       setTimeLeft(45); // Reset countdown timer
-      console.log("OTP sent successfully");
+
+      toast({
+        title: "Verification Code Sent",
+        description: "Please check your phone for the OTP",
+      });
     } catch (error) {
       console.error("Error sending OTP:", error);
       toast({
@@ -110,6 +137,35 @@ export const Login = ({ user }: { user: User }) => {
       setIsLoading(false);
     }
   };
+
+  // const verifyOtp = async (verificationCode: string) => {
+  //   if (!userId) return;
+  //   try {
+  //     setIsLoading(true);
+  //     const session = await account.updatePhoneSession(
+  //       userId,
+  //       verificationCode
+  //     );
+  //     console.log("Session created successfully", session);
+
+  //     // Store the token with 24-hour expiration
+  //     TokenManager.setToken(userId);
+
+  //     setOpen(false); // Close modal on successful OTP verification
+  //     toast({
+  //       title: "Login Successful",
+  //       description: "You have been successfully logged in.",
+  //     });
+  //     router.push(`/dashboard/patients/${userId}/new-appointment`);
+  //   } catch (error) {
+  //     setError("Incorrect OTP. Please try again.");
+  //     setOpen(true);
+  //     console.error("Error verifying OTP:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+  // In the LoginComponent, add this to the verifyOtp function:
 
   const verifyOtp = async (verificationCode: string) => {
     if (!userId) return;
@@ -129,7 +185,18 @@ export const Login = ({ user }: { user: User }) => {
         title: "Login Successful",
         description: "You have been successfully logged in.",
       });
-      router.push(`/dashboard/patients/${userId}/new-appointment`);
+
+      // Check if there's a redirect URL in the query parameters
+      const params = new URLSearchParams(window.location.search);
+      const redirectUrl = params.get("redirect");
+
+      if (redirectUrl) {
+        // Redirect to the original requested URL
+        router.push(redirectUrl);
+      } else {
+        // Default redirect to new appointment
+        router.push(`/dashboard/patients/${userId}/new-appointment`);
+      }
     } catch (error) {
       setError("Incorrect OTP. Please try again.");
       setOpen(true);
@@ -139,10 +206,36 @@ export const Login = ({ user }: { user: User }) => {
     }
   };
 
+  // Modify the form initialization to use the phone from URL
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
-    defaultValues: { phone: user.phone || " " },
+    defaultValues: {
+      phone: user?.phone || "",
+    },
   });
+
+  // Add loading state UI
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  // Add error state UI
+  if (error && !open) {
+    // Show global errors that aren't OTP related
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="rounded-lg bg-red-50 p-4 text-center">
+          <p className="text-red-600">{error}</p>
+          <button
+            onClick={() => setError("")}
+            className="mt-4 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Form {...form}>
@@ -174,7 +267,7 @@ export const Login = ({ user }: { user: User }) => {
                 >
                   <CardHeader className="flex flex-col items-center justify-center space-y-2 pb-4 pt-6">
                     <h2 className="text-center text-2xl font-bold text-gray-800 dark:text-white md:text-3xl">
-                      Welcome back, {user.name}!
+                      Welcome back, {user?.name}!
                     </h2>
                     <p className="text-center text-base text-gray-600 dark:text-gray-300 md:text-lg">
                       We will send an OTP to verify your identity
@@ -182,7 +275,7 @@ export const Login = ({ user }: { user: User }) => {
                   </CardHeader>
 
                   <CardContent className="space-y-6 px-6 pb-8">
-                    {!codeSent && (
+                    {!codeSent && !phone && (
                       <CustomFormField
                         fieldType={FormFieldType.PHONE_INPUT}
                         control={form.control}
@@ -193,6 +286,12 @@ export const Login = ({ user }: { user: User }) => {
                         iconAlt="phone"
                         disabled={codeSent}
                       />
+                    )}
+
+                    {!codeSent && phone && (
+                      <div className="text-center text-gray-600 dark:text-gray-300">
+                        Sending verification code to: {phone}
+                      </div>
                     )}
 
                     <SubmitButton
@@ -277,4 +376,34 @@ export const Login = ({ user }: { user: User }) => {
   );
 };
 
-export default Login;
+// This is the actual page component that Next.js will use
+export default function LoginPage({ params }: { params: { userId: string } }) {
+  // Fetch user data based on userId
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        // Replace this with your actual user fetching logic
+        // For example: const userData = await getUserById(params.userId);
+        const userData = { $id: params.userId, name: "User", phone: "" };
+        setUser(userData as User);
+      } catch (err) {
+        console.error("Error fetching user:", err);
+        setError("Failed to load user data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [params.userId]);
+
+  if (loading) return <Loading />;
+  if (error) return <div className="text-center text-red-500">{error}</div>;
+  if (!user) return <div className="text-center">User not found</div>;
+
+  return <LoginComponent user={user} />;
+}

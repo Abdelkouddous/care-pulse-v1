@@ -16,7 +16,7 @@ import { parseStringify } from "../utils";
 
 export const createUser = async (user: CreateUserParams) => {
   try {
-    // Create new user -> https://appwrite.io/docs/references/1.5.x/server-nodejs/users#create
+    // Create new user
     const newuser = await users.create(
       ID.unique(),
       faker.internet.email(),
@@ -33,11 +33,42 @@ export const createUser = async (user: CreateUserParams) => {
         Query.equal("phone", [user.phone]),
       ]);
 
-      return existingUser.users[0];
+      // Check if user exists in patients collection to determine registration status
+      const patient = await getPatient(existingUser.users[0].$id);
+
+      return {
+        ...existingUser.users[0],
+        isRegistered: !!patient, // true if patient exists, false if not
+      };
     }
     console.error("An error occurred while creating a new user:", error);
   }
 };
+
+// export const createUser = async (user: CreateUserParams) => {
+//   try {
+//     // Create new user -> https://appwrite.io/docs/references/1.5.x/server-nodejs/users#create
+//     const newuser = await users.create(
+//       ID.unique(),
+//       faker.internet.email(),
+//       user.phone,
+//       undefined,
+//       user.name
+//     );
+
+//     return parseStringify(newuser);
+//   } catch (error: any) {
+//     // Check existing user
+//     if (error && error?.code === 409) {
+//       const existingUser = await users.list([
+//         Query.equal("phone", [user.phone]),
+//       ]);
+
+//       return existingUser.users[0];
+//     }
+//     console.error("An error occurred while creating a new user:", error);
+//   }
+// };
 
 // GET PATIENT
 // export const getUser = async (userId: string) => {
@@ -53,6 +84,46 @@ export const createUser = async (user: CreateUserParams) => {
 //   }
 // };
 // GET PATIENT from database
+// export const getPatient = async (userId: string) => {
+//   try {
+//     const patients = await databases.listDocuments(
+//       DATABASE_ID!,
+//       PATIENT_COLLECTION_ID!,
+//       [Query.equal("userId", [userId])]
+//     );
+
+//     return parseStringify(patients.documents[0]);
+//   } catch (error) {
+//     console.error(
+//       "An error occurred while retrieving the patient details:",
+//       error
+//     );
+//   }
+// };
+// export const getPatient = async (userId: string) => {
+//   try {
+//     const patients = await databases.listDocuments(
+//       DATABASE_ID!,
+//       PATIENT_COLLECTION_ID!,
+//       [Query.equal("userId", [userId])]
+//     );
+
+//     // Only parse if we have a document
+//     if (patients.documents.length > 0) {
+//       return parseStringify(patients.documents[0]);
+//     }
+//     return null; // Return null if no patient found
+//   } catch (error) {
+//     console.error(
+//       "An error occurred while retrieving the patient details:",
+//       error
+//     );
+//     return null; // Return null on error
+//   }
+// };
+
+// REGISTER PATIENT
+// lib/actions/patient.actions.ts
 export const getPatient = async (userId: string) => {
   try {
     const patients = await databases.listDocuments(
@@ -61,16 +132,20 @@ export const getPatient = async (userId: string) => {
       [Query.equal("userId", [userId])]
     );
 
-    return parseStringify(patients.documents[0]);
+    // Only parse if we have a document
+    if (patients.documents.length > 0) {
+      return parseStringify(patients.documents[0]);
+    }
+    return null; // Return null if no patient found
   } catch (error) {
     console.error(
       "An error occurred while retrieving the patient details:",
       error
     );
+    return null; // Return null on error
   }
 };
 
-// REGISTER PATIENT
 export const registerPatient = async ({
   identificationDocument,
   ...patient

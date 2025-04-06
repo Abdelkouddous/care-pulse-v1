@@ -128,14 +128,14 @@ export function MainNav({ items, userId }: MainNavProps) {
             </Button>
 
             {/* Sign In Button */}
-            <Link href="/signin">
+            {/* <Link href="/register">
               <Button
                 variant="outline"
                 className="hidden border-emerald-600 text-emerald-600 hover:bg-emerald-50 dark:border-emerald-400 dark:text-emerald-400 dark:hover:bg-emerald-950/30 md:inline-flex"
               >
-                Sign In
+                Register
               </Button>
-            </Link>
+            </Link> */}
 
             {/* Mobile Menu Button */}
             <Button

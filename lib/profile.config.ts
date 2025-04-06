@@ -1,6 +1,6 @@
 // lib/profile-config.ts
 
-import { logout } from "@/lib/auth";
+import { TokenManager } from "@/lib/auth";
 
 // Define a type for navigation items
 type NavItem = {
@@ -23,13 +23,13 @@ export const profileConfig: ProfileConfig = {
   name: "Profile",
   description: "A healthcare management app",
   mainNav: [
-    { title: "My appointments", href: `my-appointments` },
-    { title: "New appointment", href: "new-appointment" },
-    { title: "My profile", href: "profile" },
-    { title: "Edit profile", href: `edit-profile` },
+    { title: "My appointments", href: `/my-appointments` },
+    { title: "New appointment", href: "/new-appointment" },
+    { title: "My profile", href: "/profile" },
+    { title: "Edit profile", href: `/edit-profile` },
     {
       title: "Logout",
-      onClick: logout, // Use the logout function instead of a href
+      onClick: TokenManager.logout, // Use the logout function instead of a href
     },
   ],
   links: {

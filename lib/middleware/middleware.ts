@@ -1,69 +1,50 @@
-// middleware.ts
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+// lib/middleware/middleware.ts
+import { NextRequest, NextResponse } from "next/server";
+import { TokenManager } from "@/lib/auth";
 
 export function middleware(request: NextRequest) {
-  // Get the pathname of the request
-  const path = request.nextUrl.pathname;
+  // Get the pathname from the URL
+  const pathname = request.nextUrl.pathname;
 
-  // Define public paths that don't require authentication
-  const isPublicPath =
-    path === "/login" ||
-    path === "/register" ||
-    path === "/" ||
-    path.startsWith("/api/");
+  // Check if the path is a dashboard route that needs protection
+  const isDashboardRoute = pathname.startsWith("/dashboard/patients/");
 
-  // Check if the path is a dashboard path
-  const isDashboardPath = path.includes("/dashboard/");
+  // Allow access to login and register routes
+  const isLoginRoute = pathname.includes("/login");
+  const isRegisterRoute = pathname.includes("/register");
 
-  // Get the token from cookies
-  const token = request.cookies.get("authToken")?.value;
+  // If it's a dashboard route but not login or register, check for authentication
+  if (isDashboardRoute && !isLoginRoute && !isRegisterRoute) {
+    // Get the userId from the URL
+    // The URL pattern is /dashboard/patients/[userId]/...
+    const urlParts = pathname.split("/");
+    const urlUserId = urlParts[3]; // Index 3 should be the userId
 
-  // If the path is a dashboard path and there's no token, redirect to login
-  if (isDashboardPath && !token) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+    // Get the token from cookies or localStorage
+    const token = TokenManager.getToken();
 
-  // If the path is a public path and there's a token, redirect to dashboard
-  if (isPublicPath && token) {
-    try {
-      const tokenData = JSON.parse(token);
-      const { userId, expiresAt } = tokenData;
-
-      // Check if token is expired
-      if (new Date().getTime() > expiresAt) {
-        // Token is expired, clear it and allow access to public path
-        const response = NextResponse.next();
-        response.cookies.delete("authToken");
-        return response;
-      }
-
-      // Token is valid, redirect to dashboard
-      return NextResponse.redirect(
-        new URL(`/dashboard/patients/${userId}/new-appointment`, request.url)
+    // If no token exists or the token doesn't match the URL userId, redirect to login
+    if (!token || token !== urlUserId) {
+      // Create the login URL with the userId
+      const loginUrl = new URL(
+        `/dashboard/patients/${urlUserId}/login`,
+        request.url
       );
-    } catch (error) {
-      // If there's an error parsing the token, clear it and continue
-      const response = NextResponse.next();
-      response.cookies.delete("authToken");
-      return response;
+
+      // Add a redirect parameter to return after login
+      loginUrl.searchParams.set("redirect", pathname);
+
+      // Redirect to the login page
+      return NextResponse.redirect(loginUrl);
     }
   }
 
-  // For all other cases, continue
+  // Allow the request to continue
   return NextResponse.next();
 }
 
 // Configure the middleware to run on specific paths
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except:
-     * 1. /api routes
-     * 2. /_next (Next.js internals)
-     * 3. /fonts, /images (static files)
-     * 4. /favicon.ico, /sitemap.xml (static files)
-     */
-    "/((?!api|_next|fonts|images|favicon.ico|sitemap.xml).*)",
-  ],
+  // Match all dashboard patient routes except login and register
+  matcher: ["/dashboard/patients/:userId/:path*"],
 };

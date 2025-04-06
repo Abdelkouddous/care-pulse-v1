@@ -1,107 +1,90 @@
 // lib/auth.ts
-import { Client, Account } from "appwrite";
-import Cookies from "js-cookie";
+export class TokenManager {
+  private static readonly TOKEN_KEY = "pulse_auth_token";
+  private static readonly EXPIRY_KEY = "pulse_auth_expiry";
 
-import { toast } from "@/hooks/use-toast";
-
-// Export the TokenManager
-export const TokenManager = {
-  // Set token with expiration
-  setToken: (userId: string) => {
-    const expirationTime = new Date().getTime() + 24 * 60 * 60 * 1000; // 24 hours from now
-    const tokenData = { userId, expiresAt: expirationTime };
-
-    // Store in cookie (accessible by both client and middleware)
-    Cookies.set("authToken", JSON.stringify(tokenData), {
-      expires: new Date(expirationTime),
-      path: "/",
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-    });
-
-    // Also store in localStorage as a backup
-    localStorage.setItem("authToken", JSON.stringify(tokenData));
-
-    // Set a timeout to automatically logout when token expires
-    const timeUntilExpiration = expirationTime - new Date().getTime();
-    setTimeout(() => {
-      TokenManager.removeToken();
-      window.location.href = "/";
-      toast({
-        title: "Session Expired",
-        description: "Your session has expired. Please log in again.",
-      });
-    }, timeUntilExpiration);
-  },
-
-  // Get token and check if it's valid
-  getToken: () => {
-    // Try to get from cookie first
-    const cookieToken = Cookies.get("authToken");
-    const tokenData = cookieToken || localStorage.getItem("authToken");
-
-    if (!tokenData) return null;
-
+  // Set token with expiration (default 24 hours)
+  static setToken(token: string, expiryHours: number = 24): void {
     try {
-      const { userId, expiresAt } = JSON.parse(tokenData);
-      const currentTime = new Date().getTime();
+      // Store in localStorage if available (client-side)
+      if (typeof window !== "undefined") {
+        const expiryTime = new Date();
+        expiryTime.setHours(expiryTime.getHours() + expiryHours);
 
-      if (currentTime > expiresAt) {
-        // Token has expired
-        TokenManager.removeToken();
-        return null;
+        localStorage.setItem(this.TOKEN_KEY, token);
+        localStorage.setItem(this.EXPIRY_KEY, expiryTime.toISOString());
+
+        // Also set in cookie for middleware access
+        document.cookie = `${this.TOKEN_KEY}=${token}; path=/; max-age=${expiryHours * 3600}; SameSite=Lax`;
+      }
+    } catch (error) {
+      console.error("Error setting token:", error);
+    }
+  }
+
+  // Get token and check if it's still valid
+  static getToken(): string | null {
+    try {
+      // Check localStorage first (client-side)
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem(this.TOKEN_KEY);
+        const expiry = localStorage.getItem(this.EXPIRY_KEY);
+
+        if (token && expiry) {
+          // Check if token is expired
+          if (new Date(expiry) > new Date()) {
+            return token;
+          } else {
+            // Token expired, clear it
+            this.clearToken();
+            return null;
+          }
+        }
+
+        // If not in localStorage, try to get from cookie
+        return this.getTokenFromCookie();
       }
 
-      return userId;
+      // Server-side, try to get from cookie in the request
+      return null;
     } catch (error) {
-      console.error("Error parsing token:", error);
-      TokenManager.removeToken();
+      console.error("Error getting token:", error);
       return null;
     }
-  },
+  }
 
-  // Remove token (logout)
-  removeToken: () => {
-    Cookies.remove("authToken", { path: "/" });
-    localStorage.removeItem("authToken");
-  },
-};
+  // Helper to get token from cookie
+  private static getTokenFromCookie(): string | null {
+    if (typeof document === "undefined") return null;
 
-// Export the logout function
-export const logout = async () => {
-  try {
-    // Create Appwrite client
-    const client = new Client()
-      .setEndpoint(process.env.NEXT_PUBLIC_ENDPOINT!)
-      .setProject(process.env.NEXT_PUBLIC_PROJECT_ID!);
-
-    const account = new Account(client);
-
-    // Delete Appwrite session
-    const sessions = await account.listSessions();
-    if (sessions?.sessions?.length) {
-      for (const session of sessions.sessions) {
-        await account.deleteSession(session.$id);
+    const cookies = document.cookie.split(";");
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split("=");
+      if (name === this.TOKEN_KEY) {
+        return value;
       }
     }
-
-    // Remove token
-    TokenManager.removeToken();
-
-    // Show success toast
-    toast({
-      title: "Logged Out",
-      description: "You have been successfully logged out.",
-    });
-
-    // Redirect to login page
-    window.location.href = "/";
-  } catch (error) {
-    console.error("Error during logout:", error);
-    toast({
-      title: "Logout Failed",
-      description: "There was an issue logging you out. Please try again.",
-      variant: "destructive",
-    });
+    return null;
   }
-};
+
+  // Clear token from all storage
+  static clearToken(): void {
+    try {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem(this.TOKEN_KEY);
+        localStorage.removeItem(this.EXPIRY_KEY);
+        document.cookie = `${this.TOKEN_KEY}=; path=/; max-age=0; SameSite=Lax`;
+      }
+    } catch (error) {
+      console.error("Error clearing token:", error);
+    }
+  }
+  //logout
+  static logout(): void {
+    this.clearToken();
+    // Optionally, redirect to login page or perform other logout actions
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
+    }
+  }
+}
