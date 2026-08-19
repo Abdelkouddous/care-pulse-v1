@@ -1,0 +1,20 @@
+# ==============================================================================
+# CarePulse Monorepo Netlify Build Configuration
+# ==============================================================================
+
+[build]
+  # Target directory containing the Next.js application
+  base = "frontend"
+
+  # Build command executed inside the 'frontend' directory
+  command = "npm run build"
+
+  # Publish directory relative to the base directory
+  publish = ".next"
+
+[[plugins]]
+  # Essential Next.js plugin for SSR, Middleware, and Server Actions support
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NODE_VERSION = "20"

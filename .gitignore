@@ -1,39 +1,47 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules/
 /.pnp
 .pnp.js
 .yarn/install-state.gz
 
+# environment variables
+.env
+.env*.local
+.env.local
+.env.production
+.env.development
+!.env.example
+.env.sentry-build-plugin
+
 # testing
-/coverage
+coverage/
 
-# next.js
-/.next/
-/out/
+# build & caches (Next.js, Laravel, generic)
+.next/
+out/
+build/
+dist/
+.cache/
 
-# production
-/build
-
-# misc
+# OS & IDE
 .DS_Store
+Thumbs.db
 *.pem
+.vscode/
+.idea/
 
-# debug
+# debug & logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# local env files
-.env*.local
-
-# vercel
-.vercel
+pnpm-debug.log*
+*.log
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
-# Sentry Config File
-.env.sentry-build-plugin
+# vercel
+.vercel/

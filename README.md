@@ -3,11 +3,11 @@
     <img src="https://img.shields.io/badge/-Next_JS-black?style=for-the-badge&logoColor=white&logo=nextdotjs&color=000000" alt="Next.js" />
     <img src="https://img.shields.io/badge/-TypeScript-black?style=for-the-badge&logoColor=white&logo=typescript&color=3178C6" alt="TypeScript" />
     <img src="https://img.shields.io/badge/-Tailwind_CSS-black?style=for-the-badge&logoColor=white&logo=tailwindcss&color=06B6D4" alt="Tailwind CSS" />
-    <img src="https://img.shields.io/badge/-Appwrite-black?style=for-the-badge&logoColor=white&logo=appwrite&color=FD366E" alt="Appwrite" />
+    <img src="https://img.shields.io/badge/-Backend_Agnostic-black?style=for-the-badge&logoColor=white&logo=code&color=555555" alt="Backend-agnostic" />
   </div>
 
   <h3 align="center">Pulse - Modern Healthcare Management Platform</h3>
-  <h3 align="center">Developed by Aymene Hamel · CTO at HML Soft</h3>
+  <h3 align="center">Developed by Aymene Hamel · CEO at HML Soft</h3>
   <h2> Revolutionizing healthcare management through cutting-edge technology solutions</h2>
    <div align="center">
      Proudly developed by <a href="https://hmlsoft.com" target="_blank"><b>HML Soft</b></a> · Transforming healthcare IT since 2023
@@ -39,11 +39,10 @@
 
 - **Core Framework**: Next.js 14 (App Router)
 - **State Management**: Zustand
-- **Database**: Appwrite + MongoDB Atlas
+- **Database**: Backend-agnostic adapter (lib/db.ts) with planned Railway Postgres
 - **UI/UX**: Tailwind CSS + ShadCN
-- **Authentication**: Appwrite Auth + OAuth2
-- **Real-time**: WebSockets + Server-Sent Events
-- **Monitoring**: Sentry + Prometheus
+- **Authentication**: Placeholder OTP + TokenManager (backend-agnostic)
+- **Monitoring**: Sentry (optional)
 - **CI/CD**: GitHub Actions + Docker
 
 ## <a name="features">💡 Key Features</a>
@@ -85,9 +84,7 @@
 
 **Prerequisites**
 
-- Node.js 18+
-- Appwrite instance
-- Redis server
+- Node.js 18+ (no external backend required in placeholder mode)
 
 **1. Clone Repository**
 
@@ -107,10 +104,17 @@ npm install
 
 ```env
 # .env.local
-NEXT_PUBLIC_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
-APPWRITE_PROJECT_ID=<your-project-id>
-APPWRITE_API_KEY=<your-api-key>
-REDIS_URL=redis://localhost:6379
+
+# Enable MOCK MODE (in-memory data)
+# Use either flag; NEXT_PUBLIC_ is available to client and server, MOCK_MODE is server-only
+NEXT_PUBLIC_MOCK_MODE=true
+# or
+MOCK_MODE=true
+
+# When ready to use a real backend, set MOCK MODE to false:
+# NEXT_PUBLIC_MOCK_MODE=false
+# MOCK_MODE=false
+# Then implement lib/db.real.ts with Railway/Postgres logic.
 ```
 
 **4. Run Development Server**
