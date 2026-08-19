@@ -26,17 +26,19 @@ export const PasskeyDoctorModal = () => {
       : null;
   const path = usePathname();
 
+  const DOCTOR_PASSKEY = process.env.NEXT_PUBLIC_DOCTOR_PASSKEY || "654321";
+
   useEffect(() => {
     const accessKey = encryptedKey && decryptKey(encryptedKey);
     if (path) {
-      if (accessKey === process.env.NEXT_PUBLIC_DOCTOR_PASSKEY) {
+      if (accessKey === DOCTOR_PASSKEY) {
         setOpen(false);
         router.push(`/doctors/login`);
       } else {
         setOpen(true);
       }
     }
-  }, [encryptedKey, path, router]);
+  }, [encryptedKey, path, router, DOCTOR_PASSKEY]);
 
   const closeModal = () => {
     setOpen(false);
@@ -48,13 +50,18 @@ export const PasskeyDoctorModal = () => {
   ) => {
     e.preventDefault();
 
-    if (passkey === process.env.NEXT_PUBLIC_DOCTOR_PASSKEY) {
+    if (passkey === DOCTOR_PASSKEY) {
       const newEncryptedKey = encryptKey(passkey);
       localStorage.setItem("accessKey", newEncryptedKey);
       router.push(`/doctors/login`);
     } else {
       setError(DICTIONARY_EN.modals.doctor.error);
     }
+  };
+
+  const handleDemoFill = () => {
+    setPasskey(DOCTOR_PASSKEY);
+    setError("");
   };
 
   // Close modal when clicking outside the dialog content
@@ -104,6 +111,18 @@ export const PasskeyDoctorModal = () => {
         <p className="mt-4 text-sm text-slate-400">
           {DICTIONARY_EN.modals.doctor.description}
         </p>
+
+        {/* Demo Mode Quick Access */}
+        <div className="mt-3 rounded-lg border border-sky-500/30 bg-sky-950/40 p-3 text-xs text-sky-300 flex items-center justify-between">
+          <span>🧪 <strong>Demo Passkey:</strong> <code className="bg-sky-900/60 px-1.5 py-0.5 rounded font-mono font-bold text-white">654321</code></span>
+          <button
+            type="button"
+            onClick={handleDemoFill}
+            className="rounded bg-sky-600 px-2 py-1 text-[11px] font-semibold text-white transition hover:bg-sky-500 active:scale-95"
+          >
+            Auto-fill
+          </button>
+        </div>
 
         <div className="my-6 flex flex-col items-center">
           <InputOTP

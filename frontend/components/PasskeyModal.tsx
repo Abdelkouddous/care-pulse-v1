@@ -34,17 +34,19 @@ export const PasskeyModal = () => {
       : null;
   const path = usePathname();
 
+  const ADMIN_PASSKEY = process.env.NEXT_PUBLIC_ADMIN_PASSKEY || "123456";
+
   useEffect(() => {
     const accessKey = encryptedKey && decryptKey(encryptedKey);
     if (path) {
-      if (accessKey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY) {
+      if (accessKey === ADMIN_PASSKEY) {
         setOpen(false);
         router.push(`/admin/login`);
       } else {
         setOpen(true);
       }
     }
-  }, [encryptedKey, path, router]);
+  }, [encryptedKey, path, router, ADMIN_PASSKEY]);
 
   const closeModal = () => {
     setOpen(false);
@@ -56,7 +58,7 @@ export const PasskeyModal = () => {
   ) => {
     e.preventDefault();
 
-    if (passkey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY) {
+    if (passkey === ADMIN_PASSKEY) {
       const newEncryptedKey = encryptKey(passkey);
       localStorage.setItem("accessKey", newEncryptedKey);
       router.push(`/admin/login`);
@@ -73,6 +75,11 @@ export const PasskeyModal = () => {
     ) {
       closeModal();
     }
+  };
+
+  const handleDemoFill = () => {
+    setPasskey(ADMIN_PASSKEY);
+    setError("");
   };
 
   return (
@@ -112,6 +119,18 @@ export const PasskeyModal = () => {
         <p className="mt-4 text-sm text-slate-400">
           {DICTIONARY_EN.modals.admin.description}
         </p>
+
+        {/* Demo Mode Quick Access */}
+        <div className="mt-3 rounded-lg border border-emerald-500/30 bg-emerald-950/40 p-3 text-xs text-emerald-300 flex items-center justify-between">
+          <span>🧪 <strong>Demo Passkey:</strong> <code className="bg-emerald-900/60 px-1.5 py-0.5 rounded font-mono font-bold text-white">123456</code></span>
+          <button
+            type="button"
+            onClick={handleDemoFill}
+            className="rounded bg-emerald-600 px-2 py-1 text-[11px] font-semibold text-white transition hover:bg-emerald-500 active:scale-95"
+          >
+            Auto-fill
+          </button>
+        </div>
 
         <div className="my-6 flex flex-col items-center">
           <InputOTP

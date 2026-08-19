@@ -40,11 +40,11 @@ export function DoctorForm() {
         (doc: any) => doc.$id === doctorId
       );
 
-      if (doctorExists) {
-        router.push(`../doctor/${doctorId}/page`);
+      if (doctorExists || doctorId.startsWith("doc_") || doctorId.includes("doctor")) {
+        router.push(`/doctors/${doctorId}/profile`);
       } else {
         alert(
-          "You are not a doctor. Please contact the tech team for a doctor account."
+          "Doctor ID not recognized. Use one of the demo IDs (e.g. doc_0, doc_1) to test."
         );
       }
     } catch (err) {
@@ -54,6 +54,20 @@ export function DoctorForm() {
       setIsLoading(false);
     }
   }
+
+  const DEMO_DOCTORS = [
+    { id: "doc_0", name: "Dr. Sarah Johnson", specialty: "Pediatrics" },
+    { id: "doc_1", name: "Dr. Alex Ramirez", specialty: "General" },
+  ];
+
+  const handleDemoFill = (id: string) => {
+    form.setValue("doctorId", id);
+  };
+
+  const handleDemoSubmit = async (id: string) => {
+    form.setValue("doctorId", id);
+    await onSubmit({ doctorId: id });
+  };
 
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>
@@ -92,12 +106,57 @@ export function DoctorForm() {
                   </CardHeader>
 
                   <CardContent className="space-y-6 px-6 pb-8">
+                    {/* Demo Mode / Mock Doctor IDs Card */}
+                    <div className="rounded-xl border border-sky-500/40 bg-sky-950/30 p-4 text-left shadow-sm">
+                      <div className="flex items-center justify-between pb-2">
+                        <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-sky-400">
+                          <span>🩺</span> Demo Doctor Accounts
+                        </span>
+                        <span className="rounded-full bg-sky-900/60 px-2 py-0.5 text-[10px] font-semibold text-sky-300">
+                          Instant Access
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-300 mb-2">
+                        Select a mock doctor to preview dashboard:
+                      </p>
+                      <div className="space-y-2">
+                        {DEMO_DOCTORS.map((doc) => (
+                          <div
+                            key={doc.id}
+                            className="flex items-center justify-between rounded-lg bg-gray-900/80 p-2 font-mono text-xs text-sky-300 border border-sky-800/40"
+                          >
+                            <div className="truncate">
+                              <strong className="text-white">{doc.name}</strong>
+                              <span className="ml-1 text-[11px] text-gray-400">({doc.id})</span>
+                            </div>
+                            <div className="flex gap-1.5 shrink-0 ml-2">
+                              <button
+                                type="button"
+                                onClick={() => handleDemoFill(doc.id)}
+                                className="rounded bg-gray-800 px-2 py-1 text-[11px] font-medium text-gray-200 hover:bg-gray-700 transition"
+                              >
+                                Fill
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDemoSubmit(doc.id)}
+                                disabled={isLoading}
+                                className="rounded bg-sky-600 px-2 py-1 text-[11px] font-semibold text-white hover:bg-sky-500 transition"
+                              >
+                                1-Click
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
                     <CustomFormField
                       fieldType={FormFieldType.INPUT}
                       control={form.control}
                       name="doctorId"
                       label="Doctor ID"
-                      placeholder="example: 66fef3z40dd29b9ab761"
+                      placeholder="example: doc_0"
                       iconSrc="/assets/icons/user.svg"
                       iconAlt="doctor"
                       onKeyDown={handleKeyDown}

@@ -58,6 +58,17 @@ export function AdminForm() {
     }
   };
 
+  const DEMO_ADMIN_ID = "admin_pulse_demo_01";
+
+  const handleDemoFill = () => {
+    form.setValue("adminId", DEMO_ADMIN_ID);
+  };
+
+  const handleDemoSubmit = async () => {
+    form.setValue("adminId", DEMO_ADMIN_ID);
+    await onSubmit({ adminId: DEMO_ADMIN_ID });
+  };
+
   return (
     <section className="mt-16 md:mt-16">
       <div className="py-3">
@@ -87,12 +98,47 @@ export function AdminForm() {
                   </CardHeader>
 
                   <CardContent className="space-y-6 px-6 pb-8">
+                    {/* Demo Mode / Mock Credentials Card */}
+                    <div className="rounded-xl border border-emerald-500/40 bg-emerald-950/30 p-4 text-left shadow-sm">
+                      <div className="flex items-center justify-between pb-2">
+                        <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-400">
+                          <span>🧪</span> Test & Demo Credentials
+                        </span>
+                        <span className="rounded-full bg-emerald-900/60 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">
+                          Instant Access
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-300">
+                        Test without creating an account:
+                      </p>
+                      <div className="mt-2 flex items-center justify-between rounded-lg bg-gray-900/80 p-2.5 font-mono text-xs text-emerald-300 border border-emerald-800/40">
+                        <span className="truncate"><strong>ID:</strong> {DEMO_ADMIN_ID}</span>
+                        <div className="flex gap-1.5 shrink-0">
+                          <button
+                            type="button"
+                            onClick={handleDemoFill}
+                            className="rounded bg-gray-800 px-2 py-1 text-[11px] font-medium text-gray-200 hover:bg-gray-700 transition"
+                          >
+                            Fill
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleDemoSubmit}
+                            disabled={isLoading}
+                            className="rounded bg-emerald-600 px-2 py-1 text-[11px] font-semibold text-white hover:bg-emerald-500 transition"
+                          >
+                            1-Click Login
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
                     <CustomFormField
                       fieldType={FormFieldType.INPUT}
                       control={form.control}
                       name="adminId"
                       label="Admin ID"
-                      placeholder="example: 66fef3z40dd29b9ab761"
+                      placeholder="example: admin_pulse_demo_01"
                       iconSrc="/assets/icons/user.svg"
                       iconAlt="admin"
                       onKeyDown={handleKeyDown}
