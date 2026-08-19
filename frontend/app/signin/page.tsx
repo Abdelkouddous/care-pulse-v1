@@ -168,174 +168,191 @@ function SignInForm() {
 
   return (
     <Form {...form}>
-      <section className="mt-16 md:mt-16">
-        <div className="py-3">
-          <Card className="my-4 overflow-hidden border-0 shadow-lg dark:bg-gray-800 md:my-2">
-            {/* Add Back Button */}
-            <div className="absolute left-4 top-4">
-              <button
-                onClick={() => router.back()}
-                className="flex items-center space-x-2 rounded-lg px-3 py-2 text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-              >
-                <Image
-                  src="/assets/icons/arrow-left.svg"
-                  alt="Back"
-                  width={20}
-                  height={20}
-                />
-                <span>Back</span>
-              </button>
-            </div>
+      <section className="min-h-[calc(100vh-5rem)] flex items-center justify-center py-12 px-4 sm:px-6 relative">
+        {/* Back Button */}
+        <div className="absolute left-4 top-6">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="flex items-center space-x-2 rounded-xl border border-slate-200 bg-white/80 px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm backdrop-blur-sm transition-colors hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300 dark:hover:bg-slate-800"
+          >
+            <Image
+              src="/assets/icons/arrow-left.svg"
+              alt="Back"
+              width={18}
+              height={18}
+            />
+            <span>Back</span>
+          </button>
+        </div>
 
-            <h1 className="px-6 pb-4 pt-8 text-center font-serif text-5xl font-bold tracking-tight text-gray-800 fade-in dark:text-white">
+        <div className="w-full max-w-4xl mx-auto pt-6">
+          <div className="text-center space-y-2 mb-8">
+            <span className="inline-block text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-3.5 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-800/60">
+              Patient Authentication
+            </span>
+            <h1 className="font-serif text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Secure Verification
             </h1>
-
-            <p className="mx-auto mb-8 max-w-2xl px-4 text-center text-lg text-gray-600 dark:text-gray-300">
+            <p className="text-sm text-slate-600 dark:text-slate-300">
               Protect your account with two-factor authentication
             </p>
+          </div>
 
-            <div className="mx-auto my-2 flex flex-col md:flex-row max-w-6xl items-start gap-8 px-4 fade-in md:px-8">
-              <Card className="mx-auto w-full overflow-hidden border-0 shadow-lg dark:bg-gray-800 md:max-w-md">
-                <form
-                  className="space-y-8 p-4"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    if (!codeSent) {
-                      const phoneValue = form.getValues("phone");
-                      if (!phoneValue) {
-                        setError("Please enter a phone number");
-                        return;
-                      }
-                      setPhone(phoneValue);
-                      sendOtp(phoneValue);
-                    } else {
-                      if (!passkey) {
-                        setError("Please enter the verification code");
-                        return;
-                      }
-                      verifyOtp(passkey);
+          <div className="flex flex-col md:flex-row items-stretch justify-center gap-6">
+            <Card className="w-full md:max-w-md overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl dark:border-slate-800 dark:bg-slate-900/90 backdrop-blur-md">
+              <form
+                className="space-y-6 p-4 sm:p-6"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!codeSent) {
+                    const phoneValue = form.getValues("phone");
+                    if (!phoneValue) {
+                      setError("Please enter a phone number");
+                      return;
                     }
-                  }}
-                >
-                  <CardHeader className="flex flex-col items-center justify-center space-y-2 pb-4 pt-6">
-                    <h2 className="text-center text-2xl font-bold text-gray-800 dark:text-white md:text-3xl">
-                      Welcome back!
-                    </h2>
-                    <p className="text-center text-base text-gray-600 dark:text-gray-300 md:text-lg">
-                      We will send an OTP to verify your identity
-                    </p>
-                  </CardHeader>
-
-                  <CardContent className="space-y-6 px-6 pb-8">
-                    {!codeSent && (
-                      <CustomFormField
-                        fieldType={FormFieldType.PHONE_INPUT}
-                        control={form.control}
-                        name="phone"
-                        label="Phone number"
-                        placeholder="+213550123456"
-                        iconSrc="/assets/icons/phone.svg"
-                        iconAlt="phone"
-                      />
-                    )}
-
-                    <SubmitButton
-                      isLoading={isLoading}
-                      className="w-full bg-emerald-600 py-3 text-lg transition-all duration-300 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600"
-                    >
-                      {codeSent ? "Verify Code" : "Send Verification Code"}
-                    </SubmitButton>
-
-                    {codeSent && (
-                      <AlertDialog open={open} onOpenChange={setOpen}>
-                        <AlertDialogContent className="rounded-lg border-0 shadow-xl dark:bg-gray-800">
-                          <AlertDialogHeader>
-                            <div className="flex items-center justify-between">
-                              <AlertDialogTitle className="text-xl font-bold text-gray-800 dark:text-white">
-                                Enter Verification Code
-                              </AlertDialogTitle>
-                              <Image
-                                src="/assets/icons/close.svg"
-                                alt="close"
-                                width={24}
-                                height={24}
-                                onClick={closeModal}
-                                className="cursor-pointer opacity-70 transition-opacity hover:opacity-100"
-                              />
-                            </div>
-                            <AlertDialogDescription className="text-gray-600 dark:text-gray-300">
-                              Sent to ******{phone.slice(-4)}
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-
-                          <div className="space-y-4">
-                            <div className="flex justify-center">
-                              <InputOTP
-                                maxLength={6}
-                                value={passkey}
-                                onChange={(value) => setPasskey(value)}
-                                className="gap-2"
-                              >
-                                <InputOTPGroup>
-                                  {[...Array(6)].map((_, index) => (
-                                    <InputOTPSlot
-                                      key={index}
-                                      index={index}
-                                      className="size-12 rounded-lg border-2 border-gray-200 text-lg font-semibold transition-colors focus:border-emerald-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                                    />
-                                  ))}
-                                </InputOTPGroup>
-                              </InputOTP>
-                            </div>
-
-                            <div className="text-center text-sm text-gray-500 dark:text-gray-400">
-                              Time remaining: {timeLeft}s
-                            </div>
-
-                            {error && (
-                              <div className="text-center text-red-500 dark:text-red-400">
-                                {error}
-                              </div>
-                            )}
-
-                            <AlertDialogFooter className="sm:justify-center">
-                              <AlertDialogAction
-                                onClick={() => verifyOtp(passkey)}
-                                className="w-full bg-emerald-600 transition-all duration-300 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600"
-                              >
-                                Verify Code
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </div>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    )}
-                  </CardContent>
-                </form>
-              </Card>
-
-              {/* Test Accounts Mockup Data */}
-              <div className="mx-auto w-full md:max-w-md space-y-4 pt-4 md:pt-0">
-                <h2 className="text-center text-2xl font-bold text-gray-800 dark:text-white">
-                  Test Account
-                </h2>
-                <p className="text-center text-sm text-gray-600 dark:text-gray-300 mb-4">
-                  Use this credential to test the platform.
-                </p>
-                
-                <div className="grid gap-4">
-                  <Card className="p-4 border-l-4 border-l-emerald-500 shadow-sm dark:bg-gray-800">
-                    <h3 className="font-bold text-emerald-600 dark:text-emerald-400 mb-1">Patient</h3>
-                    <div className="text-sm space-y-1">
-                      <p><span className="font-medium text-gray-500 dark:text-gray-400">Phone:</span> +213550123456</p>
-                      <p><span className="font-medium text-gray-500 dark:text-gray-400">OTP:</span> Any 6 digits</p>
-                    </div>
-                  </Card>
+                    setPhone(phoneValue);
+                    sendOtp(phoneValue);
+                  } else {
+                    if (!passkey) {
+                      setError("Please enter the verification code");
+                      return;
+                    }
+                    verifyOtp(passkey);
+                  }
+                }}
+              >
+                <div className="space-y-1 text-center">
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+                    Welcome Back
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    We will send an OTP to verify your identity
+                  </p>
                 </div>
+
+                <CardContent className="space-y-6 p-0">
+                  {!codeSent && (
+                    <CustomFormField
+                      fieldType={FormFieldType.PHONE_INPUT}
+                      control={form.control}
+                      name="phone"
+                      label="Phone number"
+                      placeholder="+213550123456"
+                      iconSrc="/assets/icons/phone.svg"
+                      iconAlt="phone"
+                    />
+                  )}
+
+                  <SubmitButton
+                    isLoading={isLoading}
+                    className="w-full bg-emerald-600 py-3 text-lg transition-all duration-300 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 font-bold"
+                  >
+                    {codeSent ? "Verify Code" : "Send Verification Code"}
+                  </SubmitButton>
+
+                  {codeSent && (
+                    <AlertDialog open={open} onOpenChange={setOpen}>
+                      <AlertDialogContent className="rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl">
+                        <AlertDialogHeader>
+                          <div className="flex items-center justify-between">
+                            <AlertDialogTitle className="text-lg font-bold text-white">
+                              Enter Verification Code
+                            </AlertDialogTitle>
+                            <Image
+                              src="/assets/icons/close.svg"
+                              alt="close"
+                              width={20}
+                              height={20}
+                              onClick={closeModal}
+                              className="cursor-pointer invert brightness-0 opacity-70 hover:opacity-100"
+                            />
+                          </div>
+                          <AlertDialogDescription className="text-slate-400 text-xs">
+                            Sent to ******{phone.slice(-4)}
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+
+                        <div className="space-y-4 pt-2">
+                          <div className="flex justify-center">
+                            <InputOTP
+                              maxLength={6}
+                              value={passkey}
+                              onChange={(value) => setPasskey(value)}
+                              className="gap-2"
+                            >
+                              <InputOTPGroup>
+                                {[...Array(6)].map((_, index) => (
+                                  <InputOTPSlot
+                                    key={index}
+                                    index={index}
+                                    className="size-11 rounded-lg border border-slate-700 bg-slate-800/80 text-lg font-bold text-white focus:border-emerald-400"
+                                  />
+                                ))}
+                              </InputOTPGroup>
+                            </InputOTP>
+                          </div>
+
+                          <div className="text-center text-xs text-slate-400">
+                            Time remaining: {timeLeft}s
+                          </div>
+
+                          {error && (
+                            <div className="text-center text-xs font-medium text-red-400">
+                              {error}
+                            </div>
+                          )}
+
+                          <AlertDialogFooter className="sm:justify-center pt-2">
+                            <AlertDialogAction
+                              onClick={() => verifyOtp(passkey)}
+                              className="w-full bg-emerald-600 transition-all duration-300 hover:bg-emerald-500 font-bold text-white"
+                            >
+                              Verify Code
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </div>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  )}
+                </CardContent>
+              </form>
+            </Card>
+
+            {/* Test Account Credentials Box */}
+            <div className="w-full md:max-w-xs flex flex-col justify-center">
+              <div className="rounded-2xl border border-emerald-500/30 bg-emerald-950/20 p-5 shadow-lg backdrop-blur-md">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-base">🧪</span>
+                  <h3 className="font-bold text-sm text-emerald-400">
+                    Test Patient Account
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-300 mb-3">
+                  Use this mock credential to verify without registration:
+                </p>
+                <div className="space-y-2 rounded-xl bg-slate-900/80 p-3 text-xs border border-emerald-800/30 font-mono">
+                  <p className="flex justify-between">
+                    <span className="text-slate-400">Phone:</span>
+                    <span className="text-emerald-300 font-bold">+213550123456</span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span className="text-slate-400">OTP:</span>
+                    <span className="text-emerald-300 font-bold">Any 6 digits</span>
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    form.setValue("phone", "+213550123456");
+                  }}
+                  className="mt-3 w-full rounded-xl bg-emerald-600/20 border border-emerald-500/40 px-3 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-600 hover:text-white transition-all duration-200 text-center"
+                >
+                  Auto-fill Phone Number
+                </button>
               </div>
             </div>
-          </Card>
+          </div>
         </div>
       </section>
     </Form>

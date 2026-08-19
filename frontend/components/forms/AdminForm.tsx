@@ -70,112 +70,103 @@ export function AdminForm() {
   };
 
   return (
-    <section className="mt-16 md:mt-16">
-      <div className="py-3">
-        <Card className="my-4 overflow-hidden border-0 shadow-lg dark:bg-gray-800 md:my-2">
-          <h1 className="px-6 pb-4 pt-8 text-center font-serif text-5xl font-bold tracking-tight text-gray-800 fade-in dark:text-white">
+    <section className="min-h-[calc(100vh-5rem)] flex items-center justify-center py-12 px-4 sm:px-6">
+      <div className="w-full max-w-md mx-auto">
+        <div className="text-center space-y-2 mb-6">
+          <span className="inline-block text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-3.5 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-800/60">
             Admin Portal
+          </span>
+          <h1 className="font-serif text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            Admin Authentication
           </h1>
-
-          <p className="mx-auto mb-8 max-w-2xl px-4 text-center text-lg text-gray-600 dark:text-gray-300">
+          <p className="text-sm text-slate-600 dark:text-slate-300">
             Manage your healthcare platform with Pulse Admin Dashboard
           </p>
+        </div>
 
-          <div className="mx-auto my-2 flex max-w-6xl justify-between px-4 fade-in md:px-8">
-            <Card className="mx-auto w-full overflow-hidden border-0 shadow-lg dark:bg-gray-800 md:max-w-md">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="p-1 md:p-2"
+        <Card className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl dark:border-slate-800 dark:bg-slate-900/90 backdrop-blur-md">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="p-2 sm:p-4"
+            >
+              <CardContent className="space-y-6 pt-6 px-4 sm:px-6 pb-6">
+                {/* Demo Mode / Mock Credentials Card */}
+                <div className="rounded-xl border border-emerald-500/40 bg-emerald-950/30 p-4 text-left shadow-sm">
+                  <div className="flex items-center justify-between pb-2">
+                    <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-400">
+                      <span>🧪</span> Test & Demo Credentials
+                    </span>
+                    <span className="rounded-full bg-emerald-900/60 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">
+                      Instant Access
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-300">
+                    Test without creating an account:
+                  </p>
+                  <div className="mt-2 flex items-center justify-between rounded-lg bg-gray-900/80 p-2.5 font-mono text-xs text-emerald-300 border border-emerald-800/40">
+                    <span className="truncate"><strong>ID:</strong> {DEMO_ADMIN_ID}</span>
+                    <div className="flex gap-1.5 shrink-0">
+                      <button
+                        type="button"
+                        onClick={handleDemoFill}
+                        className="rounded bg-gray-800 px-2 py-1 text-[11px] font-medium text-gray-200 hover:bg-gray-700 transition"
+                      >
+                        Fill
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleDemoSubmit}
+                        disabled={isLoading}
+                        className="rounded bg-emerald-600 px-2 py-1 text-[11px] font-semibold text-white hover:bg-emerald-500 transition"
+                      >
+                        1-Click Login
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <CustomFormField
+                  fieldType={FormFieldType.INPUT}
+                  control={form.control}
+                  name="adminId"
+                  label="Admin ID"
+                  placeholder="example: admin_pulse_demo_01"
+                  iconSrc="/assets/icons/user.svg"
+                  iconAlt="admin"
+                  onKeyDown={handleKeyDown}
+                />
+
+                <SubmitButton
+                  isLoading={isLoading}
+                  className="w-full bg-emerald-600 py-3 text-lg transition-all duration-300 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600"
                 >
-                  <CardHeader className="flex flex-col items-center justify-center space-y-2 pb-4 pt-6">
-                    <h2 className="text-center text-2xl font-bold text-gray-800 dark:text-white md:text-3xl">
-                      Admin Authentication
-                    </h2>
-                    <p className="text-center text-base text-gray-600 dark:text-gray-300 md:text-lg">
-                      Enter your admin ID to continue
-                    </p>
-                  </CardHeader>
+                  Authenticate
+                </SubmitButton>
 
-                  <CardContent className="space-y-6 px-6 pb-8">
-                    {/* Demo Mode / Mock Credentials Card */}
-                    <div className="rounded-xl border border-emerald-500/40 bg-emerald-950/30 p-4 text-left shadow-sm">
-                      <div className="flex items-center justify-between pb-2">
-                        <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-400">
-                          <span>🧪</span> Test & Demo Credentials
-                        </span>
-                        <span className="rounded-full bg-emerald-900/60 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">
-                          Instant Access
-                        </span>
-                      </div>
-                      <p className="text-xs text-gray-300">
-                        Test without creating an account:
-                      </p>
-                      <div className="mt-2 flex items-center justify-between rounded-lg bg-gray-900/80 p-2.5 font-mono text-xs text-emerald-300 border border-emerald-800/40">
-                        <span className="truncate"><strong>ID:</strong> {DEMO_ADMIN_ID}</span>
-                        <div className="flex gap-1.5 shrink-0">
-                          <button
-                            type="button"
-                            onClick={handleDemoFill}
-                            className="rounded bg-gray-800 px-2 py-1 text-[11px] font-medium text-gray-200 hover:bg-gray-700 transition"
-                          >
-                            Fill
-                          </button>
-                          <button
-                            type="button"
-                            onClick={handleDemoSubmit}
-                            disabled={isLoading}
-                            className="rounded bg-emerald-600 px-2 py-1 text-[11px] font-semibold text-white hover:bg-emerald-500 transition"
-                          >
-                            1-Click Login
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <CustomFormField
-                      fieldType={FormFieldType.INPUT}
-                      control={form.control}
-                      name="adminId"
-                      label="Admin ID"
-                      placeholder="example: admin_pulse_demo_01"
-                      iconSrc="/assets/icons/user.svg"
-                      iconAlt="admin"
-                      onKeyDown={handleKeyDown}
-                    />
-
-                    <SubmitButton
-                      isLoading={isLoading}
-                      className="w-full bg-emerald-600 py-3 text-lg transition-all duration-300 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600"
+                <div className="mt-4 border-t border-gray-200 pt-4 text-center dark:border-gray-700 space-y-1">
+                  <p className="text-xs text-gray-600 dark:text-gray-300">
+                    {"Don't have an admin ID? "}
+                    <Link
+                      href="/contact"
+                      className="font-semibold text-emerald-600 hover:underline dark:text-emerald-400"
                     >
-                      Authenticate
-                    </SubmitButton>
-
-                    <div className="mt-4 border-t border-gray-200 pt-4 text-center dark:border-gray-700">
-                      <p className="text-gray-600 dark:text-gray-300">
-                        {"Don't have an admin ID? "}
-                        <Link
-                          href="/contact"
-                          className="font-semibold text-emerald-600 hover:underline dark:text-emerald-400"
-                        >
-                          Contact us
-                        </Link>
-                      </p>
-                      <p className="text-gray-600 dark:text-gray-300">
-                        Not an admin?{" "}
-                        <Link
-                          href="/"
-                          className="font-semibold text-emerald-600 hover:underline dark:text-emerald-400"
-                        >
-                          Go back to home
-                        </Link>
-                      </p>
-                    </div>
-                  </CardContent>
-                </form>
-              </Form>
-            </Card>
-          </div>
+                      Contact us
+                    </Link>
+                  </p>
+                  <p className="text-xs text-gray-600 dark:text-gray-300">
+                    Not an admin?{" "}
+                    <Link
+                      href="/"
+                      className="font-semibold text-emerald-600 hover:underline dark:text-emerald-400"
+                    >
+                      Go back to home
+                    </Link>
+                  </p>
+                </div>
+              </CardContent>
+            </form>
+          </Form>
         </Card>
       </div>
     </section>

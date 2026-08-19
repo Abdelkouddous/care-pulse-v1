@@ -9,20 +9,19 @@ export const siteConfig = {
 
     {
       title: "About",
-      href: "#about",
+      href: "/#about",
     },
     {
       title: "Doctors",
-      href: "#doctors",
+      href: "/#doctors",
     },
-
     {
       title: "Services",
-      href: "#Services",
+      href: "/#services",
     },
     {
       title: "Contact",
-      href: "#contact",
+      href: "/#contact",
     },
 
     // isLoggedIn
