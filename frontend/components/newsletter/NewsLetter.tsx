@@ -50,7 +50,7 @@ const NewsLetter = () => {
               type="email"
               required
               placeholder={DICTIONARY_EN.newsletter.placeholder}
-              className="w-full sm:max-w-xs rounded-xl border-white/30 bg-white/10 text-white placeholder:text-emerald-200 focus:border-white focus:ring-white h-11"
+              className="w-full sm:max-w-xs rounded-xl border-white/30 bg-white/10 px-4 text-sm text-white placeholder:text-emerald-100/70 focus:border-white focus:ring-white h-11"
             />
             <Button
               type="submit"

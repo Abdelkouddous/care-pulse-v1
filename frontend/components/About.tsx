@@ -35,7 +35,7 @@ const About: React.FC<AboutProps> = ({ className = "" }): JSX.Element => {
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-3.5 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-800/60">
                 {DICTIONARY_EN.about.badge}
               </span>
-              <h2 className="font-serif text-3xl font-bold text-slate-900 dark:text-white md:text-4xl">
+              <h2 className="font-sans text-3xl font-bold text-slate-900 dark:text-white md:text-4xl">
                 {DICTIONARY_EN.about.title}
               </h2>
             </CardTitle>

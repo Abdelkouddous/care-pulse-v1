@@ -1,32 +1,38 @@
 "use server";
 
-import { Doctors } from "@/constants";
+import axios from "axios";
 
-// Mock Doctor Actions
-
-export const createDoctor = async (data: any) => {
-  return {
-    $id: `mock_doctor_${Date.now()}`,
-    ...data,
-  };
-};
-
-export const getDoctorCount = async () => {
-  return Doctors.length;
-};
-
-export const getActiveDoctorCount = async () => {
-  return Math.floor(Doctors.length * 0.8);
-};
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 export const getDoctors = async () => {
-  // Return the static list mapped to mock DB format
-  return Doctors.map((doc, idx) => ({
-    $id: `doc_${idx}`,
-    name: doc.name,
-    email: `${doc.name.toLowerCase().replace(" ", ".")}@mock.com`,
-    image: doc.image,
-    speciality: doc.speciality,
-    rating: doc.rating,
-  }));
+  try {
+    const res = await axios.get(`${API_URL}/doctors`);
+    return res.data.data.map((d: any) => ({
+      $id: d.id,
+      name: d.name,
+      image: d.avatar_url,
+      speciality: d.specialty?.name || "General Medicine",
+      consultationFee: d.consultation_fee_cents / 100,
+      feeCents: d.consultation_fee_cents,
+      email: d.email,
+    }));
+  } catch (error) {
+    return [];
+  }
+};
+
+export const createDoctor = async (doctorData: any) => {
+  try {
+    const res = await axios.post(`${API_URL}/admin/doctors`, {
+      first_name: doctorData.name?.split(" ")[0] || "Doctor",
+      last_name: doctorData.name?.split(" ").slice(1).join(" ") || "Name",
+      email: doctorData.email,
+      specialty_id: doctorData.specialityId,
+      license_number: doctorData.licenseNumber || `LIC-${Date.now()}`,
+      consultation_fee_cents: (doctorData.consultationFee || 35) * 100,
+    });
+    return res.data.data;
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
 };

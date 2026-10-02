@@ -11,6 +11,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { getDoctors } from "@/lib/actions/doctors.actions";
 import { DoctorFormValidation } from "@/lib/validation";
+import { MOCK_DOCTOR } from "@/mocks/data";
 
 import { SubmitButton } from "../ui/SubmitButton";
 
@@ -37,14 +38,14 @@ export function DoctorForm() {
     try {
       const fetchedDoctors = await getDoctors();
       const doctorExists = fetchedDoctors.some(
-        (doc: any) => doc.$id === doctorId
+        (doc: any) => doc.$id === doctorId || doc.id === doctorId
       );
 
-      if (doctorExists || doctorId.startsWith("doc_") || doctorId.includes("doctor")) {
-        router.push(`/doctors/${doctorId}/profile`);
+      if (doctorExists || doctorId === MOCK_DOCTOR.id || doctorId.startsWith("doc_") || doctorId.includes("doctor")) {
+        router.push(`/doctors/dashboard`);
       } else {
         alert(
-          "Doctor ID not recognized. Use one of the demo IDs (e.g. doc_0, doc_1) to test."
+          `Doctor ID not recognized. Use the demo ID (${MOCK_DOCTOR.id}) to test.`
         );
       }
     } catch (err) {
@@ -56,8 +57,11 @@ export function DoctorForm() {
   }
 
   const DEMO_DOCTORS = [
-    { id: "doc_0", name: "Dr. Sarah Johnson", specialty: "Pediatrics" },
-    { id: "doc_1", name: "Dr. Alex Ramirez", specialty: "General" },
+    {
+      id: MOCK_DOCTOR.id,
+      name: MOCK_DOCTOR.name,
+      specialty: MOCK_DOCTOR.specialty?.name || "Cardiology",
+    },
   ];
 
   const handleDemoFill = (id: string) => {

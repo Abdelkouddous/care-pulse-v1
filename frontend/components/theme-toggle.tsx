@@ -1,59 +1,39 @@
-// "use client";
-
-// import * as React from "react";
-// import { Moon, Sun } from "lucide-react";
-// import { useTheme } from "next-themes";
-
-// import { Button } from "@/components/ui/button";
-
-// export function ThemeToggle() {
-//   const { setTheme, theme } = useTheme();
-
-//   return (
-//     <Button
-//       variant="ghost"
-//       size="icon"
-//       onClick={() =>
-//         setTheme(theme === "medical-light" ? "medical-dark" : "light")
-//       }
-//     >
-//       <Sun className="h-[1.5rem] w-[1.3rem] dark:hidden" />
-//       <Moon className="hidden h-5 w-5 dark:block" />
-//       <span className="sr-only">Toggle theme</span>
-//     </Button>
-//   );
-// }
 "use client";
+
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 
-export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+export function ThemeToggle({ className }: { className?: string }) {
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
-  if (!mounted)
+  if (!mounted) {
     return (
-      <Button roleVariant="ghost" size="icon" disabled>
-        <Sun className="h-[1.5rem] w-[1.3rem]" />
+      <Button roleVariant="ghost" size="icon" className={className} disabled>
+        <Sun className="size-4" />
       </Button>
     );
+  }
+
+  const isDark = resolvedTheme === "dark";
 
   return (
     <Button
       roleVariant="ghost"
       size="icon"
-      onClick={() =>
-        setTheme(theme === "medical-light" ? "medical-dark" : "medical-light")
-      }
+      className={className}
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      aria-label="Toggle visual theme"
+      title={`Switch to ${isDark ? "light" : "dark"} mode`}
     >
-      {theme === "medical-dark" ? (
-        <Sun className="h-5 w-5 text-foreground " />
+      {isDark ? (
+        <Sun className="size-4 text-amber-400 transition-transform duration-200 hover:rotate-45" />
       ) : (
-        <Moon className="h-[1.5rem] w-[1.3rem] text-foreground " />
+        <Moon className="size-4 text-slate-700 transition-transform duration-200 hover:-rotate-12" />
       )}
       <span className="sr-only">Toggle theme</span>
     </Button>

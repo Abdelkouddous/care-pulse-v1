@@ -12,6 +12,8 @@ import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import { NavItem } from "@/types/nav";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { DemoTourModal } from "@/components/DemoTourModal";
 import { DICTIONARY_EN } from "@/constants/locales/en";
 
 interface MainNavProps {
@@ -24,9 +26,22 @@ export function MainNav({ items, userId }: MainNavProps) {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolling, setIsScrolling] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState("patient");
   const { theme, setTheme } = useTheme();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token =
+        localStorage.getItem("carepulse_token") ||
+        localStorage.getItem("user_token");
+      const role = localStorage.getItem("carepulse_role") || "patient";
+      setIsAuthenticated(!!token);
+      setUserRole(role);
+    }
+  }, [pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,11 +70,22 @@ export function MainNav({ items, userId }: MainNavProps) {
     };
   }, []);
 
-  const mainNavItems = items || [
+  const baseNavItems = items || [
     { title: DICTIONARY_EN.nav.home, href: "/" },
-    { title: DICTIONARY_EN.nav.about, href: "/about" },
-    { title: DICTIONARY_EN.nav.doctors, href: "/doctors" },
+    { title: DICTIONARY_EN.nav.about, href: "/#about" },
+    { title: DICTIONARY_EN.nav.doctors, href: "/#doctors" },
   ];
+
+  const dashboardHref =
+    userRole === "doctor"
+      ? "/doctors/dashboard"
+      : userRole === "admin"
+      ? "/admin/dashboard"
+      : "/patient/dashboard";
+
+  const mainNavItems = isAuthenticated
+    ? [...baseNavItems, { title: "Dashboard", href: dashboardHref }]
+    : baseNavItems;
 
   return (
     <nav
@@ -110,24 +136,40 @@ export function MainNav({ items, userId }: MainNavProps) {
 
           {/* Right Action Bar */}
           <div className="flex items-center space-x-3">
+            {/* MVP Demo Sandbox Button */}
+            <div className="hidden sm:block">
+              <DemoTourModal />
+            </div>
+
+            {/* Real Sign In / Patient Dashboard Button */}
+            {isAuthenticated ? (
+              <Link href={dashboardHref} className="hidden sm:block">
+                <Button
+                  roleVariant="patient"
+                  size="sm"
+                  className="rounded-xl text-xs font-bold px-3.5 shadow-sm bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer"
+                >
+                  {userRole === "doctor"
+                    ? "Doctor Portal"
+                    : userRole === "admin"
+                    ? "Admin Portal"
+                    : "Patient Dashboard"}
+                </Button>
+              </Link>
+            ) : (
+              <Link href="/login" className="hidden sm:block">
+                <Button
+                  roleVariant="patient"
+                  size="sm"
+                  className="rounded-xl text-xs font-bold px-3.5 shadow-sm cursor-pointer"
+                >
+                  Sign In
+                </Button>
+              </Link>
+            )}
+
             {/* Theme Toggle */}
-            <Button
-              roleVariant="ghost"
-              size="icon"
-              onClick={() =>
-                setTheme(
-                  theme === "medical-dark" ? "medical-light" : "medical-dark"
-                )
-              }
-              className="rounded-xl p-2 hover:bg-slate-100 dark:hover:bg-slate-800"
-              aria-label="Toggle theme"
-            >
-              {theme === "medical-dark" ? (
-                <Sun className="size-5 text-slate-300" />
-              ) : (
-                <Moon className="size-5 text-slate-600" />
-              )}
-            </Button>
+            <ThemeToggle className="size-9 rounded-xl border border-slate-200 dark:border-slate-800" />
 
             {/* Mobile Navigation Toggle */}
             <Button
@@ -166,14 +208,31 @@ export function MainNav({ items, userId }: MainNavProps) {
                   </Link>
                 );
               })}
-              <div className="pt-2">
-                <Link
-                  href="/signin"
-                  className="block rounded-xl bg-emerald-600 px-4 py-2.5 text-center text-sm font-bold text-white hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 shadow-md"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {DICTIONARY_EN.nav.signIn}
-                </Link>
+              <div className="pt-2 space-y-2">
+                <div className="w-full">
+                  <DemoTourModal className="w-full justify-center" />
+                </div>
+                {isAuthenticated ? (
+                  <Link
+                    href={dashboardHref}
+                    className="block rounded-xl bg-emerald-600 px-4 py-2.5 text-center text-sm font-bold text-white hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 shadow-md"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {userRole === "doctor"
+                      ? "Doctor Portal"
+                      : userRole === "admin"
+                      ? "Admin Portal"
+                      : "Patient Dashboard"}
+                  </Link>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="block rounded-xl bg-emerald-600 px-4 py-2.5 text-center text-sm font-bold text-white hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 shadow-md"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {DICTIONARY_EN.nav.signIn}
+                  </Link>
+                )}
               </div>
             </div>
           </div>

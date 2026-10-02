@@ -17,10 +17,9 @@ import { PatientFormValidation } from "@/lib/validation";
 import { toast } from "@/hooks/use-toast";
 
 import "react-datepicker/dist/react-datepicker.css";
-import "react-phone-number-input/style.css";
-import CustomFormField, { FormFieldType } from "../CustomFormField";
-import { FileUploader } from "../FileUploader";
-import SubmitButton from "../SubmitButton";
+import CustomFormField, { FormFieldType } from "./CustomFormField";
+import { FileUploader } from "@/components/FileUploader";
+import { SubmitButton } from "@/components/ui/SubmitButton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 const RegisterForm = ({ user }: { user: User }) => {
@@ -100,7 +99,7 @@ const RegisterForm = ({ user }: { user: User }) => {
         });
 
         // Pass the phone number to the login page
-        router.push(`/signin?phone=${encodeURIComponent(values.phone)}`);
+        router.push(`/login?phone=${encodeURIComponent(values.phone)}`);
       }
     } catch (error) {
       console.error("Error registering patient:", error);
@@ -203,7 +202,7 @@ const RegisterForm = ({ user }: { user: User }) => {
                     control={form.control}
                     name="gender"
                     label="Gender"
-                    renderSkeleton={(field) => (
+                    renderSkeleton={(field: any) => (
                       <FormControl>
                         <RadioGroup
                           className="flex h-11 gap-6 xl:justify-between"
@@ -270,7 +269,7 @@ const RegisterForm = ({ user }: { user: User }) => {
                     control={form.control}
                     name="identificationDocument"
                     label="Identification Document"
-                    renderSkeleton={(field) => (
+                    renderSkeleton={(field: any) => (
                       <FormControl>
                         <FileUploader
                           files={field.value}

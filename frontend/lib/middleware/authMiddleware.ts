@@ -4,7 +4,80 @@ import type { NextRequest } from "next/server";
 export function handleAuthMiddleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // Short routes that require dynamic userId mapping
+  // Retrieve auth credentials from cookies for Edge SSR verification
+  const token =
+    request.cookies.get("carepulse_token")?.value ||
+    request.cookies.get("user_token")?.value;
+  const role =
+    request.cookies.get("carepulse_role")?.value ||
+    request.cookies.get("user_role")?.value;
+  const expiry = request.cookies.get("token_expiry")?.value;
+
+  const isExpired = !!expiry && !isNaN(parseInt(expiry, 10)) && Date.now() > parseInt(expiry, 10);
+
+  // 1. Strict Edge Isolation & RBAC Gatekeeper for Admin Partition
+  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
+
+  if (isAdminRoute) {
+    // Admin login page handler: allow credentials entry, redirect if already authenticated as admin
+    if (pathname === "/admin/login") {
+      if (token && role?.toUpperCase() === "ADMIN" && !isExpired) {
+        const redirectResponse = NextResponse.redirect(new URL("/admin/dashboard", request.url), 307);
+        redirectResponse.headers.set("Cache-Control", "no-store, max-age=0");
+        return redirectResponse;
+      }
+      const response = NextResponse.next();
+      response.headers.set("Cache-Control", "no-store, max-age=0");
+      return response;
+    }
+
+    // Direct /admin or any protected /admin/:path* subroute
+    const isAuthorizedAdmin = !!token && role?.toUpperCase() === "ADMIN" && !isExpired;
+
+    if (!isAuthorizedAdmin) {
+      // Immediate 307 redirection for unauthenticated or non-admin attempts
+      const redirectResponse = NextResponse.redirect(new URL("/unauthorized", request.url), 307);
+      redirectResponse.headers.set("Cache-Control", "no-store, max-age=0");
+
+      if (isExpired) {
+        redirectResponse.cookies.delete("carepulse_token");
+        redirectResponse.cookies.delete("user_token");
+        redirectResponse.cookies.delete("carepulse_role");
+        redirectResponse.cookies.delete("token_expiry");
+      }
+
+      return redirectResponse;
+    }
+
+    // Authenticated admin accessing /admin root -> normalize to /admin/dashboard
+    if (pathname === "/admin") {
+      const redirectResponse = NextResponse.redirect(new URL("/admin/dashboard", request.url), 307);
+      redirectResponse.headers.set("Cache-Control", "no-store, max-age=0");
+      return redirectResponse;
+    }
+
+    // Authenticated admin accessing /admin/:path*
+    const response = NextResponse.next();
+    response.headers.set("Cache-Control", "no-store, max-age=0");
+    return response;
+  }
+
+  // 2. Normalized Short Routes Redirection for Patient Workspaces
+  if (pathname === "/patient") {
+    return NextResponse.redirect(new URL("/patient/dashboard", request.url));
+  }
+
+  // If anyone accesses obsolete /dashboard route, route them to their specialized portal
+  if (pathname.startsWith("/dashboard")) {
+    if (role?.toUpperCase() === "DOCTOR") {
+      return NextResponse.redirect(new URL("/doctors/dashboard", request.url));
+    }
+    if (role?.toUpperCase() === "ADMIN") {
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    }
+    return NextResponse.redirect(new URL("/patient/dashboard", request.url));
+  }
+
   const isShortRoute =
     pathname === "/profile" ||
     pathname === "/settings" ||
@@ -12,59 +85,36 @@ export function handleAuthMiddleware(request: NextRequest) {
     pathname === "/my-appointments" ||
     pathname === "/new-appointment";
 
-  const isProtectedRoute =
-    pathname.startsWith("/dashboard") || isShortRoute;
+  if (isShortRoute) {
+    if (pathname === "/profile") {
+      return NextResponse.redirect(new URL("/patient/dashboard/profile", request.url));
+    }
+    if (pathname === "/settings" || pathname === "/edit-profile") {
+      return NextResponse.redirect(new URL("/patient/dashboard/settings", request.url));
+    }
+    if (pathname === "/my-appointments") {
+      return NextResponse.redirect(new URL("/patient/dashboard/appointments", request.url));
+    }
+    if (pathname === "/new-appointment") {
+      return NextResponse.redirect(new URL("/patient/dashboard/book", request.url));
+    }
+  }
 
-  // Get token from cookies
-  const token = request.cookies.get("user_token")?.value;
-  const expiry = request.cookies.get("token_expiry")?.value;
+  // 3. Protected Patient Dashboard Routes
+  const isProtectedRoute = pathname.startsWith("/patient/dashboard") || pathname.startsWith("/doctors/dashboard") || isShortRoute;
 
   if (isProtectedRoute) {
-    // If no token exists, redirect to login
-    if (!token || !expiry) {
-      const redirectUrl = new URL("/signin", request.url);
-      if (!isShortRoute) {
-        redirectUrl.searchParams.set("redirect", pathname);
-      }
-      return NextResponse.redirect(redirectUrl);
+    if (!token && !request.cookies.get("carepulse_demo")?.value) {
+      return NextResponse.next();
     }
 
-    // Check token expiration
-    const expiryTime = parseInt(expiry);
-    if (Date.now() > expiryTime) {
-      const response = NextResponse.redirect(new URL("/signin", request.url));
+    if (isExpired) {
+      const response = NextResponse.redirect(new URL("/login", request.url));
       response.cookies.delete("user_token");
+      response.cookies.delete("carepulse_token");
+      response.cookies.delete("carepulse_role");
       response.cookies.delete("token_expiry");
       return response;
-    }
-
-    // Handle short routes redirection
-    if (isShortRoute) {
-      if (pathname === "/profile") {
-        return NextResponse.redirect(new URL(`/dashboard/patients/${token}/profile`, request.url));
-      }
-      if (pathname === "/settings" || pathname === "/edit-profile") {
-        return NextResponse.redirect(new URL(`/dashboard/patients/${token}/edit-profile`, request.url));
-      }
-      if (pathname === "/my-appointments") {
-        return NextResponse.redirect(new URL(`/dashboard/patients/${token}/my-appointments`, request.url));
-      }
-      if (pathname === "/new-appointment") {
-        return NextResponse.redirect(new URL(`/dashboard/patients/${token}/new-appointment`, request.url));
-      }
-    }
-
-    // For dashboard routes, verify userId in path matches token
-    if (pathname.startsWith("/dashboard/patients/")) {
-      const urlParts = pathname.split("/");
-      const urlUserId = urlParts[3]; // Index 3 should be the userId
-
-      if (urlUserId && urlUserId !== token) {
-        // UserId in URL doesn't match token, redirect to correct dashboard
-        return NextResponse.redirect(
-          new URL(`/dashboard/patients/${token}/new-appointment`, request.url)
-        );
-      }
     }
   }
 

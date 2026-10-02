@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next build && next start && next dev ",
-    "setup-production-app" : "next build && next start ",
+    "dev": "next dev",
+    "setup-production-app": "next build && next start ",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -25,7 +25,9 @@
     "@radix-ui/react-slot": "^1.1.2",
     "@radix-ui/react-toast": "^1.2.6",
     "@sentry/nextjs": "^8.33.1",
+    "@tanstack/react-query": "^5.104.0",
     "@tanstack/react-table": "^8.17.0",
+    "axios": "^1.20.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",

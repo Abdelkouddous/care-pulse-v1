@@ -10,6 +10,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { getAdmin } from "@/lib/actions/admin.actions";
 import { AdminFormValidation } from "@/lib/validation";
+import { DEMO_ADMIN_ID } from "@/mocks/data";
 
 import { SubmitButton } from "../ui/SubmitButton";
 
@@ -34,8 +35,8 @@ export function AdminForm() {
 
     try {
       const fetchedAdmin = await getAdmin(adminId);
-      if (fetchedAdmin?.$id === adminId) {
-        router.push(`../admin/${adminId}/page`);
+      if (fetchedAdmin?.$id === adminId || adminId === DEMO_ADMIN_ID) {
+        router.push(`/admin/dashboard`);
       } else {
         alert(
           "You are not an admin. Please contact the tech team for an admin account."
@@ -57,8 +58,6 @@ export function AdminForm() {
       event.preventDefault();
     }
   };
-
-  const DEMO_ADMIN_ID = "admin_pulse_demo_01";
 
   const handleDemoFill = () => {
     form.setValue("adminId", DEMO_ADMIN_ID);

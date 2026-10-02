@@ -12,9 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+            $table->uuid('id')->primary();
+            $table->string('first_name', 100);
+            $table->string('last_name', 100);
+            $table->string('name')->virtualAs("first_name || ' ' || last_name")->nullable();
             $table->string('email')->unique();
+            $table->string('phone', 30)->nullable();
+            $table->date('date_of_birth')->nullable();
+            $table->string('gender', 20)->nullable();
+            $table->text('address')->nullable();
+            $table->string('emergency_contact_name', 200)->nullable();
+            $table->string('emergency_contact_phone', 30)->nullable();
+            $table->string('insurance_provider', 200)->nullable();
+            $table->string('insurance_policy_number', 100)->nullable();
+            $table->text('allergies')->nullable();
+            $table->text('current_medications')->nullable();
+            $table->uuid('primary_physician_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
@@ -29,7 +42,7 @@ return new class extends Migration
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignUuid('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');

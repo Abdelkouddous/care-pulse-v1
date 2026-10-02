@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'firebase' => [
+        'project_id' => env('FIREBASE_PROJECT_ID', 'gen-lang-client-0222855501'),
+    ],
+
 ];

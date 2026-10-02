@@ -1,9 +1,9 @@
-import "@/styles/globals.css";
 import "@/app/globals.css";
 
 import { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
+import { ReactQueryProvider } from "@/components/providers/ReactQueryProvider";
 import { SiteFooter } from "@/components/site-footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { siteConfig } from "@/config/site";
@@ -38,15 +38,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en" suppressHydrationWarning>
       <head />
       <body className={cn("font-sans antialiased", fontSans.variable)}>
-        <ThemeProvider
-          attribute="data-theme" // Changed from 'class' to 'data-theme'
-          defaultTheme="medical-light"
-          enableSystem={false}
-          themes={["medical-light", "medical-dark"]}
-        >
-          <div className="min-h-screen">{children}</div>
-          <SiteFooter></SiteFooter>
-        </ThemeProvider>
+        <ReactQueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            themes={["light", "dark"]}
+          >
+            <div className="min-h-screen">{children}</div>
+          </ThemeProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

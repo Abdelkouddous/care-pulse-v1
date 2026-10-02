@@ -2,15 +2,12 @@ const { fontFamily } = require("tailwindcss/defaultTheme");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // Remove the darkMode class and use data attribute instead
-  darkMode: ["class", '[data-theme="medical-dark"]'],
-
-  // Update primary color reference
-  primary: {
-    DEFAULT: "var(--medical-primary)", // Remove hsl() wrapper
-    foreground: "var(--primary-foreground)",
-  },
-  content: ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"],
+  darkMode: ["class"],
+  content: [
+    "./app/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./lib/**/*.{ts,tsx}",
+  ],
   theme: {
     container: {
       center: true,
@@ -21,19 +18,13 @@ module.exports = {
     },
     extend: {
       colors: {
-        "medical-primary": "var(--medical-primary)",
-        "medical-secondary": "var(--medical-secondary)",
-        "medical-accent": "var(--medical-accent)",
-        "medical-light": "var(--medical-light)",
-        "medical-dark": "var(--medical-dark)",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--medical-primary))",
+          DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
@@ -44,10 +35,17 @@ module.exports = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
-        backgroundImage: {
-          appointments: "url('assets/images/background/appointment-image.jpg')",
-          pending: "url('assets/images/background/pending-image.jpg')",
-          cancelled: "url('assets/images/background/cancelled-image.jpg')",
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+        },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          foreground: "hsl(var(--info-foreground))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
@@ -67,6 +65,7 @@ module.exports = {
         },
       },
       borderRadius: {
+        xl: `calc(var(--radius) + 4px)`,
         lg: `var(--radius)`,
         md: `calc(var(--radius) - 2px)`,
         sm: "calc(var(--radius) - 4px)",
@@ -85,8 +84,8 @@ module.exports = {
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.4s ease-out",
-        "accordion-up": "accordion-up 0.4s ease-out",
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },

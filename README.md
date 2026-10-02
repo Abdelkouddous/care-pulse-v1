@@ -6,14 +6,6 @@
     <img src="https://img.shields.io/badge/-Backend_Agnostic-black?style=for-the-badge&logoColor=white&logo=code&color=555555" alt="Backend-agnostic" />
   </div>
 
-  <h3 align="center">Pulse - Modern Healthcare Management Platform</h3>
-  <h3 align="center">Developed by Aymene Hamel · CEO at HML Soft</h3>
-  <h2> Revolutionizing healthcare management through cutting-edge technology solutions</h2>
-   <div align="center">
-     Proudly developed by <a href="https://hmlsoft.com" target="_blank"><b>HML Soft</b></a> · Transforming healthcare IT since 2023
-  </div>
-</div>
-
 ## 📋 Table of Contents
 
 1. 🏥 [Introduction](#introduction)
@@ -25,7 +17,7 @@
 
 ## <a name="introduction">🏥 Introduction</a>
 
-**Pulse Pro** is an enterprise-grade healthcare management system developed by HML Soft to modernize medical practice operations. Built on cutting-edge technology, this platform offers:
+**Pulse Pro** is an enterprise-grade healthcare management system developed by Vital Soft to modernize medical practice operations. Built on cutting-edge technology, this platform offers:
 
 - Patient relationship management (PRM)
 - AI-powered appointment scheduling
@@ -33,7 +25,7 @@
 - Blockchain-based medical records
 - Telemedicine capabilities
 
-**[HML Soft](https://hmlsoft.com)** specializes in developing secure, scalable healthcare solutions that comply with HIPAA and GDPR regulations.
+**[Vital Soft](https://vitalsoft.com)** specializes in developing secure, scalable healthcare solutions that comply with HIPAA and GDPR regulations.
 
 ## <a name="tech-stack">🛠️ Tech Stack</a>
 
@@ -44,6 +36,7 @@
 - **Authentication**: Placeholder OTP + TokenManager (backend-agnostic)
 - **Monitoring**: Sentry (optional)
 - **CI/CD**: GitHub Actions + Docker
+- **DEPLOYMENT**: AWS + Vercel
 
 ## <a name="features">💡 Key Features</a>
 
@@ -89,16 +82,16 @@
 **1. Clone Repository**
 
 ```bash
-git clone https://github.com/hmlsoft/Pulse-pro.git
+git clone https://github.com/vitalsoft/Pulse-pro.git
 cd Pulse-pro
 ```
 
-
 **2. Install Dependencies**
-```
+
+````
 ```bash
 npm install
-```
+````
 
 **3. Configure Environment**
 
@@ -142,14 +135,14 @@ npm run dev
 
 ## <a name="contact">📞 Contact</a>
 
-**HML Soft Development Team**  
-✉️ [contact@hmlsoft.com](mailto:contact@hmlsoft.com)  
-🌍 [https://hmlsoft.com](https://hmlsoft.com)
+**Vital Soft Development Team**
+✉️ [contact@vitalsoft.com](mailto:contact@vitalsoft.com)
+🌍 [https://vitalsoft.com](https://vitalsoft.com)
 
-**Aymene Hamel**  
-💼 [LinkedIn](https://linkedin.com/in/aymenehamel)  
+**Hamel Aymen**
+💼 [LinkedIn](https://linkedin.com/in/aymenehamel)
 🐙 [GitHub](https://github.com/aymenehamel)
 
 <div align="center" style="margin-top: 40px;">
-  <sub>Built with ❤️ by HML Soft · © 2025 All rights reserved</sub>
+  <sub>Built with ❤️ by Vital Soft · © 2026 All rights reserved</sub>
 </div>

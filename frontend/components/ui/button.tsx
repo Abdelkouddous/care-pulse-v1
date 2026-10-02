@@ -63,14 +63,16 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  variant?: VariantProps<typeof buttonVariants>["roleVariant"];
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, roleVariant, size, asChild = false, ...props }, ref) => {
+  ({ className, roleVariant, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
+    const resolvedRole = roleVariant || variant || "default";
     return (
       <Comp
-        className={cn(buttonVariants({ roleVariant, size, className }))}
+        className={cn(buttonVariants({ roleVariant: resolvedRole, size, className }))}
         ref={ref}
         {...props}
       />

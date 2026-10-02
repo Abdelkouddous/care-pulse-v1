@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 140" width="100%" height="100%">
+  <defs>
+    <linearGradient id="vsShieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#006666"/>
+      <stop offset="50%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#33CCCC"/>
+    </linearGradient>
+    <linearGradient id="vsShieldInner" x1="0%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#004d4d"/>
+      <stop offset="100%" stop-color="#14b8a6"/>
+    </linearGradient>
+    <filter id="vsGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#006666" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Group Shield Icon -->
+  <g transform="translate(10, 10)">
+    <!-- Base Shield -->
+    <path d="M 60 5 
+             C 95 5, 115 15, 115 45 
+             C 115 85, 80 110, 60 120 
+             C 40 110, 5 85, 5 45 
+             C 5 15, 25 5, 60 5 Z" 
+          fill="url(#vsShieldGrad)" 
+          filter="url(#vsGlow)"/>
+
+    <!-- Inner Shield Depth Shading -->
+    <path d="M 60 12 
+             C 88 12, 105 20, 105 46 
+             C 105 80, 75 102, 60 110 
+             C 45 102, 15 80, 15 46 
+             C 15 20, 32 12, 60 12 Z" 
+          fill="url(#vsShieldInner)" 
+          opacity="0.55"/>
+
+    <!-- Dynamic ECG / Pulse Line -->
+    <path d="M 0 65 
+             L 24 65 
+             C 32 65, 34 65, 38 52 
+             L 48 20 
+             L 62 100 
+             L 76 40 
+             L 86 76 
+             L 94 65 
+             L 122 65" 
+          fill="none" 
+          stroke="#FFFFFF" 
+          stroke-width="5.5" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+
+    <!-- Top Right Sparkle Stars -->
+    <!-- Large Sparkle -->
+    <path d="M 88 28 Q 88 35 95 35 Q 88 35 88 42 Q 88 35 81 35 Q 88 35 88 28 Z" fill="#FFFFFF"/>
+    <!-- Small Sparkle -->
+    <path d="M 98 20 Q 98 24 102 24 Q 98 24 98 28 Q 98 24 94 24 Q 98 24 98 20 Z" fill="#FFFFFF" opacity="0.9"/>
+  </g>
+
+  <!-- Typography: VitalSoft HealthTech Solutions -->
+  <g transform="translate(145, 20)">
+    <!-- Brand Wordmark -->
+    <text x="0" y="58" font-family="'Poppins', 'Inter', system-ui, sans-serif" font-size="52" font-weight="700" letter-spacing="-1">
+      <tspan fill="#006666">Vital</tspan><tspan fill="#33CCCC">Soft</tspan>
+    </text>
+
+    <!-- Subtitle / Tagline -->
+    <text x="3" y="92" font-family="'Inter', system-ui, sans-serif" font-size="19" font-weight="500" fill="#006666" opacity="0.85" letter-spacing="1.5">
+      HealthTech Solutions
+    </text>
+  </g>
+</svg>

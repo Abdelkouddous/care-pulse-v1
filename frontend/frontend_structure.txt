@@ -1,0 +1,254 @@
+frontend/
+|-- app/
+|   |-- admin/
+|   |   |-- dashboard/
+|   |   |   `-- page.tsx
+|   |   |-- layout.tsx
+|   |   |-- login/
+|   |   |   `-- page.tsx
+|   |   `-- page.tsx
+|   |-- api/
+|   |   `-- sentry-example-api/
+|   |       |-- auth/
+|   |       `-- route.ts
+|   |-- appointments/
+|   |   `-- new/
+|   |       `-- page.tsx
+|   |-- demo/
+|   |   |-- login/
+|   |   |   `-- page.tsx
+|   |   `-- page.tsx
+|   |-- doctors/
+|   |   |-- [doctorId]/
+|   |   |   |-- page.tsx
+|   |   |   `-- profile/
+|   |   |       `-- page.tsx
+|   |   |-- dashboard/
+|   |   |   `-- page.tsx
+|   |   |-- layout.tsx
+|   |   |-- login/
+|   |   |   `-- page.tsx
+|   |   `-- page.tsx
+|   |-- favicon.ico
+|   |-- global-error.tsx
+|   |-- globals.css
+|   |-- layout.tsx
+|   |-- loading.tsx
+|   |-- login/
+|   |   `-- page.tsx
+|   |-- page.tsx
+|   |-- patient/
+|   |   |-- dashboard/
+|   |   |   |-- appointments/
+|   |   |   |   `-- page.tsx
+|   |   |   |-- book/
+|   |   |   |   `-- page.tsx
+|   |   |   |-- page.tsx
+|   |   |   |-- profile/
+|   |   |   |   `-- page.tsx
+|   |   |   `-- settings/
+|   |   |       `-- page.tsx
+|   |   |-- layout.tsx
+|   |   `-- page.tsx
+|   |-- register/
+|   |   `-- page.tsx
+|   |-- sentry-example-page/
+|   |   `-- page.tsx
+|   `-- unauthorized/
+|       `-- page.tsx
+|-- components/
+|   |-- About.tsx
+|   |-- AppointmentModal.tsx
+|   |-- ContactAdmin.tsx
+|   |-- DemoTourModal.tsx
+|   |-- FileUploader.tsx
+|   |-- LogoutButton.tsx
+|   |-- PassKeyDoctorModal.tsx
+|   |-- PasskeyModal.tsx
+|   |-- Ressources.tsx
+|   |-- common/
+|   |   |-- Transitions.tsx
+|   |   |-- alert-destructive.tsx
+|   |   |-- tailwind-indicator.tsx
+|   |   `-- theme-toggle.tsx
+|   |-- forms/
+|   |   |-- AdminForm.tsx
+|   |   |-- AppointmentForm.tsx
+|   |   |-- CustomFormField.tsx
+|   |   |-- DoctorForm.tsx
+|   |   |-- PatientForm.tsx
+|   |   `-- RegisterForm.tsx
+|   |-- icons.tsx
+|   |-- landing/
+|   |   |-- BookAppointmentSection.tsx
+|   |   |-- HeroSection.tsx
+|   |   |-- MetricsSection.tsx
+|   |   |-- PhoneBookingSection.tsx
+|   |   |-- TrendingDoctorsSection.tsx
+|   |   `-- TrustedBySection.tsx
+|   |-- layout/
+|   |   `-- AppShell.tsx
+|   |-- main-nav.tsx
+|   |-- newsletter/
+|   |   `-- NewsLetter.tsx
+|   |-- payment/
+|   |   `-- Plans.tsx
+|   |-- providers/
+|   |   `-- ReactQueryProvider.tsx
+|   |-- site-footer.tsx
+|   |-- site-header.tsx
+|   |-- table/
+|   |   |-- DataTable.tsx
+|   |   `-- columns.tsx
+|   |-- tailwind-indicator.tsx
+|   |-- testimonials/
+|   |   `-- Testimonials.tsx
+|   |-- theme-provider.tsx
+|   |-- theme-toggle.tsx
+|   `-- ui/
+|       |-- AlgerianPhoneInput.tsx
+|       |-- EmptyState.tsx
+|       |-- PageHeader.tsx
+|       |-- SkeletonLoader.tsx
+|       |-- StatCard.tsx
+|       |-- StatusBadge.tsx
+|       |-- SubmitButton.tsx
+|       |-- alert-dialog.tsx
+|       |-- alert.tsx
+|       |-- avatar.tsx
+|       |-- badge.tsx
+|       |-- button.tsx
+|       |-- card.tsx
+|       |-- carousel.tsx
+|       |-- checkbox.tsx
+|       |-- command.tsx
+|       |-- dialog.tsx
+|       |-- dropdown-menu.tsx
+|       |-- form.tsx
+|       |-- input-otp.tsx
+|       |-- input.tsx
+|       |-- label.tsx
+|       |-- popover.tsx
+|       |-- radio-group.tsx
+|       |-- select.tsx
+|       |-- separator.tsx
+|       |-- table.tsx
+|       |-- textarea.tsx
+|       |-- toast.tsx
+|       `-- toaster.tsx
+|-- components.json
+|-- config/
+|   `-- site.ts
+|-- constants/
+|   |-- algeria.ts
+|   |-- index.ts
+|   `-- locales/
+|       `-- en.ts
+|-- frontend_structure.txt
+|-- hooks/
+|   |-- use-toast.ts
+|   |-- useAdminDashboard.ts
+|   |-- useAppointments.ts
+|   |-- useAuth.ts
+|   |-- useDoctors.ts
+|   `-- useSpecialties.ts
+|-- instrumentation.ts
+|-- lib/
+|   |-- README.txt
+|   |-- actions/
+|   |   |-- admin.actions.ts
+|   |   |-- appointment.actions.ts
+|   |   |-- doctors.actions.ts
+|   |   `-- patient.actions.ts
+|   |-- api/
+|   |   |-- admin.service.ts
+|   |   |-- appointment.service.ts
+|   |   |-- auth.service.ts
+|   |   |-- client.ts
+|   |   |-- doctor.service.ts
+|   |   |-- patient.service.ts
+|   |   `-- specialty.service.ts
+|   |-- auth.ts
+|   |-- fonts.ts
+|   |-- middleware/
+|   |   `-- authMiddleware.ts
+|   |-- profile.config.ts
+|   |-- utils.ts
+|   |-- validation.ts
+|   `-- withAuth.tsx
+|-- middleware.ts
+|-- mocks/
+|   `-- data/
+|       |-- admin.mock.ts
+|       |-- appointment.mock.ts
+|       |-- doctor.mock.ts
+|       |-- index.ts
+|       `-- patient.mock.ts
+|-- netlify.toml
+|-- next-env.d.ts
+|-- next.config.mjs
+|-- package-lock.json
+|-- package.json
+|-- postcss.config.mjs
+|-- public/
+|   |-- assets/
+|   |   |-- gifs/
+|   |   |   `-- success.gif
+|   |   |-- icons/
+|   |   |   |-- 00-dis-check.svg
+|   |   |   |-- appointments.svg
+|   |   |   |-- arrow.svg
+|   |   |   |-- calendar.svg
+|   |   |   |-- cancelled.svg
+|   |   |   |-- check-circle.svg
+|   |   |   |-- check.svg
+|   |   |   |-- close.svg
+|   |   |   |-- email.svg
+|   |   |   |-- loader.svg
+|   |   |   |-- logo-full.svg
+|   |   |   |-- logo-icon.svg
+|   |   |   |-- pending.svg
+|   |   |   |-- upload.svg
+|   |   |   `-- user.svg
+|   |   |-- images/
+|   |   |   |-- 00-dr-watson.png
+|   |   |   |-- admin.png
+|   |   |   |-- appointment-img.png
+|   |   |   |-- appointments-bg.png
+|   |   |   |-- cancelled-bg.png
+|   |   |   |-- dr-brown.png
+|   |   |   |-- dr-cameron.png
+|   |   |   |-- dr-cruz.png
+|   |   |   |-- dr-green.png
+|   |   |   |-- dr-lee.png
+|   |   |   |-- dr-livingston.png
+|   |   |   |-- dr-peter.png
+|   |   |   |-- dr-powell.png
+|   |   |   |-- dr-remirez.png
+|   |   |   |-- dr-sharma.png
+|   |   |   |-- dr-watson.png
+|   |   |   |-- onboarding-img.png
+|   |   |   |-- pending-bg.png
+|   |   |   `-- register-img.png
+|   |   `-- main.jpg
+|   |-- favicon.svg
+|   |-- logo.svg
+|   |-- next.svg
+|   |-- robots.txt
+|   `-- vercel.svg
+|-- sentry.client.config.ts
+|-- sentry.edge.config.ts
+|-- sentry.server.config.ts
+|-- styles/
+|   `-- datepicker.css
+|-- tailwind.config.js
+|-- tsconfig.json
+|-- tsconfig.tsbuildinfo
+`-- types/
+    |-- api.types.ts
+    |-- contracts.ts
+    |-- domain.types.ts
+    |-- index.d.ts
+    `-- nav.ts
+
+55 directories, 197 files

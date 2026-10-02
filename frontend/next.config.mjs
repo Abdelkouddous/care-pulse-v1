@@ -11,6 +11,14 @@ const nextConfig = {
   experimental: {
     outputFileTracingRoot: path.join(__dirname, "../"),
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
+  },
 };
 
 export default withSentryConfig(

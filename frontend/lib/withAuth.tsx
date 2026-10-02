@@ -36,7 +36,7 @@ export function withAuth<P extends object>(
             description: "Please log in again to continue.",
             variant: "destructive",
           });
-          router.push("/signin");
+          router.push("/login");
           return;
         }
 

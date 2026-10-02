@@ -27,9 +27,8 @@ const DoctorProfile = ({ params }: { params: { doctorId: string } }) => {
 
   const stats = [
     { label: "Patients", value: "243", icon: User },
-    { label: "Appointments", value: "12", icon: Calendar },
-    { label: "Prescriptions", value: "8", icon: ClipboardList },
-    { label: "Health Plans", value: "5", icon: HeartPulse },
+    { label: "Consultations", value: "48", icon: Calendar },
+    { label: "Health Plans", value: "4", icon: HeartPulse },
   ];
 
   return (
@@ -161,8 +160,8 @@ const DoctorProfile = ({ params }: { params: { doctorId: string } }) => {
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
                   <Button roleVariant="outline" className="h-24">
-                    <ClipboardList className="mr-2 size-5" />
-                    New Prescription
+                    <HeartPulse className="mr-2 size-5" />
+                    Consultation Plans
                   </Button>
                   <Button roleVariant="outline" className="h-24">
                     <Calendar className="mr-2 size-5" />

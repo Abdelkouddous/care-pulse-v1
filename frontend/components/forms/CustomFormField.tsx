@@ -2,10 +2,6 @@ import React from "react";
 import Image from "next/image";
 import { Control } from "react-hook-form";
 
-import "react-phone-number-input/style.css";
-import { E164Number } from "libphonenumber-js/core";
-import PhoneInput from "react-phone-number-input";
-
 import {
   FormControl,
   FormField,
@@ -14,8 +10,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AlgerianPhoneInput } from "@/components/ui/AlgerianPhoneInput";
 
 import { FormFieldType } from "./PatientForm";
+export { FormFieldType };
 
 // Import DatePicker correctly
 import ReactDatePicker from "react-datepicker";
@@ -121,14 +119,11 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
     case FormFieldType.PHONE_INPUT:
       return (
         <FormControl>
-          <PhoneInput
-            defaultCountry="DZ"
-            placeholder={placeholder}
-            international
-            withCountryCallingCode
-            value={field.value as E164Number | undefined}
+          <AlgerianPhoneInput
+            value={field.value as string | undefined}
             onChange={field.onChange}
-            className="input-phone"
+            placeholder={placeholder || "549 88 24 56"}
+            disabled={props.disabled}
           />
         </FormControl>
       );
@@ -147,9 +142,13 @@ export const CustomFormField = (props: CustomProps) => {
       render={({ field }) => (
         <FormItem className="flex-1">
           {fieldType !== FormFieldType.CHECKBOX && label && (
-            <FormLabel>{label}</FormLabel>
+            <FormLabel className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
+              {label}
+            </FormLabel>
           )}
+
           <RenderField field={field} props={props} />
+
           <FormMessage className="shad-error" />
         </FormItem>
       )}

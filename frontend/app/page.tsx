@@ -2,23 +2,36 @@
 
 import { useEffect, useState } from "react";
 
-import PatientForm from "@/components/forms/PatientForm";
+import { HeroSection } from "@/components/landing/HeroSection";
+import { PhoneBookingSection } from "@/components/landing/PhoneBookingSection";
+import { TrustedBySection } from "@/components/landing/TrustedBySection";
+import { TrendingDoctorsSection } from "@/components/landing/TrendingDoctorsSection";
 import { PasskeyDoctorModal } from "@/components/PassKeyDoctorModal";
-import { PasskeyModal } from "@/components/PasskeyModal";
 import { SiteHeader } from "@/components/site-header";
-import Transitions from "./Transitions";
+import { SiteFooter } from "@/components/site-footer";
+import Transitions from "@/components/common/Transitions";
 
 interface SearchParamProps {
-  searchParams: { admin?: string; doctor?: string; user?: string };
+  searchParams: { doctor?: string; user?: string };
 }
 
 export default function Home({ searchParams }: SearchParamProps) {
   // Modal pop triggers based on portal entry actions
-  const isAdmin = searchParams?.admin === "true";
   const isDoctor = searchParams?.doctor === "true";
 
   const [isOffline, setIsOffline] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [searchFilters, setSearchFilters] = useState<{
+    specialty: string;
+    wilaya: string;
+    date: string;
+    visitType: string;
+  }>({
+    specialty: "All",
+    wilaya: "16",
+    date: "",
+    visitType: "clinic",
+  });
 
   // Network offline state listener
   useEffect(() => {
@@ -53,13 +66,32 @@ export default function Home({ searchParams }: SearchParamProps) {
 
       {/* Role-Based Passkey Verification Modals */}
       {isDoctor && <PasskeyDoctorModal />}
-      {isAdmin && <PasskeyModal />}
 
       {/* Main Landing Page Content Flow */}
-      <main className="w-full flex-1 flex flex-col items-center pt-4 pb-16 px-3 sm:px-6">
-        <PatientForm />
+      <main className="w-full flex-1 flex flex-col items-center">
+        {/* 1. Full Screen Hero Section (View Demo & Book Appointment CTAs) */}
+        <HeroSection />
+
+        {/* 2. Full Screen Phone Booking & Search Section (Unified Width max-w-4xl) */}
+        <PhoneBookingSection
+          onSearchChange={(filters) => setSearchFilters(filters)}
+        />
+
+        {/* 3. Trusted By Section (Framer Motion Continuous Marquee of Algerian Private Hospitals) */}
+        <TrustedBySection />
+
+        {/* 4. Unified Autoplayed Trending Doctors & Specialists Section */}
+        <TrendingDoctorsSection
+          filterSpecialty={searchFilters.specialty}
+          filterWilaya={searchFilters.wilaya}
+        />
+
+        {/* 5. Section Rhythm & Feature Components (About, Metrics, Autoplay Services, Z-form Testimonials, etc.) */}
         <Transitions />
       </main>
+
+      {/* Professional Site Footer */}
+      <SiteFooter />
     </div>
   );
 }
