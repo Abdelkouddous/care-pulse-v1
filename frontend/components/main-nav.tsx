@@ -35,9 +35,13 @@ export function MainNav({ items, userId }: MainNavProps) {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const token =
+        localStorage.getItem("vitalbook_token") ||
         localStorage.getItem("carepulse_token") ||
         localStorage.getItem("user_token");
-      const role = localStorage.getItem("carepulse_role") || "patient";
+      const role =
+        localStorage.getItem("vitalbook_role") ||
+        localStorage.getItem("carepulse_role") ||
+        "patient";
       setIsAuthenticated(!!token);
       setUserRole(role);
     }
@@ -100,13 +104,13 @@ export function MainNav({ items, userId }: MainNavProps) {
           <Link href="/" className="transition-opacity hover:opacity-80 flex items-center gap-2.5">
             <Image
               src="/favicon.svg"
-              alt="CarePulse"
+              alt="VitalBook"
               width={38}
               height={38}
               priority
             />
             <span className="font-sans text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">
-              Care<span className="font-light text-emerald-600 dark:text-emerald-400">Pulse</span>
+              Vital<span className="font-light text-emerald-600 dark:text-emerald-400">Book</span>
             </span>
           </Link>
 
@@ -157,15 +161,26 @@ export function MainNav({ items, userId }: MainNavProps) {
                 </Button>
               </Link>
             ) : (
-              <Link href="/login" className="hidden sm:block">
-                <Button
-                  roleVariant="patient"
-                  size="sm"
-                  className="rounded-xl text-xs font-bold px-3.5 shadow-sm cursor-pointer"
-                >
-                  Sign In
-                </Button>
-              </Link>
+              <div className="hidden sm:flex items-center gap-2">
+                <Link href="/login">
+                  <Button
+                    roleVariant="ghost"
+                    size="sm"
+                    className="rounded-xl text-xs font-semibold px-3 text-slate-700 dark:text-slate-300 hover:text-emerald-500 cursor-pointer"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button
+                    roleVariant="patient"
+                    size="sm"
+                    className="rounded-xl text-xs font-bold px-3.5 shadow-sm bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer"
+                  >
+                    Register
+                  </Button>
+                </Link>
+              </div>
             )}
 
             {/* Theme Toggle */}
@@ -225,13 +240,22 @@ export function MainNav({ items, userId }: MainNavProps) {
                       : "Patient Dashboard"}
                   </Link>
                 ) : (
-                  <Link
-                    href="/login"
-                    className="block rounded-xl bg-emerald-600 px-4 py-2.5 text-center text-sm font-bold text-white hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 shadow-md"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {DICTIONARY_EN.nav.signIn}
-                  </Link>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link
+                      href="/login"
+                      className="block rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2.5 text-center text-sm font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {DICTIONARY_EN.nav.signIn}
+                    </Link>
+                    <Link
+                      href="/register"
+                      className="block rounded-xl bg-emerald-600 px-3 py-2.5 text-center text-sm font-bold text-white hover:bg-emerald-700 shadow-md"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Register
+                    </Link>
+                  </div>
                 )}
               </div>
             </div>

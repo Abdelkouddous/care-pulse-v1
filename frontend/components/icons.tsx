@@ -17,7 +17,7 @@ export const Icons = {
   logo: (props: LucideProps) => (
     <Image 
       src="/logo.svg"
-      alt='carepulse'
+      alt='VitalBook'
       width={160}
       height={40}
       priority />

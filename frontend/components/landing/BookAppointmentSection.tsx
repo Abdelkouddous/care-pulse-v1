@@ -28,7 +28,7 @@ import { CustomFormField } from "@/components/forms/CustomFormField";
 import { FormFieldType } from "@/components/forms/PatientForm";
 import { SubmitButton } from "@/components/ui/SubmitButton";
 import { UserFormValidation } from "@/lib/validation";
-import { createUser, getPatient } from "@/lib/actions/patient.actions";
+import { authService } from "@/lib/api/auth.service";
 import { useDoctorsList } from "@/hooks/useDoctors";
 import { MOCK_DOCTOR_DISPLAY } from "@/mocks/data";
 import { toast } from "@/hooks/use-toast";
@@ -49,23 +49,30 @@ export function BookAppointmentSection({
 
   const { data: doctorsData, isLoading: isDoctorsLoading } = useDoctorsList();
 
-  // Resolve doctors from API or centralized canonical mock fixture
+  const isDemo =
+    typeof window !== "undefined" &&
+    (localStorage.getItem("vitalbook_demo") === "true" ||
+      localStorage.getItem("carepulse_demo") === "true");
+
+  // Resolve doctors from API or centralized canonical mock fixture strictly in demo mode
   const doctorsList = doctorsData?.doctors && doctorsData.doctors.length > 0
     ? doctorsData.doctors.map((doc) => ({
         id: doc.id,
         name: doc.name || `Dr. ${doc.first_name} ${doc.last_name}`,
         specialty: doc.specialty?.name || "General Medicine",
-        avatar: doc.avatar_url?.startsWith("/assets") ? doc.avatar_url : MOCK_DOCTOR_DISPLAY.avatar,
+        avatar: doc.avatar_url?.startsWith("/assets") ? doc.avatar_url : doc.avatar_url || "/assets/images/dr-remirez.png",
         address: (doc as any).clinic?.address || "12 Rue Didouche Mourad, Alger",
         wilaya: "16 - Alger",
         fee_cents: doc.consultation_fee_cents || 400000,
         fee_dzd: `${Math.round((doc.consultation_fee_cents || 400000) / 100).toLocaleString()} DZD`,
         rating: 4.9,
         reviewsCount: 120,
-        license: doc.license_number || MOCK_DOCTOR_DISPLAY.license,
+        license: doc.license_number || "DZ-MSPRH-16",
         nextSlot: "Tomorrow, 09:30 AM",
       }))
-    : [MOCK_DOCTOR_DISPLAY];
+    : isDemo
+    ? [MOCK_DOCTOR_DISPLAY]
+    : [];
 
   // Filter doctors by active tab
   const filteredDoctors = doctorsList.filter((doc) => {
@@ -82,24 +89,23 @@ export function BookAppointmentSection({
   const onPhoneSubmit = async ({ phone }: z.infer<typeof UserFormValidation>) => {
     setIsSubmittingPhone(true);
     try {
-      const userData = { name: "Patient User", phone };
-      const user = await createUser(userData);
-
-      if (user) {
-        const patient = await getPatient(user.$id);
-        if (patient) {
-          router.push(`/login?phone=${encodeURIComponent(phone)}`);
-        } else {
-          router.push(`/register?phone=${encodeURIComponent(phone)}`);
-        }
+      const exists = await authService.checkPhone(phone);
+      if (exists) {
+        toast({
+          title: "Existing Account Detected",
+          description: "Welcome back! Please sign in to book your consultation.",
+        });
+        router.push(`/login?phone=${encodeURIComponent(phone)}`);
+      } else {
+        toast({
+          title: "New Patient Registration",
+          description: "Welcome to VitalBook! Please complete your registration wizard.",
+        });
+        router.push(`/register?phone=${encodeURIComponent(phone)}`);
       }
     } catch (error) {
       console.error("Fast-track phone error:", error);
-      toast({
-        title: "Submission Error",
-        description: "Could not proceed with phone number. Please try again.",
-        variant: "destructive",
-      });
+      router.push(`/register?phone=${encodeURIComponent(phone)}`);
     } finally {
       setIsSubmittingPhone(false);
     }
@@ -280,7 +286,7 @@ export function BookAppointmentSection({
               <div className="flex items-center gap-2">
                 <Sparkles className="size-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                 <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
-                  Evaluating CarePulse SaaS?
+                  Evaluating VitalBook SaaS?
                 </span>
               </div>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">

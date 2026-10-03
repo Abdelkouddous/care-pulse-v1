@@ -161,7 +161,7 @@ export function PatientForm() {
           <div className="w-full md:max-w-md flex flex-col justify-center space-y-4">
             <div className="text-left space-y-1">
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                Evaluating CarePulse MVP?
+                Evaluating VitalBook MVP?
               </span>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white">
                 Interactive Role Sandbox

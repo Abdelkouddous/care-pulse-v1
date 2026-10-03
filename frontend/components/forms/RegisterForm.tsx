@@ -1,329 +1,762 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import { Form, FormControl } from "@/components/ui/form";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { SelectItem } from "@/components/ui/select";
-import { Doctors, GenderOptions, PatientFormDefaultValues } from "@/constants";
-import { registerPatient } from "@/lib/actions/patient.actions";
-import { PatientFormValidation } from "@/lib/validation";
+import React, { useState } from "react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  CheckCircle2,
+  ArrowRight,
+  ArrowLeft,
+  User,
+  Mail,
+  Lock,
+  Phone,
+  Calendar,
+  MapPin,
+  Shield,
+  HeartPulse,
+  AlertCircle,
+  FileCheck,
+  Stethoscope,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { registerPatient } from "@/lib/actions/patient.actions";
+import { TokenManager } from "@/lib/auth";
+import { useDoctorsList } from "@/hooks/useDoctors";
 
-import "react-datepicker/dist/react-datepicker.css";
-import CustomFormField, { FormFieldType } from "./CustomFormField";
-import { FileUploader } from "@/components/FileUploader";
-import { SubmitButton } from "@/components/ui/SubmitButton";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+interface StepItem {
+  num: number;
+  label: string;
+  sub: string;
+}
 
-const RegisterForm = ({ user }: { user: User }) => {
+const WIZARD_STEPS: StepItem[] = [
+  { num: 1, label: "Identity & Access", sub: "Personal credentials" },
+  { num: 2, label: "Clinical & Insurance", sub: "CNAS & health data" },
+  { num: 3, label: "Emergency & Consent", sub: "Legal agreements" },
+];
+
+export default function RegisterForm({ user }: { user?: any }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [phoneFromURL, setPhoneFromURL] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const phoneParam = searchParams.get("phone") || "";
+  const { data: doctorsData } = useDoctorsList();
+  const availableDoctors = doctorsData?.doctors && doctorsData.doctors.length > 0
+    ? doctorsData.doctors
+    : [];
 
-  // Initialize form with default values
-  const form = useForm<z.infer<typeof PatientFormValidation>>({
-    resolver: zodResolver(PatientFormValidation),
-    defaultValues: {
-      ...PatientFormDefaultValues,
-      name: "",
-      phone: "",
-    },
+  const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+  // Form State
+  const [formData, setFormData] = useState({
+    // Step 1
+    firstName: user?.name ? user.name.split(" ")[0] : "",
+    lastName: user?.name ? user.name.split(" ").slice(1).join(" ") : "",
+    email: user?.email || "",
+    phone: phoneParam || user?.phone || "+213 ",
+    password: "",
+    confirmPassword: "",
+
+    // Step 2
+    dateOfBirth: "1995-06-15",
+    gender: "male",
+    address: "Algiers, Algeria",
+    insuranceProvider: "CNAS",
+    insurancePolicyNumber: "DZ-CNAS-",
+    primaryPhysician: "Dr. Amine Mansouri",
+
+    // Step 3
+    emergencyContactName: "",
+    emergencyContactPhone: "+213 ",
+    allergies: "None",
+    currentMedications: "None",
+    treatmentConsent: true,
+    privacyConsent: true,
   });
 
-  // Effect to get phone number from URL and set it in the form
-  useEffect(() => {
-    // Get phone from URL parameters
-    const params = new URLSearchParams(window.location.search);
-    const phone = params.get("phone");
-
-    if (phone) {
-      setPhoneFromURL(phone);
-      form.setValue("phone", phone);
-
-      toast({
-        title: "Welcome to Pulse!",
-        description: "Please complete your registration to continue.",
+  const updateField = (field: string, value: any) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (fieldErrors[field]) {
+      setFieldErrors((prev) => {
+        const next = { ...prev };
+        delete next[field];
+        return next;
       });
-    }
-  }, [form]);
-
-  const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
-    setIsLoading(true);
-
-    // Handle file upload if present
-    let formData;
-    if (
-      values.identificationDocument &&
-      values.identificationDocument?.length > 0
-    ) {
-      const blobFile = new Blob([values.identificationDocument[0]], {
-        type: values.identificationDocument[0].type,
-      });
-
-      formData = new FormData();
-      formData.append("blobFile", blobFile);
-      formData.append("fileName", values.identificationDocument[0].name);
-    }
-
-    try {
-      // Format userId to ensure it's a valid string
-      const sanitizedUserId = user?.$id?.toString() || '';
-
-      const patient = {
-        userId: sanitizedUserId, // Use the sanitized userId
-        name: values.name,
-        phone: values.phone,
-        birthDate: new Date(values.birthDate),
-        gender: values.gender,
-        address: values.address,
-        primaryPhysician: values.primaryPhysician,
-        identificationDocument: values.identificationDocument
-          ? formData
-          : undefined,
-        privacyConsent: values.privacyConsent,
-      };
-
-      const newPatient = await registerPatient(patient);
-
-      if (newPatient) {
-        toast({
-          title: "Registration Successful",
-          description: "You can now proceed to login.",
-        });
-
-        // Pass the phone number to the login page
-        router.push(`/login?phone=${encodeURIComponent(values.phone)}`);
-      }
-    } catch (error) {
-      console.error("Error registering patient:", error);
-      toast({
-        title: "Registration Failed",
-        description:
-          "There was an error registering your account. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  // Loading state UI
-  if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent"></div>
-          <p className="text-sm text-gray-500">
-            Please wait while we process your registration...
-          </p>
-        </div>
-      </div>
-    );
-  }
+  // Step 1 Validation
+  const validateStep1 = (): boolean => {
+    const errors: Record<string, string> = {};
+    if (!formData.firstName.trim()) errors.firstName = "First name is required.";
+    if (!formData.lastName.trim()) errors.lastName = "Last name is required.";
+    if (!formData.email.trim() || !formData.email.includes("@")) {
+      errors.email = "Valid email address is required.";
+    }
+    if (formData.phone.trim().length < 9) {
+      errors.phone = "Valid phone number is required (e.g. +213 555 99 88 77).";
+    }
+    if (formData.password.length < 8) {
+      errors.password = "Password must be at least 8 characters.";
+    }
+    if (formData.password !== formData.confirmPassword) {
+      errors.confirmPassword = "Passwords do not match.";
+    }
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Step 2 Validation
+  const validateStep2 = (): boolean => {
+    const errors: Record<string, string> = {};
+    if (!formData.dateOfBirth) errors.dateOfBirth = "Date of birth is required.";
+    if (!formData.address.trim()) errors.address = "Residential address is required.";
+    if (!formData.insurancePolicyNumber.trim()) {
+      errors.insurancePolicyNumber = "Insurance / CNAS card number is required.";
+    }
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Step 3 Validation
+  const validateStep3 = (): boolean => {
+    const errors: Record<string, string> = {};
+    if (!formData.emergencyContactName.trim()) {
+      errors.emergencyContactName = "Emergency contact name is required.";
+    }
+    if (formData.emergencyContactPhone.trim().length < 9) {
+      errors.emergencyContactPhone = "Valid emergency phone number is required.";
+    }
+    if (!formData.privacyConsent) {
+      errors.privacyConsent = "You must acknowledge and accept the privacy policy.";
+    }
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleNext = () => {
+    if (currentStep === 1 && validateStep1()) {
+      setCurrentStep(2);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (currentStep === 2 && validateStep2()) {
+      setCurrentStep(3);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 1) {
+      setCurrentStep((prev) => prev - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateStep3()) return;
+
+    setIsSubmitting(true);
+    try {
+      const payload = {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        name: `${formData.firstName} ${formData.lastName}`.trim(),
+        email: formData.email,
+        password: formData.password,
+        phone: formData.phone,
+        date_of_birth: formData.dateOfBirth,
+        gender: formData.gender,
+        address: formData.address,
+        insurance_provider: formData.insuranceProvider,
+        insurance_policy_number: formData.insurancePolicyNumber,
+        emergency_contact_name: formData.emergencyContactName,
+        emergency_contact_phone: formData.emergencyContactPhone,
+        allergies: formData.allergies,
+        current_medications: formData.currentMedications,
+        primaryPhysician: formData.primaryPhysician,
+      };
+
+      const result = await registerPatient(payload);
+
+      if (result) {
+        if (result.token) {
+          TokenManager.setSession(result.token, "patient", result.user);
+          localStorage.setItem("vitalbook_token", result.token);
+          localStorage.setItem("carepulse_token", result.token);
+          localStorage.setItem("vitalbook_role", "patient");
+          localStorage.setItem("carepulse_role", "patient");
+        }
+        if (result.user || result.$id) {
+          const userStr = JSON.stringify(result.user || { name: payload.name, email: payload.email, role: "patient" });
+          localStorage.setItem("vitalbook_user", userStr);
+          localStorage.setItem("carepulse_user", userStr);
+        }
+
+        toast({
+          title: "Registration Successful! 🎉",
+          description: `Welcome to VitalBook, ${formData.firstName}!`,
+        });
+
+        setCurrentStep(4); // Success step
+      }
+    } catch (err: any) {
+      toast({
+        title: "Registration Failed",
+        description: err?.response?.data?.message || "An error occurred during account creation.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Card className="overflow-hidden border-0 shadow-lg dark:bg-gray-800">
-        <CardHeader className="border-b border-gray-100 pb-6 pt-8 text-center dark:border-gray-700">
-          <div className="flex flex-col items-center justify-center">
-            <span className="mb-2 inline-block rounded-full bg-emerald-100 px-3 py-1 text-sm font-medium text-emerald-600 dark:bg-emerald-900 dark:text-emerald-300">
-              Patient Registration
-            </span>
-            <h1 className="font-serif text-3xl font-bold text-gray-800 dark:text-white md:text-4xl">
-              Welcome to Pulse 👋
-            </h1>
-            <p className="mt-2 max-w-2xl text-gray-600 dark:text-gray-300">
-              Please complete your profile to continue. Your information helps
-              us provide better care.
-            </p>
-          </div>
-        </CardHeader>
+    <div className="w-full max-w-3xl mx-auto py-6">
+      {/* ======================================================================= */}
+      {/* 3-STEP WIZARD PROGRESS BAR */}
+      {/* ======================================================================= */}
+      {currentStep <= 3 && (
+        <div className="mb-10">
+          <div className="flex items-center justify-between relative">
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-secondary -z-0" />
+            <div
+              className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-emerald-500 transition-all duration-300 -z-0"
+              style={{
+                width: `${((currentStep - 1) / (WIZARD_STEPS.length - 1)) * 100}%`,
+              }}
+            />
 
-        <CardContent className="px-6 pb-8 pt-6 md:px-8">
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex-1 space-y-8"
-            >
-              <div className="rounded-lg ">
-                <h2 className="mb-4 text-xl font-semibold ">
-                  Personal Information
-                </h2>
+            {WIZARD_STEPS.map((s) => {
+              const isDone = currentStep > s.num;
+              const isCurrent = currentStep === s.num;
 
-                <div className="flex flex-col gap-6 md:flex-row ">
-                  <div className="w-full md:w-1/2">
-                    <CustomFormField
-                      fieldType={FormFieldType.INPUT}
-                      control={form.control}
-                      name="name"
-                      label="Full Name"
-                      placeholder="John Doe"
-                      iconSrc="/assets/icons/user.svg"
-                      iconAlt="user"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-6 md:flex-row">
-                    <div className="w-full md:w-1/2">
-                      <CustomFormField
-                        fieldType={FormFieldType.PHONE_INPUT}
-                        control={form.control}
-                        name="phone"
-                        label="Phone Number"
-                        placeholder="+213555555555"
-                        disabled={!!phoneFromURL} // Disable if we have a phone from URL
-                      />
-                      {phoneFromURL && (
-                        <p className="mt-1 text-xs text-emerald-600 dark:text-emerald-400">
-                          ✓ Phone number verified
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="w-full md:w-1/2">
-                      <CustomFormField
-                        fieldType={FormFieldType.DATE_PICKER}
-                        control={form.control}
-                        name="birthDate"
-                        label="Date of Birth"
-                      />
-                    </div>
-                  </div>
-
-                  <CustomFormField
-                    fieldType={FormFieldType.SKELETON}
-                    control={form.control}
-                    name="gender"
-                    label="Gender"
-                    renderSkeleton={(field: any) => (
-                      <FormControl>
-                        <RadioGroup
-                          className="flex h-11 gap-6 xl:justify-between"
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          {GenderOptions.map((option, i) => (
-                            <div key={option + i} className="radio-group">
-                              <RadioGroupItem value={option} id={option} />
-                              <Label
-                                htmlFor={option}
-                                className="cursor-pointer"
-                              >
-                                {option}
-                              </Label>
-                            </div>
-                          ))}
-                        </RadioGroup>
-                      </FormControl>
+              return (
+                <div key={s.num} className="flex flex-col items-center relative z-10">
+                  <div
+                    className={cn(
+                      "size-10 rounded-full flex items-center justify-center font-bold text-xs transition-all",
+                      isDone
+                        ? "bg-emerald-600 text-white shadow-sm"
+                        : isCurrent
+                        ? "bg-emerald-600 text-white ring-4 ring-emerald-500/20 shadow-md"
+                        : "bg-card text-muted-foreground border border-border"
                     )}
-                  />
-
-                  <CustomFormField
-                    fieldType={FormFieldType.INPUT}
-                    control={form.control}
-                    name="address"
-                    label="Address"
-                    placeholder="Micro activity zone 13, Algiers, Algeria"
-                  />
-                </div>
-              </div>
-
-              <div className="rounded-lg bg-gray-50 p-6 dark:bg-gray-900">
-                <h2 className="mb-4 text-xl font-semibold text-gray-800 dark:text-white">
-                  Medical Information
-                </h2>
-
-                <div className="space-y-6">
-                  <CustomFormField
-                    fieldType={FormFieldType.SELECT}
-                    control={form.control}
-                    name="primaryPhysician"
-                    label="Primary Care Physician"
-                    placeholder="Select a physician"
                   >
-                    {Doctors.map((doctor, i) => (
-                      <SelectItem key={doctor.name + i} value={doctor.name}>
-                        <div className="flex cursor-pointer items-center gap-2">
-                          <Image
-                            src={doctor.image}
-                            width={32}
-                            height={32}
-                            alt="doctor"
-                            className="rounded-full border border-dark-500"
-                          />
-                          <p>{doctor.name}</p>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </CustomFormField>
+                    {isDone ? <CheckCircle2 className="size-5" /> : s.num}
+                  </div>
+                  <span
+                    className={cn(
+                      "text-xs font-semibold mt-2 hidden sm:block",
+                      isCurrent ? "text-foreground font-bold" : "text-muted-foreground"
+                    )}
+                  >
+                    {s.label}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground hidden sm:block">
+                    {s.sub}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
-                  <CustomFormField
-                    fieldType={FormFieldType.SKELETON}
-                    control={form.control}
-                    name="identificationDocument"
-                    label="Identification Document"
-                    renderSkeleton={(field: any) => (
-                      <FormControl>
-                        <FileUploader
-                          files={field.value}
-                          onChange={field.onChange}
-                        />
-                      </FormControl>
+      {/* ======================================================================= */}
+      {/* STEP 1: IDENTITY & ACCESS */}
+      {/* ======================================================================= */}
+      {currentStep === 1 && (
+        <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-sm">
+          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-border">
+            <div className="size-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+              <User className="size-5" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-foreground">Step 1: Patient Identity & Credentials</h2>
+              <p className="text-xs text-muted-foreground">Create your clinical access account and verify your identity.</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                  First Name *
+                </label>
+                <input
+                  type="text"
+                  placeholder="Sarah"
+                  value={formData.firstName}
+                  onChange={(e) => updateField("firstName", e.target.value)}
+                  className={cn(
+                    "w-full h-11 px-3.5 rounded-xl border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none",
+                    fieldErrors.firstName ? "border-red-500" : "border-border"
+                  )}
+                />
+                {fieldErrors.firstName && (
+                  <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                    <AlertCircle className="size-3" /> {fieldErrors.firstName}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                  Last Name *
+                </label>
+                <input
+                  type="text"
+                  placeholder="Benali"
+                  value={formData.lastName}
+                  onChange={(e) => updateField("lastName", e.target.value)}
+                  className={cn(
+                    "w-full h-11 px-3.5 rounded-xl border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none",
+                    fieldErrors.lastName ? "border-red-500" : "border-border"
+                  )}
+                />
+                {fieldErrors.lastName && (
+                  <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                    <AlertCircle className="size-3" /> {fieldErrors.lastName}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                Email Address *
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                <input
+                  type="email"
+                  placeholder="sarah.benali@example.dz"
+                  value={formData.email}
+                  onChange={(e) => updateField("email", e.target.value)}
+                  className={cn(
+                    "w-full h-11 pl-10 pr-3.5 rounded-xl border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none",
+                    fieldErrors.email ? "border-red-500" : "border-border"
+                  )}
+                />
+              </div>
+              {fieldErrors.email && (
+                <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                  <AlertCircle className="size-3" /> {fieldErrors.email}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                Mobile Phone (Algeria) *
+              </label>
+              <div className="relative">
+                <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                <input
+                  type="tel"
+                  placeholder="+213 555 99 88 77"
+                  value={formData.phone}
+                  onChange={(e) => updateField("phone", e.target.value)}
+                  className={cn(
+                    "w-full h-11 pl-10 pr-3.5 rounded-xl border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none",
+                    fieldErrors.phone ? "border-red-500" : "border-border"
+                  )}
+                />
+              </div>
+              {fieldErrors.phone && (
+                <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                  <AlertCircle className="size-3" /> {fieldErrors.phone}
+                </p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                  Password (min 8 chars) *
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                  <input
+                    type="password"
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={(e) => updateField("password", e.target.value)}
+                    className={cn(
+                      "w-full h-11 pl-10 pr-3.5 rounded-xl border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none",
+                      fieldErrors.password ? "border-red-500" : "border-border"
                     )}
                   />
                 </div>
+                {fieldErrors.password && (
+                  <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                    <AlertCircle className="size-3" /> {fieldErrors.password}
+                  </p>
+                )}
               </div>
 
-              <div className="rounded-lg bg-gray-50 p-6 dark:bg-gray-900">
-                <h2 className="mb-4 text-xl font-semibold text-gray-800 dark:text-white">
-                  Consent and Privacy
-                </h2>
-
-                <div className="space-y-4">
-                  <CustomFormField
-                    fieldType={FormFieldType.CHECKBOX}
-                    control={form.control}
-                    name="treatmentConsent"
-                    label="I consent to receive treatment for my health condition."
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                  Confirm Password *
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                  <input
+                    type="password"
+                    placeholder="••••••••"
+                    value={formData.confirmPassword}
+                    onChange={(e) => updateField("confirmPassword", e.target.value)}
+                    className={cn(
+                      "w-full h-11 pl-10 pr-3.5 rounded-xl border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none",
+                      fieldErrors.confirmPassword ? "border-red-500" : "border-border"
+                    )}
                   />
+                </div>
+                {fieldErrors.confirmPassword && (
+                  <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                    <AlertCircle className="size-3" /> {fieldErrors.confirmPassword}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
 
-                  <CustomFormField
-                    fieldType={FormFieldType.CHECKBOX}
-                    control={form.control}
-                    name="disclosureConsent"
-                    label="I consent to the use and disclosure of my health information for treatment purposes."
-                  />
+          <div className="mt-8 pt-4 border-t border-border flex items-center justify-between">
+            <Link href="/login" className="text-xs text-muted-foreground hover:text-foreground">
+              Already have an account? <span className="text-emerald-500 font-bold underline">Sign In</span>
+            </Link>
+            <Button
+              type="button"
+              onClick={handleNext}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl px-6 h-11 font-bold shadow-sm"
+            >
+              Continue to Step 2 <ArrowRight className="ml-2 size-4" />
+            </Button>
+          </div>
+        </div>
+      )}
 
-                  <CustomFormField
-                    fieldType={FormFieldType.CHECKBOX}
-                    control={form.control}
-                    name="privacyConsent"
-                    label="I acknowledge that I have reviewed and agree to the privacy policy."
+      {/* ======================================================================= */}
+      {/* STEP 2: CLINICAL & INSURANCE */}
+      {/* ======================================================================= */}
+      {currentStep === 2 && (
+        <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-sm">
+          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-border">
+            <div className="size-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+              <HeartPulse className="size-5" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-foreground">Step 2: Medical Profile & CNAS Insurance</h2>
+              <p className="text-xs text-muted-foreground">Provide demographic details and healthcare coverage.</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                  Date of Birth *
+                </label>
+                <div className="relative">
+                  <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                  <input
+                    type="date"
+                    value={formData.dateOfBirth}
+                    onChange={(e) => updateField("dateOfBirth", e.target.value)}
+                    className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end">
-                <SubmitButton
-                  isLoading={isLoading}
-                  className="bg-emerald-600 px-8 py-3 text-lg transition-all duration-300 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600"
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                  Gender *
+                </label>
+                <select
+                  value={formData.gender}
+                  onChange={(e) => updateField("gender", e.target.value)}
+                  className="w-full h-11 px-3.5 rounded-xl border border-border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none"
                 >
-                  Complete Registration
-                </SubmitButton>
+                  <option value="female">Female</option>
+                  <option value="male">Male</option>
+                  <option value="other">Other</option>
+                </select>
               </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                Residential Address *
+              </label>
+              <div className="relative">
+                <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                <input
+                  type="text"
+                  placeholder="45 Boulevard des Martyrs, Algiers, Algeria"
+                  value={formData.address}
+                  onChange={(e) => updateField("address", e.target.value)}
+                  className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                  Insurance Provider
+                </label>
+                <select
+                  value={formData.insuranceProvider}
+                  onChange={(e) => updateField("insuranceProvider", e.target.value)}
+                  className="w-full h-11 px-3.5 rounded-xl border border-border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none"
+                >
+                  <option value="CNAS">CNAS (Caisse Nationale des Assurances Sociales)</option>
+                  <option value="CASNOS">CASNOS (Non-Salariés)</option>
+                  <option value="Mutuelle">Mutuelle d&apos;Assurance Privée</option>
+                  <option value="Self-Pay">Self-Pay / Non-Assuré</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                  Card / Policy Number *
+                </label>
+                <div className="relative">
+                  <Shield className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                  <input
+                    type="text"
+                    placeholder="DZ-CNAS-99887711"
+                    value={formData.insurancePolicyNumber}
+                    onChange={(e) => updateField("insurancePolicyNumber", e.target.value)}
+                    className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                Preferred Primary Physician
+              </label>
+              <div className="relative">
+                <Stethoscope className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                <select
+                  value={formData.primaryPhysician}
+                  onChange={(e) => updateField("primaryPhysician", e.target.value)}
+                  className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none"
+                >
+                  {availableDoctors.length > 0 ? (
+                    availableDoctors.map((doc) => (
+                      <option key={doc.id} value={doc.name}>
+                        {doc.name} - {doc.specialty?.name || "General Medicine"}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="Dr. Amine Mansouri">Dr. Amine Mansouri - Cardiology</option>
+                  )}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 pt-4 border-t border-border flex items-center justify-between">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleBack}
+              className="rounded-xl px-5 h-11"
+            >
+              <ArrowLeft className="mr-2 size-4" /> Back
+            </Button>
+            <Button
+              type="button"
+              onClick={handleNext}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl px-6 h-11 font-bold shadow-sm"
+            >
+              Continue to Step 3 <ArrowRight className="ml-2 size-4" />
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================================= */}
+      {/* STEP 3: EMERGENCY CONTACT & CONSENT */}
+      {/* ======================================================================= */}
+      {currentStep === 3 && (
+        <form onSubmit={handleSubmit} className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-sm">
+          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-border">
+            <div className="size-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+              <FileCheck className="size-5" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-foreground">Step 3: Emergency Contact & Legal Consent</h2>
+              <p className="text-xs text-muted-foreground">Emergency contacts and clinical privacy authorizations.</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                  Emergency Contact Name *
+                </label>
+                <input
+                  type="text"
+                  placeholder="Karim Benali (Spouse / Guardian)"
+                  value={formData.emergencyContactName}
+                  onChange={(e) => updateField("emergencyContactName", e.target.value)}
+                  className={cn(
+                    "w-full h-11 px-3.5 rounded-xl border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none",
+                    fieldErrors.emergencyContactName ? "border-red-500" : "border-border"
+                  )}
+                />
+                {fieldErrors.emergencyContactName && (
+                  <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                    <AlertCircle className="size-3" /> {fieldErrors.emergencyContactName}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                  Emergency Contact Phone *
+                </label>
+                <input
+                  type="tel"
+                  placeholder="+213 555 11 22 33"
+                  value={formData.emergencyContactPhone}
+                  onChange={(e) => updateField("emergencyContactPhone", e.target.value)}
+                  className={cn(
+                    "w-full h-11 px-3.5 rounded-xl border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none",
+                    fieldErrors.emergencyContactPhone ? "border-red-500" : "border-border"
+                  )}
+                />
+                {fieldErrors.emergencyContactPhone && (
+                  <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                    <AlertCircle className="size-3" /> {fieldErrors.emergencyContactPhone}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                  Known Allergies
+                </label>
+                <input
+                  type="text"
+                  placeholder="Penicillin, Peanuts, None..."
+                  value={formData.allergies}
+                  onChange={(e) => updateField("allergies", e.target.value)}
+                  className="w-full h-11 px-3.5 rounded-xl border border-border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                  Current Medications
+                </label>
+                <input
+                  type="text"
+                  placeholder="Aspirin, Insulin, None..."
+                  value={formData.currentMedications}
+                  onChange={(e) => updateField("currentMedications", e.target.value)}
+                  className="w-full h-11 px-3.5 rounded-xl border border-border bg-background text-sm text-foreground focus:ring-2 focus:ring-emerald-500 outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Consents */}
+            <div className="space-y-3 pt-3 border-t border-border">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.treatmentConsent}
+                  onChange={(e) => updateField("treatmentConsent", e.target.checked)}
+                  className="mt-1 size-4 rounded text-emerald-600 focus:ring-emerald-500 border-border"
+                />
+                <span className="text-xs text-muted-foreground leading-relaxed">
+                  I consent to receive healthcare consultations and clinical triage through the VitalBook medical network.
+                </span>
+              </label>
+
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.privacyConsent}
+                  onChange={(e) => updateField("privacyConsent", e.target.checked)}
+                  className="mt-1 size-4 rounded text-emerald-600 focus:ring-emerald-500 border-border"
+                />
+                <span className="text-xs text-muted-foreground leading-relaxed">
+                  I agree to the electronic processing of my medical records in compliance with CNAS, HIPAA, and GDPR standards. *
+                </span>
+              </label>
+              {fieldErrors.privacyConsent && (
+                <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                  <AlertCircle className="size-3" /> {fieldErrors.privacyConsent}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-8 pt-4 border-t border-border flex items-center justify-between">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleBack}
+              disabled={isSubmitting}
+              className="rounded-xl px-5 h-11"
+            >
+              <ArrowLeft className="mr-2 size-4" /> Back
+            </Button>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl px-8 h-11 font-bold shadow-md cursor-pointer"
+            >
+              {isSubmitting ? "Creating Account..." : "Complete Registration"}
+            </Button>
+          </div>
+        </form>
+      )}
+
+      {/* ======================================================================= */}
+      {/* STEP 4: SUCCESS CONFIRMATION */}
+      {/* ======================================================================= */}
+      {currentStep === 4 && (
+        <div className="rounded-2xl border border-border bg-card p-8 sm:p-12 text-center shadow-lg animate-in fade-in zoom-in-95 duration-300">
+          <div className="size-20 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center mx-auto mb-6">
+            <CheckCircle2 className="size-10 text-emerald-500 animate-bounce" />
+          </div>
+          <span className="inline-block px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-xs font-bold uppercase tracking-wider mb-2">
+            Registration Completed
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground mb-3">
+            Welcome to VitalBook, {formData.firstName}!
+          </h2>
+          <p className="text-sm text-muted-foreground max-w-md mx-auto mb-8">
+            Your patient record and CNAS policy ({formData.insurancePolicyNumber}) have been securely registered. Your session is active.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/appointments/new">
+              <Button className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl px-6 h-12 font-bold shadow-md cursor-pointer">
+                Book First Consultation <ArrowRight className="ml-2 size-4" />
+              </Button>
+            </Link>
+            <Link href="/dashboard/patients/me/profile">
+              <Button variant="outline" className="w-full sm:w-auto rounded-xl px-6 h-12 font-bold cursor-pointer">
+                View Health Profile
+              </Button>
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   );
-};
-
-export default RegisterForm;
+}

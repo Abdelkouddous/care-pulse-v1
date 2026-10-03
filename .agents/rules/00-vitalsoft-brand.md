@@ -5,7 +5,7 @@
 - **Tagline:** HealthTech Solutions
 - **Status:** Finalized brand replacing legacy "HML Soft" (All occurrences deprecated)
 - **Founder & Chief Architect:** Hamel Aymen
-- **Official Website:** https://vitalsoft.com
+- **Official Website:** https://vitalsoft.aymenhamel.com
 - **Contact:** contact@vitalsoft.com / aymen@vitalsoft.com
 
 ## 💼 Core Specialization

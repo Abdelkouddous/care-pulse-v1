@@ -13,10 +13,11 @@ use Illuminate\Support\Str;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
+    /** @var \Tests\TestCase $this */
     $this->clinic = Clinic::create([
         'id' => (string) Str::uuid(),
-        'name' => 'CarePulse Algiers',
-        'email' => 'algiers@carepulse.com',
+        'name' => 'VitalBook Algiers',
+        'email' => 'algiers@vitalbook.com',
         'is_active' => true,
     ]);
 
@@ -31,7 +32,7 @@ beforeEach(function () {
         'specialty_id' => $this->specialty->id,
         'first_name' => 'Tarek',
         'last_name' => 'Mansour',
-        'email' => 'tarek@carepulse.com',
+        'email' => 'tarek@vitalbook.com',
         'consultation_fee_cents' => 350000, // 3,500.00 DZD
         'license_number' => 'DZ-TEST-1234',
         'is_active' => true,
@@ -58,7 +59,7 @@ beforeEach(function () {
 });
 
 test('patient can successfully book an appointment', function () {
-    $nextMonday = Carbon::now()->next(Carbon::MONDAY)->setTime(10, 0, 0);
+    $nextMonday = Carbon::now()->next('Monday')->setTime(10, 0, 0);
 
     $response = $this->actingAs($this->patient, 'sanctum')
         ->withHeader('X-Clinic-ID', $this->clinic->id)
@@ -80,7 +81,7 @@ test('patient can successfully book an appointment', function () {
 });
 
 test('double booking the exact same doctor slot returns 422 conflict', function () {
-    $nextMonday = Carbon::now()->next(Carbon::MONDAY)->setTime(11, 0, 0);
+    $nextMonday = Carbon::now()->next('Monday')->setTime(11, 0, 0);
 
     // Book first appointment
     Appointment::create([
@@ -116,7 +117,7 @@ test('double booking the exact same doctor slot returns 422 conflict', function 
 });
 
 test('patient can cancel an appointment', function () {
-    $nextMonday = Carbon::now()->next(Carbon::MONDAY)->setTime(14, 0, 0);
+    $nextMonday = Carbon::now()->next('Monday')->setTime(14, 0, 0);
 
     $appointment = Appointment::create([
         'id' => (string) Str::uuid(),

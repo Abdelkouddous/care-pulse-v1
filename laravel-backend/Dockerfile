@@ -1,4 +1,4 @@
-# Multi-Stage Production Dockerfile for CarePulse Laravel API (AWS ECS Fargate)
+# Multi-Stage Production Dockerfile for VitalBook Laravel API (AWS ECS Fargate)
 # Stage 1: Build Composer Vendor
 FROM composer:2.8 AS vendor
 

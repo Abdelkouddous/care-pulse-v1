@@ -111,7 +111,7 @@ export default function DoctorDashboardPage() {
     <AppShell role="doctor" pageTitle="Doctor Workspace">
       <PageHeader
         title={`Clinical Workspace — ${doctorName}`}
-        subtitle={`Department of ${specialty} · CarePulse Medical Center`}
+        subtitle={`Department of ${specialty} · VitalBook Medical Center`}
         badge={
           <span className="px-3 py-1 rounded-full text-xs font-semibold bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300">
             Attending Physician

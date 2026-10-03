@@ -34,21 +34,29 @@ export default function AdminLoginPage() {
       const res = await authService.adminLogin(email.trim(), password);
 
       if (res?.token) {
-        TokenManager.setSession(res.token, "admin");
+        TokenManager.setSession(res.token, "admin", res.user, false);
 
         if (typeof window !== "undefined") {
+          localStorage.setItem("vitalbook_token", res.token);
           localStorage.setItem("carepulse_token", res.token);
+          localStorage.setItem("vitalbook_role", "admin");
           localStorage.setItem("carepulse_role", "admin");
-          localStorage.removeItem("carepulse_demo"); // Real account session
-          localStorage.setItem("carepulse_user", JSON.stringify(res.user));
+          localStorage.removeItem("vitalbook_demo");
+          localStorage.removeItem("carepulse_demo");
+          const userStr = JSON.stringify(res.user);
+          localStorage.setItem("vitalbook_user", userStr);
+          localStorage.setItem("carepulse_user", userStr);
+          document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
           document.cookie = `carepulse_token=${res.token}; path=/; max-age=86400; samesite=lax`;
+          document.cookie = `vitalbook_role=admin; path=/; max-age=86400; samesite=lax`;
           document.cookie = `carepulse_role=admin; path=/; max-age=86400; samesite=lax`;
+          document.cookie = `vitalbook_demo=; path=/; max-age=0; samesite=lax`;
           document.cookie = `carepulse_demo=; path=/; max-age=0; samesite=lax`;
         }
 
         toast({
           title: "Administrative Access Granted",
-          description: "Welcome to CarePulse Clinic Control Center.",
+          description: "Welcome to VitalBook Clinic Control Center.",
         });
 
         router.push("/admin/dashboard");
@@ -81,7 +89,7 @@ export default function AdminLoginPage() {
               <Activity className="size-5 text-emerald-400" />
             </div>
             <div>
-              <span className="font-extrabold text-lg tracking-tight block">CarePulse</span>
+              <span className="font-extrabold text-lg tracking-tight block">VitalBook</span>
               <span className="text-[10px] text-slate-400 font-semibold tracking-wider uppercase block">
                 Admin Console
               </span>
@@ -116,7 +124,7 @@ export default function AdminLoginPage() {
 
           <div className="flex items-center gap-3 pt-4 border-t border-slate-800 text-xs text-slate-400">
             <Building2 className="size-4 text-emerald-400" />
-            <span>Tenant: CarePulse Medical Center (Algiers, DZ)</span>
+            <span>Tenant: VitalBook Medical Center (Algiers, DZ)</span>
           </div>
         </div>
 

@@ -211,13 +211,21 @@ export function AppShell({
     }
     TokenManager.clearToken();
     if (typeof window !== "undefined") {
+      localStorage.removeItem("vitalbook_token");
       localStorage.removeItem("carepulse_token");
       localStorage.removeItem("user_token");
+      localStorage.removeItem("vitalbook_user");
       localStorage.removeItem("carepulse_user");
+      localStorage.removeItem("vitalbook_role");
       localStorage.removeItem("carepulse_role");
+      localStorage.removeItem("vitalbook_demo");
       localStorage.removeItem("carepulse_demo");
+      document.cookie = "vitalbook_token=; path=/; max-age=0";
       document.cookie = "carepulse_token=; path=/; max-age=0";
       document.cookie = "user_token=; path=/; max-age=0";
+      document.cookie = "vitalbook_role=; path=/; max-age=0";
+      document.cookie = "carepulse_role=; path=/; max-age=0";
+      document.cookie = "vitalbook_demo=; path=/; max-age=0";
       document.cookie = "carepulse_demo=; path=/; max-age=0";
       window.location.href = "/login";
     } else {
@@ -319,7 +327,7 @@ export function AppShell({
             {!isCollapsed && (
               <div className="flex flex-col">
                 <span className="font-extrabold text-base tracking-tight text-foreground leading-none">
-                  CarePulse
+                  VitalBook
                 </span>
                 <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider mt-0.5">
                   {detectedRole === "admin"
@@ -428,7 +436,7 @@ export function AppShell({
                     <Activity className="size-5" />
                   </div>
                   <div>
-                    <span className="font-bold text-base text-foreground block">CarePulse</span>
+                    <span className="font-bold text-base text-foreground block">VitalBook</span>
                     <span className="text-[10px] text-muted-foreground uppercase font-semibold">
                       {detectedRole} Portal
                     </span>
@@ -515,7 +523,7 @@ export function AppShell({
             {/* Breadcrumb Trail */}
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Link href="/" className="hover:text-foreground transition-colors font-medium">
-                CarePulse
+                VitalBook
               </Link>
               <ChevronRight className="size-3 text-muted-foreground/60" />
               <span className="font-semibold text-foreground capitalize">

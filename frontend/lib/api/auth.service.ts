@@ -20,6 +20,28 @@ export const authService = {
     }
   },
 
+  async checkPhone(phone: string): Promise<boolean> {
+    try {
+      const res = await apiClient.post<ApiEnvelope<{ exists: boolean }>>("/auth/check-phone", {
+        phone,
+      });
+      return Boolean(res.data?.data?.exists);
+    } catch {
+      return false;
+    }
+  },
+
+  async firebasePhone(
+    idToken?: string,
+    phone?: string
+  ): Promise<{ registered: boolean; token?: string; user?: any; onboarding_token?: string; role?: string }> {
+    const res = await apiClient.post<ApiEnvelope<any>>("/auth/firebase-phone", {
+      id_token: idToken,
+      phone,
+    });
+    return res.data.data;
+  },
+
   async login(email: string, password: string): Promise<AuthSession> {
     try {
       const res = await apiClient.post<ApiEnvelope<AuthSession>>("/auth/login", {
@@ -88,13 +110,20 @@ export const authService = {
     } finally {
       if (typeof window !== "undefined") {
         TokenManager.clearToken();
+        localStorage.removeItem("vitalbook_token");
         localStorage.removeItem("carepulse_token");
         localStorage.removeItem("user_token");
+        localStorage.removeItem("vitalbook_user");
         localStorage.removeItem("carepulse_user");
+        localStorage.removeItem("vitalbook_role");
         localStorage.removeItem("carepulse_role");
+        localStorage.removeItem("vitalbook_demo");
         localStorage.removeItem("carepulse_demo");
+        document.cookie = "vitalbook_token=; path=/; max-age=0";
         document.cookie = "carepulse_token=; path=/; max-age=0";
+        document.cookie = "vitalbook_role=; path=/; max-age=0";
         document.cookie = "carepulse_role=; path=/; max-age=0";
+        document.cookie = "vitalbook_demo=; path=/; max-age=0";
         document.cookie = "carepulse_demo=; path=/; max-age=0";
       }
     }
@@ -106,8 +135,13 @@ export const authService = {
       return res.data.data;
     } catch {
       if (typeof window !== "undefined") {
-        const storedRole = localStorage.getItem("carepulse_role") || "patient";
-        const storedUser = localStorage.getItem("carepulse_user");
+        const storedRole =
+          localStorage.getItem("vitalbook_role") ||
+          localStorage.getItem("carepulse_role") ||
+          "patient";
+        const storedUser =
+          localStorage.getItem("vitalbook_user") ||
+          localStorage.getItem("carepulse_user");
         if (storedUser) {
           try {
             return { user: JSON.parse(storedUser), role: storedRole };

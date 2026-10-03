@@ -120,7 +120,7 @@ const ContactAdmin = () => {
 
                 {/* WhatsApp Direct CTA */}
                 <a
-                  href="https://wa.me/213549882456?text=Hello%20CarePulse%2C%20I%20would%20like%20to%20inquire%20about%20an%20appointment."
+                  href="https://wa.me/213549882456?text=Hello%20VitalBook%2C%20I%20would%20like%20to%20inquire%20about%20an%20appointment."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] hover:bg-[#20ba59] active:scale-[0.98] px-6 h-11 text-sm font-bold text-white shadow-md transition-all"

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthService
 {
@@ -138,10 +139,13 @@ class AuthService
         ];
     }
 
-    public function logout($user): void
+    public function logout(User|Doctor|Admin|null $user): void
     {
-        if ($user && method_exists($user, 'currentAccessToken') && $user->currentAccessToken()) {
-            $user->currentAccessToken()->delete();
+        if ($user && method_exists($user, 'currentAccessToken')) {
+            $token = $user->currentAccessToken();
+            if ($token instanceof PersonalAccessToken) {
+                $token->delete();
+            }
         }
     }
 
@@ -155,14 +159,16 @@ class AuthService
     {
         $verifiedPhone = null;
 
+        $configuredTestPhone = config('services.firebase.test_phone', env('FIREBASE_TEST_PHONE'));
+
         // If a real Firebase JWT is provided, verify against Google Public x509 Certs
         if (substr_count($idToken, '.') === 2) {
             try {
                 $claims = $this->firebaseTokenService->verifyIdToken($idToken);
                 $verifiedPhone = $claims['phone_number'] ?? null;
             } catch (\Exception $e) {
-                // If it fails but fallback phone is provided and matches test phone in dev, allow graceful testing
-                if ($fallbackPhone && str_contains($fallbackPhone, '549882456')) {
+                // If it fails but fallback phone is provided and matches configured test phone, allow testing
+                if ($configuredTestPhone && $fallbackPhone && str_contains($fallbackPhone, $configuredTestPhone)) {
                     $verifiedPhone = $fallbackPhone;
                 } else {
                     throw ValidationException::withMessages([
@@ -170,9 +176,13 @@ class AuthService
                     ]);
                 }
             }
-        } elseif ($fallbackPhone) {
-            // Development/Test Attestation Mode
+        } elseif ($configuredTestPhone && $fallbackPhone && str_contains($fallbackPhone, $configuredTestPhone)) {
+            // Development/Test Attestation Mode strictly for configured test phone
             $verifiedPhone = $fallbackPhone;
+        } else {
+            throw ValidationException::withMessages([
+                'id_token' => ['A valid Firebase ID token is required for live phone verification.'],
+            ]);
         }
 
         if (! $verifiedPhone) {
@@ -212,6 +222,14 @@ class AuthService
         ];
     }
 
+    public function phoneExists(string $phone): bool
+    {
+        $cleanPhone = preg_replace('/[^0-9]/', '', $phone);
+        $e164Phone = str_starts_with($cleanPhone, '213') ? '+' . $cleanPhone : '+213' . ltrim($cleanPhone, '0');
+
+        return $this->patientRepo->findByPhone($e164Phone) !== null;
+    }
+
     /**
      * Progressive Patient Onboarding Wizard Finalization
      * Consumes encrypted onboarding_token, asserts verified phone, and provisions Algerian civic patient.
@@ -241,7 +259,7 @@ class AuthService
             ]);
         }
 
-        $email = $data['email'] ?? ('patient_' . substr(preg_replace('/[^0-9]/', '', $verifiedPhone), -8) . '@carepulse.dz');
+        $email = $data['email'] ?? ('patient_' . substr(preg_replace('/[^0-9]/', '', $verifiedPhone), -8) . '@vitalbook.dz');
 
         $userData = [
             'id' => (string) Str::uuid(),

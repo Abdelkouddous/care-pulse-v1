@@ -18,6 +18,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/doctor/login', [AuthController::class, 'doctorLogin']);
         Route::post('/admin/login', [AuthController::class, 'adminLogin']);
         Route::post('/firebase-phone', [AuthController::class, 'firebasePhone']);
+        Route::post('/check-phone', [AuthController::class, 'checkPhone']);
         Route::post('/register-wizard', [AuthController::class, 'registerWizard']);
     });
 

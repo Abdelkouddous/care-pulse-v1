@@ -33,7 +33,7 @@ export function Testimonials() {
       specialty: "Cardiology Consultation",
       date: "September 2026",
       quote:
-        "Booking with Dr. Mansouri through CarePulse saved me hours of waiting in a crowded clinic. The DZD fee was clearly stated beforehand, my Carte Chifa was registered seamlessly, and I walked right into my 09:30 AM appointment without delay.",
+        "Booking with Dr. Mansouri through VitalBook saved me hours of waiting in a crowded clinic. The DZD fee was clearly stated beforehand, my Carte Chifa was registered seamlessly, and I walked right into my 09:30 AM appointment without delay.",
       highlight: "Saved 3 hours of clinic queue time with guaranteed time-slot.",
     },
     {

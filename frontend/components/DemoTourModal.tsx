@@ -40,13 +40,21 @@ export function DemoTourModal({ variant = "button", className }: DemoTourModalPr
     try {
       if (role === "patient") {
         const session = await authService.login(MOCK_PATIENT.email, "password123");
-        TokenManager.setSession(session.token, "patient");
+        TokenManager.setSession(session.token, "patient", session.user, true);
+        localStorage.setItem("vitalbook_token", session.token);
         localStorage.setItem("carepulse_token", session.token);
+        localStorage.setItem("vitalbook_role", "patient");
         localStorage.setItem("carepulse_role", "patient");
+        localStorage.setItem("vitalbook_demo", "true");
         localStorage.setItem("carepulse_demo", "true");
-        localStorage.setItem("carepulse_user", JSON.stringify(session.user));
+        const userStr = JSON.stringify(session.user);
+        localStorage.setItem("vitalbook_user", userStr);
+        localStorage.setItem("carepulse_user", userStr);
+        document.cookie = `vitalbook_token=${session.token}; path=/; max-age=86400; samesite=lax`;
         document.cookie = `carepulse_token=${session.token}; path=/; max-age=86400; samesite=lax`;
+        document.cookie = `vitalbook_role=patient; path=/; max-age=86400; samesite=lax`;
         document.cookie = `carepulse_role=patient; path=/; max-age=86400; samesite=lax`;
+        document.cookie = `vitalbook_demo=true; path=/; max-age=86400; samesite=lax`;
         document.cookie = `carepulse_demo=true; path=/; max-age=86400; samesite=lax`;
 
         toast({
@@ -56,13 +64,21 @@ export function DemoTourModal({ variant = "button", className }: DemoTourModalPr
         router.push("/patient/dashboard");
       } else if (role === "doctor") {
         const session = await authService.doctorLogin(MOCK_DOCTOR.email, "password123");
-        TokenManager.setSession(session.token, "doctor");
+        TokenManager.setSession(session.token, "doctor", session.user, true);
+        localStorage.setItem("vitalbook_token", session.token);
         localStorage.setItem("carepulse_token", session.token);
+        localStorage.setItem("vitalbook_role", "doctor");
         localStorage.setItem("carepulse_role", "doctor");
+        localStorage.setItem("vitalbook_demo", "true");
         localStorage.setItem("carepulse_demo", "true");
-        localStorage.setItem("carepulse_user", JSON.stringify(session.user));
+        const docUserStr = JSON.stringify(session.user);
+        localStorage.setItem("vitalbook_user", docUserStr);
+        localStorage.setItem("carepulse_user", docUserStr);
+        document.cookie = `vitalbook_token=${session.token}; path=/; max-age=86400; samesite=lax`;
         document.cookie = `carepulse_token=${session.token}; path=/; max-age=86400; samesite=lax`;
+        document.cookie = `vitalbook_role=doctor; path=/; max-age=86400; samesite=lax`;
         document.cookie = `carepulse_role=doctor; path=/; max-age=86400; samesite=lax`;
+        document.cookie = `vitalbook_demo=true; path=/; max-age=86400; samesite=lax`;
         document.cookie = `carepulse_demo=true; path=/; max-age=86400; samesite=lax`;
 
         toast({
@@ -100,7 +116,7 @@ export function DemoTourModal({ variant = "button", className }: DemoTourModalPr
                   Interactive MVP Tour
                 </span>
                 <p className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200">
-                  Evaluate CarePulse across Patient & Doctor roles in 1 click
+                  Evaluate VitalBook across Patient & Doctor roles in 1 click
                 </p>
               </div>
             </div>
@@ -129,7 +145,7 @@ export function DemoTourModal({ variant = "button", className }: DemoTourModalPr
             </span>
           </div>
           <DialogTitle className="text-2xl font-extrabold text-foreground">
-            CarePulse Sandbox Environment
+            VitalBook Sandbox Environment
           </DialogTitle>
           <DialogDescription className="text-xs sm:text-sm text-muted-foreground">
             Experience role-based clinical scheduling workflows in 1 click without manual registration.

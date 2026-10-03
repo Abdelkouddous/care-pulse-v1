@@ -18,11 +18,20 @@ export const doctorService = {
         doctors: res.data.data,
         meta: res.data.meta,
       };
-    } catch {
-      // Offline / Demo fallback: return single canonical mock doctor
+    } catch (err) {
+      if (
+        typeof window !== "undefined" &&
+        (localStorage.getItem("vitalbook_demo") === "true" ||
+          localStorage.getItem("carepulse_demo") === "true")
+      ) {
+        return {
+          doctors: [MOCK_DOCTOR],
+          meta: { total: 1 },
+        };
+      }
       return {
-        doctors: [MOCK_DOCTOR],
-        meta: { total: 1 },
+        doctors: [],
+        meta: { total: 0 },
       };
     }
   },
@@ -31,8 +40,15 @@ export const doctorService = {
     try {
       const res = await apiClient.get<ApiEnvelope<Doctor>>(`/doctors/${id}`);
       return res.data.data;
-    } catch {
-      return MOCK_DOCTOR;
+    } catch (err) {
+      if (
+        typeof window !== "undefined" &&
+        (localStorage.getItem("vitalbook_demo") === "true" ||
+          localStorage.getItem("carepulse_demo") === "true")
+      ) {
+        return MOCK_DOCTOR;
+      }
+      throw err;
     }
   },
 

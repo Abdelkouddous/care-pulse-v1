@@ -1,6 +1,6 @@
 export const siteConfig = {
-  name: "Pulse",
-  description: "A healthcare appointement management app ",
+  name: "VitalBook",
+  description: "VitalBook — Enterprise Healthcare Appointment & Practice Management Platform by Vital Soft",
   mainNav: [
     {
       title: "Home",

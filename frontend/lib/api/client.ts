@@ -17,6 +17,7 @@ apiClient.interceptors.request.use(
   (config) => {
     if (typeof window !== "undefined") {
       const token =
+        localStorage.getItem("vitalbook_token") ||
         localStorage.getItem("carepulse_token") ||
         localStorage.getItem("user_token");
       if (token) {
@@ -24,6 +25,7 @@ apiClient.interceptors.request.use(
       }
 
       const clinicId =
+        localStorage.getItem("vitalbook_clinic_id") ||
         localStorage.getItem("carepulse_clinic_id") ||
         process.env.NEXT_PUBLIC_DEFAULT_CLINIC_ID;
       if (clinicId) {
@@ -46,13 +48,18 @@ apiClient.interceptors.response.use(
       const isAuthPage =
         pathname === "/" ||
         pathname.includes("/login") ||
-        pathname.includes("/register") ||
-        pathname.includes("/login");
+        pathname.includes("/register");
 
       // Only redirect if explicitly on a protected page AND not already redirecting AND not demo mode
-      const isDemo = localStorage.getItem("carepulse_demo") === "true";
+      const isDemo =
+        localStorage.getItem("vitalbook_demo") === "true" ||
+        localStorage.getItem("carepulse_demo") === "true";
       if (!isAuthPage && !isRedirecting && !isDemo) {
-        const hasToken = !!localStorage.getItem("carepulse_token");
+        const hasToken = !!(
+          localStorage.getItem("vitalbook_token") ||
+          localStorage.getItem("carepulse_token") ||
+          localStorage.getItem("user_token")
+        );
         if (!hasToken) {
           isRedirecting = true;
           setTimeout(() => {

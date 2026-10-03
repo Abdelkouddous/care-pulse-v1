@@ -15,6 +15,7 @@ class Clinic extends Model
     public $incrementing = false;
 
     protected $fillable = [
+        'id',
         'name',
         'address',
         'phone',

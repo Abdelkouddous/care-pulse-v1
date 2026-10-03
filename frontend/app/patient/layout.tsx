@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Patient Portal | CarePulse",
+  title: "Patient Portal | VitalBook",
   description: "Manage your consultations, clinical records, and appointments.",
 };
 

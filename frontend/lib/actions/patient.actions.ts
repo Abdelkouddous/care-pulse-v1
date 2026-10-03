@@ -9,7 +9,7 @@ export const createUser = async (user: any) => {
     const res = await axios.post(`${API_URL}/auth/register`, {
       first_name: user.name?.split(" ")[0] || "Patient",
       last_name: user.name?.split(" ").slice(1).join(" ") || "User",
-      email: user.email || `patient_${Date.now()}@carepulse.local`,
+      email: user.email || `patient_${Date.now()}@vitalbook.local`,
       phone: user.phone,
       password: user.password || "password123",
     });
@@ -36,12 +36,7 @@ export const getPatient = async (userId: string) => {
       ...res.data.data,
     };
   } catch (error) {
-    return {
-      $id: userId,
-      name: "Patient User",
-      phone: "+213 555 12 34 56",
-      primaryPhysician: "Dr. Amine Mansouri",
-    };
+    return null;
   }
 };
 
@@ -50,12 +45,26 @@ export const registerPatient = async (patient: any) => {
     const res = await axios.post(`${API_URL}/auth/register`, patient);
     return {
       $id: res.data.data.user.id,
+      token: res.data.data.token,
+      user: res.data.data.user,
       ...res.data.data.user,
     };
-  } catch (error) {
-    return {
-      $id: `mock_patient_${Date.now()}`,
+  } catch (error: any) {
+    const mockId = `patient_${Date.now()}`;
+    const mockUser = {
+      id: mockId,
+      first_name: patient.first_name || patient.name?.split(" ")[0] || "Sarah",
+      last_name: patient.last_name || patient.name?.split(" ").slice(1).join(" ") || "Benali",
+      email: patient.email || `patient_${Date.now()}@vitalbook.local`,
+      phone: patient.phone || "+213 555 99 88 77",
+      role: "patient",
       ...patient,
+    };
+    return {
+      $id: mockId,
+      token: `vitalbook_token_${Date.now()}`,
+      user: mockUser,
+      ...mockUser,
     };
   }
 };

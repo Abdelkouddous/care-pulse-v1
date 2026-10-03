@@ -21,23 +21,39 @@ import { toast } from "@/hooks/use-toast";
 import { TokenManager } from "@/lib/auth";
 import { authService } from "@/lib/api/auth.service";
 import { AlgerianPhoneInput } from "@/components/ui/AlgerianPhoneInput";
+import {
+  getFirebaseAuth,
+  createRecaptchaVerifier,
+  ConfirmationResult,
+} from "@/lib/firebase";
+import { signInWithPhoneNumber } from "firebase/auth";
 
 function SignInContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const phoneParam = searchParams.get("phone") || "";
 
-  const [authMethod, setAuthMethod] = useState<"credentials" | "otp">(phoneParam ? "otp" : "credentials");
-  const [identifier, setIdentifier] = useState(phoneParam || "");
-  const [password, setPassword] = useState("");
-  const [identifierError, setIdentifierError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  // Auth Method: "credentials" for Email & Password, "otp" for Phone Number
+  const [authMethod, setAuthMethod] = useState<"credentials" | "otp">(
+    phoneParam ? "otp" : "credentials"
+  );
 
-  // OTP State
+  // Email & Password State
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  // Phone & OTP State
+  const [phoneNumber, setPhoneNumber] = useState(phoneParam || "");
+  const [phoneError, setPhoneError] = useState("");
   const [otpStep, setOtpStep] = useState<"phone" | "code">("phone");
   const [otpCode, setOtpCode] = useState("");
-  const [timeLeft, setTimeLeft] = useState(45);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [confirmationResult, setConfirmationResult] =
+    useState<ConfirmationResult | null>(null);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   // Auto-redirect if existing valid session
   useEffect(() => {
@@ -58,12 +74,12 @@ function SignInContent() {
     };
   }, [otpStep, timeLeft]);
 
-  // Real Account Login: Authenticates directly with Laravel Sanctum API
+  // Email & Password Login: Authenticates directly with Laravel Sanctum API
   const handleCredentialsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!identifier.trim()) {
-      setIdentifierError("Please enter your registered email or phone number.");
+    if (!email.trim() || !email.includes("@")) {
+      setEmailError("Please enter a valid email address.");
       return;
     }
     if (!password) {
@@ -71,22 +87,29 @@ function SignInContent() {
       return;
     }
 
-    setIdentifierError("");
+    setEmailError("");
     setPasswordError("");
     setIsLoading(true);
 
     try {
-      const res = await authService.login(identifier.trim(), password);
+      const res = await authService.login(email.trim(), password);
 
       if (res?.token) {
-        TokenManager.setToken(res.token);
+        TokenManager.setSession(res.token, res.role || "patient", res.user, false);
 
         if (typeof window !== "undefined") {
+          localStorage.setItem("vitalbook_token", res.token);
           localStorage.setItem("carepulse_token", res.token);
+          localStorage.setItem("vitalbook_role", res.role || "patient");
           localStorage.setItem("carepulse_role", res.role || "patient");
-          localStorage.removeItem("carepulse_demo"); // Real account session
-          localStorage.setItem("carepulse_user", JSON.stringify(res.user));
+          localStorage.removeItem("vitalbook_demo");
+          localStorage.removeItem("carepulse_demo");
+          const userStr = JSON.stringify(res.user);
+          localStorage.setItem("vitalbook_user", userStr);
+          localStorage.setItem("carepulse_user", userStr);
+          document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
           document.cookie = `carepulse_token=${res.token}; path=/; max-age=86400; samesite=lax`;
+          document.cookie = `vitalbook_demo=; path=/; max-age=0; samesite=lax`;
           document.cookie = `carepulse_demo=; path=/; max-age=0; samesite=lax`;
         }
 
@@ -95,7 +118,12 @@ function SignInContent() {
           description: `Welcome back, ${(res.user as any)?.name || (res.user as any)?.first_name || "Patient"}.`,
         });
 
-        const target = res.role === "doctor" ? "/doctors/dashboard" : res.role === "admin" ? "/admin/dashboard" : "/patient/dashboard";
+        const target =
+          res.role === "doctor"
+            ? "/doctors/dashboard"
+            : res.role === "admin"
+            ? "/admin/dashboard"
+            : "/patient/dashboard";
         router.push(target);
       } else {
         throw new Error("Missing authentication token from server.");
@@ -104,7 +132,7 @@ function SignInContent() {
       const message =
         err.response?.data?.errors?.email?.[0] ||
         err.response?.data?.message ||
-        "Invalid credentials. Please verify your email/phone and password.";
+        "Invalid credentials. Please verify your email and password.";
       toast({
         title: "Authentication Failed",
         description: message,
@@ -116,58 +144,184 @@ function SignInContent() {
     }
   };
 
-  // OTP Login Flow
+  // Helper to format Algerian phone number to standard E.164 (+213...)
+  const getE164Phone = (raw: string) => {
+    const digits = raw.replace(/[^0-9]/g, "");
+    if (raw.startsWith("+")) return raw.trim();
+    if (digits.startsWith("0")) return `+213${digits.substring(1)}`;
+    if (digits.startsWith("213")) return `+${digits}`;
+    return `+213${digits}`;
+  };
+
+  const testPhoneEnv = process.env.NEXT_PUBLIC_FIREBASE_TEST_PHONE;
+  const cleanPhone = phoneNumber.replace(/[^0-9]/g, "");
+  const isTestPhone = Boolean(
+    testPhoneEnv &&
+      cleanPhone.length > 5 &&
+      cleanPhone.includes(testPhoneEnv.replace(/[^0-9]/g, ""))
+  );
+
+  // Phone OTP Flow: Dispatches SMS using Firebase Auth and Google reCAPTCHA
   const handleSendOtp = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (!identifier.trim() || identifier.trim().length < 8) {
-      setIdentifierError("Please enter a valid Algerian phone number.");
+    const digits = phoneNumber.replace(/[^0-9]/g, "");
+    if (!digits || digits.length < 8) {
+      setPhoneError("Please enter a valid Algerian mobile number.");
       return;
     }
-    setIdentifierError("");
+
+    setPhoneError("");
     setIsLoading(true);
 
     try {
+      const formatted = getE164Phone(phoneNumber);
+      const auth = getFirebaseAuth();
+
+      if (!auth) {
+        // If Firebase API Key is not configured yet in .env.local
+        if (isTestPhone) {
+          setOtpStep("code");
+          setTimeLeft(60);
+          toast({
+            title: "Test Phone Mode Active",
+            description: "Simulated OTP dispatch. Enter passcode 123456.",
+          });
+          return;
+        }
+
+        toast({
+          title: "Firebase Configuration Needed",
+          description:
+            "Please add NEXT_PUBLIC_FIREBASE_API_KEY to frontend/.env.local from your Firebase Console to enable live carrier SMS.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Initialize reCAPTCHA verifier for invisible protection
+      const verifier = createRecaptchaVerifier("recaptcha-container");
+      if (!verifier) {
+        throw new Error("reCAPTCHA verifier could not be established.");
+      }
+
+      // Trigger Firebase signInWithPhoneNumber
+      const confirmation = await signInWithPhoneNumber(auth, formatted, verifier);
+      setConfirmationResult(confirmation);
       setOtpStep("code");
-      setTimeLeft(45);
+      setTimeLeft(60);
+
       toast({
-        title: "Verification Passcode Dispatched",
-        description: "SMS code dispatched to your mobile number.",
+        title: "SMS Verification Dispatched",
+        description: `Firebase dispatched a 6-digit verification code to ${formatted}.`,
       });
-    } catch {
+    } catch (err: any) {
+      console.error("Firebase send OTP error:", err);
+      if (typeof window !== "undefined" && (window as any).recaptchaVerifier) {
+        try {
+          (window as any).recaptchaVerifier.clear();
+        } catch {
+          // Clear fallback
+        }
+      }
+
+      let errorMsg =
+        err.message || "Failed to dispatch SMS verification code.";
+      if (err.code === "auth/invalid-phone-number") {
+        errorMsg = "Invalid phone number format. Please check the digits and try again.";
+      } else if (err.code === "auth/quota-exceeded") {
+        errorMsg = "SMS quota exceeded for today on Firebase project. Please try again later.";
+      } else if (err.code === "auth/captcha-check-failed") {
+        errorMsg = "Google reCAPTCHA verification failed. Please try again.";
+      } else if (err.code === "auth/invalid-api-key") {
+        errorMsg = "Invalid Firebase API Key. Please verify NEXT_PUBLIC_FIREBASE_API_KEY in .env.local.";
+      }
+
       toast({
-        title: "Dispatch Failed",
-        description: "Unable to dispatch SMS passcode. Please retry.",
+        title: "SMS Dispatch Failed",
+        description: errorMsg,
         variant: "destructive",
       });
+      setPhoneError(errorMsg);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Verify OTP: Confirms code with Firebase Auth, then exchanges ID token with Laravel backend
   const handleVerifyOtp = async () => {
     if (otpCode.length !== 6) return;
     setIsLoading(true);
 
     try {
-      // In production or demo OTP fallback
-      const demoToken = "patient_otp_token_" + Date.now();
-      const patientData = {
-        name: "Verified Patient",
-        phone: identifier,
-        email: "patient@carepulse.com",
-      };
-      TokenManager.setToken(demoToken);
-      if (typeof window !== "undefined") {
-        localStorage.setItem("carepulse_token", demoToken);
-        localStorage.setItem("carepulse_role", "patient");
-        localStorage.setItem("carepulse_user", JSON.stringify(patientData));
-        document.cookie = `carepulse_token=${demoToken}; path=/; max-age=86400; samesite=lax`;
+      const formatted = getE164Phone(phoneNumber);
+      let idToken: string | undefined = undefined;
+
+      // 1. Confirm with Firebase if a live confirmation result exists
+      if (confirmationResult) {
+        const userCredential = await confirmationResult.confirm(otpCode);
+        idToken = await userCredential.user.getIdToken();
+      } else if (isTestPhone && otpCode === "123456") {
+        idToken = undefined;
+      } else {
+        toast({
+          title: "Invalid Verification Code",
+          description:
+            "Passcode 123456 is invalid for live phone numbers. Please enter the SMS code sent to your phone.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
       }
+
+      // 2. Call Laravel Backend stateless authentication
+      const res = await authService.firebasePhone(idToken, formatted);
+
+      if (res.registered && res.token && res.user) {
+        TokenManager.setSession(res.token, "patient", res.user, false);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("vitalbook_token", res.token);
+          localStorage.setItem("carepulse_token", res.token);
+          localStorage.setItem("vitalbook_role", res.role || "patient");
+          localStorage.setItem("carepulse_role", res.role || "patient");
+          localStorage.removeItem("vitalbook_demo");
+          localStorage.removeItem("carepulse_demo");
+          const userStr = JSON.stringify(res.user);
+          localStorage.setItem("vitalbook_user", userStr);
+          localStorage.setItem("carepulse_user", userStr);
+          document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
+          document.cookie = `carepulse_token=${res.token}; path=/; max-age=86400; samesite=lax`;
+        }
+
+        toast({
+          title: "Passcode Verified",
+          description: "Access granted to Patient Portal.",
+        });
+        router.push("/patient/dashboard");
+      } else {
+        toast({
+          title: "Phone Verified",
+          description: "Please complete your registration wizard.",
+        });
+        const redirectUrl = res.onboarding_token
+          ? `/register?phone=${encodeURIComponent(formatted)}&onboarding_token=${encodeURIComponent(res.onboarding_token)}`
+          : `/register?phone=${encodeURIComponent(formatted)}`;
+        router.push(redirectUrl);
+      }
+    } catch (err: any) {
+      console.error("Firebase verify OTP error:", err);
+      let errorMsg =
+        err.response?.data?.message || err.message || "Could not verify passcode.";
+      if (err.code === "auth/invalid-verification-code") {
+        errorMsg = "The verification code you entered is invalid. Please check your SMS.";
+      } else if (err.code === "auth/code-expired") {
+        errorMsg = "The verification code has expired. Please request a new SMS passcode.";
+      }
+
       toast({
-        title: "Passcode Verified",
-        description: "Access granted to Patient Portal.",
+        title: "Authentication Failed",
+        description: errorMsg,
+        variant: "destructive",
       });
-      router.push("/patient/dashboard");
     } finally {
       setIsLoading(false);
     }
@@ -186,78 +340,89 @@ function SignInContent() {
               <Activity className="size-5" />
             </div>
             <div>
-              <span className="font-extrabold text-lg tracking-tight block">CarePulse</span>
-              <span className="text-[10px] text-emerald-300 font-semibold tracking-wider uppercase block">
-                Healthcare Portal
+              <span className="text-xl font-black tracking-tight text-white">
+                Vital<span className="text-emerald-400">Book</span>
+              </span>
+              <span className="text-[10px] block font-mono text-emerald-300/80 -mt-1 tracking-wider uppercase">
+                Santé Algérie
               </span>
             </div>
           </Link>
-
-          <Link href="/">
-            <Button
-              roleVariant="ghost"
-              size="sm"
-              className="text-emerald-100 hover:text-white hover:bg-white/10 rounded-xl gap-2 text-xs"
-            >
-              <ArrowLeft className="size-3.5" />
-              <span>Back Home</span>
-            </Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <DemoTourModal />
+          </div>
         </div>
 
-        <div className="my-12 lg:my-0 space-y-6 z-10 max-w-lg">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
-            <ShieldCheck className="size-3.5 text-emerald-400" />
-            <span>Strict End-to-End Privacy Guaranteed</span>
+        <div className="my-12 lg:my-auto max-w-lg z-10 space-y-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            <Sparkles className="size-3.5" />
+            <span>Healthcare Portal & Real-time Scheduling</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
-            Next-Generation Healthcare Access for Algeria.
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+            Next-Generation <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
+              Healthcare Access
+            </span>
           </h1>
 
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Sign in to manage your clinical consultations, review attending physician prescriptions, and access verified CNAS medical records.
+            Sign in to manage doctor consultations, track prescription dossiers, and coordinate
+            CNAS insurance approvals across all 58 Wilayas.
           </p>
 
-          <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
-            <div>
-              <span className="text-2xl font-bold text-white block">15 min</span>
-              <span className="text-xs text-slate-400">Average response window</span>
+          <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-800">
+            <div className="flex items-center gap-2.5 text-xs text-slate-300">
+              <CheckCircle2 className="size-4 text-emerald-400 shrink-0" />
+              <span>Full CNAS Integration</span>
             </div>
-            <div>
-              <span className="text-2xl font-bold text-white block">100%</span>
-              <span className="text-xs text-slate-400">Multi-tenant isolation</span>
+            <div className="flex items-center gap-2.5 text-xs text-slate-300">
+              <CheckCircle2 className="size-4 text-emerald-400 shrink-0" />
+              <span>Carte Chifa Ready</span>
+            </div>
+            <div className="flex items-center gap-2.5 text-xs text-slate-300">
+              <CheckCircle2 className="size-4 text-emerald-400 shrink-0" />
+              <span>Verified Algerian MDs</span>
+            </div>
+            <div className="flex items-center gap-2.5 text-xs text-slate-300">
+              <CheckCircle2 className="size-4 text-emerald-400 shrink-0" />
+              <span>Doctor Passkey / OTP</span>
             </div>
           </div>
         </div>
 
-        <div className="text-xs text-slate-400 z-10 flex items-center justify-between">
-          <span>© 2026 CarePulse Medical Network</span>
-          <span className="text-emerald-400 font-medium">Algiers, Algeria</span>
+        <div className="z-10 text-xs text-slate-400 flex items-center justify-between pt-6 border-t border-slate-800/80">
+          <span>&copy; {new Date().getFullYear()} VitalBook DZ</span>
+          <span className="flex items-center gap-1.5">
+            <ShieldCheck className="size-3.5 text-emerald-400" />
+            256-bit Healthcare Encryption
+          </span>
         </div>
       </div>
 
-      {/* Interactive Real Login Card (Right) */}
-      <div className="lg:w-1/2 flex flex-col justify-between p-6 sm:p-12 lg:p-16 bg-background">
-        <div className="flex items-center justify-between mb-4">
-          <DemoTourModal />
-          <ThemeToggle className="size-9 rounded-xl border border-border" />
+      {/* Auth Interaction Panel (Right) */}
+      <div className="lg:w-1/2 p-6 sm:p-12 lg:p-16 flex flex-col justify-between max-w-xl mx-auto w-full">
+        <div className="flex items-center justify-between">
+          <Link
+            href="/"
+            className="inline-flex items-center text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors group"
+          >
+            <ArrowLeft className="size-3.5 mr-1 group-hover:-translate-x-0.5 transition-transform" />
+            Back to Home
+          </Link>
+          <span className="text-[11px] font-mono text-muted-foreground">Patient Gateway</span>
         </div>
 
-        <div className="max-w-md w-full mx-auto my-auto space-y-7">
+        <div className="my-auto py-8 space-y-6">
           <div className="space-y-2">
-            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-primary/10 text-primary">
-              Real Patient Access
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground">
-              Sign In to Your Account
-            </h2>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Patient Sign In</h2>
             <p className="text-sm text-muted-foreground">
-              Enter your registered clinical credentials to access your patient dashboard.
+              Choose your preferred authentication method to access your medical portal.
             </p>
           </div>
 
-          {/* Real Authentication Method Tabs */}
+          {/* Authentication Method Tabs */}
           <div className="flex p-1 rounded-xl bg-secondary/80 border border-border">
             <button
               type="button"
@@ -268,7 +433,7 @@ function SignInContent() {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              Email or Phone & Password
+              Email & Password
             </button>
             <button
               type="button"
@@ -279,33 +444,33 @@ function SignInContent() {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              SMS Passcode (OTP)
+              Phone Number (SMS OTP)
             </button>
           </div>
 
-          {/* Form 1: Standard Real Credentials */}
+          {/* Form 1: Email & Password */}
           {authMethod === "credentials" && (
             <form onSubmit={handleCredentialsSubmit} className="space-y-4">
               <div className="space-y-1.5">
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
-                  EMAIL ADDRESS OR PHONE
+                  EMAIL ADDRESS
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                   <input
-                    type="text"
-                    placeholder="patient@carepulse.com or +213 555 99 88 77"
-                    value={identifier}
+                    type="email"
+                    placeholder="patient@vitalbook.com"
+                    value={email}
                     onChange={(e) => {
-                      setIdentifier(e.target.value);
-                      if (identifierError) setIdentifierError("");
+                      setEmail(e.target.value);
+                      if (emailError) setEmailError("");
                     }}
                     className="w-full h-12 pl-10 pr-4 rounded-2xl border border-border bg-card text-foreground placeholder:text-muted-foreground/60 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-xs"
                     required
                   />
                 </div>
-                {identifierError && (
-                  <p className="text-xs text-destructive font-medium mt-1">{identifierError}</p>
+                {emailError && (
+                  <p className="text-xs text-destructive font-medium mt-1">{emailError}</p>
                 )}
               </div>
 
@@ -340,14 +505,17 @@ function SignInContent() {
                 disabled={isLoading}
                 className="w-full h-12 font-bold shadow-md rounded-2xl mt-2 cursor-pointer"
               >
-                {isLoading ? "Authenticating with Clinic API..." : "Sign In to Patient Portal"}
+                {isLoading ? "Authenticating with Clinic API..." : "Sign In with Email"}
               </Button>
             </form>
           )}
 
-          {/* Form 2: OTP Method */}
+          {/* Form 2: Phone Number & OTP (Firebase Auth + reCAPTCHA) */}
           {authMethod === "otp" && (
             <div className="space-y-4">
+              {/* Invisible Google reCAPTCHA Anchor Container */}
+              <div id="recaptcha-container" />
+
               {otpStep === "phone" ? (
                 <form onSubmit={handleSendOtp} className="space-y-4">
                   <div className="space-y-1.5">
@@ -355,16 +523,16 @@ function SignInContent() {
                       MOBILE PHONE NUMBER
                     </label>
                     <AlgerianPhoneInput
-                      value={identifier}
+                      value={phoneNumber}
                       onChange={(val) => {
-                        setIdentifier(val);
-                        if (identifierError) setIdentifierError("");
+                        setPhoneNumber(val);
+                        if (phoneError) setPhoneError("");
                       }}
                       placeholder="549 88 24 56"
                       autoFocus
                     />
-                    {identifierError && (
-                      <p className="text-xs text-destructive font-medium mt-1">{identifierError}</p>
+                    {phoneError && (
+                      <p className="text-xs text-destructive font-medium mt-1">{phoneError}</p>
                     )}
                   </div>
                   <Button
@@ -373,23 +541,37 @@ function SignInContent() {
                     disabled={isLoading}
                     className="w-full h-12 font-bold shadow-md rounded-2xl cursor-pointer"
                   >
-                    {isLoading ? "Dispatching..." : "Send Verification SMS"}
+                    {isLoading ? "Verifying with reCAPTCHA..." : "Send Verification SMS"}
                   </Button>
                 </form>
               ) : (
                 <div className="space-y-4">
                   <div className="space-y-1.5">
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
-                      6-DIGIT PASSCODE
-                    </label>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                        6-DIGIT PASSCODE
+                      </label>
+                      <span className="text-[11px] text-muted-foreground flex items-center gap-1 font-mono">
+                        <Clock className="size-3 text-emerald-500" /> {timeLeft}s remaining
+                      </span>
+                    </div>
                     <input
                       type="text"
                       maxLength={6}
-                      placeholder="123456"
+                      placeholder={isTestPhone ? "123456" : "• • • • • •"}
                       value={otpCode}
                       onChange={(e) => setOtpCode(e.target.value)}
                       className="w-full h-12 text-center font-mono text-xl tracking-widest rounded-2xl border border-border bg-card text-foreground"
                     />
+                    {isTestPhone ? (
+                      <p className="text-[11px] text-emerald-500 pt-1">
+                        Firebase Test Mode: Passcode <code className="font-mono font-bold">123456</code> enabled.
+                      </p>
+                    ) : (
+                      <p className="text-[11px] text-muted-foreground pt-1">
+                        Enter the 6-digit code sent via SMS to <span className="font-mono text-foreground font-semibold">{getE164Phone(phoneNumber)}</span>.
+                      </p>
+                    )}
                   </div>
                   <Button
                     type="button"
@@ -398,12 +580,15 @@ function SignInContent() {
                     onClick={handleVerifyOtp}
                     className="w-full h-12 font-bold shadow-md rounded-2xl cursor-pointer"
                   >
-                    {isLoading ? "Verifying..." : "Verify & Sign In"}
+                    {isLoading ? "Verifying Token..." : "Verify & Sign In"}
                   </Button>
                   <Button
                     type="button"
                     variant="ghost"
-                    onClick={() => setOtpStep("phone")}
+                    onClick={() => {
+                      setOtpStep("phone");
+                      setConfirmationResult(null);
+                    }}
                     className="w-full text-xs text-muted-foreground hover:text-foreground cursor-pointer"
                   >
                     Change Mobile Number
@@ -415,18 +600,26 @@ function SignInContent() {
 
           {/* Quick Real Account Fill Helper (Subtle for developer/evaluator convenience) */}
           <div className="p-3 rounded-xl bg-secondary/50 border border-border text-xs flex items-center justify-between">
-            <span className="text-muted-foreground">Real Seeded Patient:</span>
+            <span className="text-muted-foreground">Demo Patient Credential:</span>
             <button
               type="button"
               onClick={() => {
                 setAuthMethod("credentials");
-                setIdentifier("patient@carepulse.com");
+                setEmail("patient@carepulse.com");
                 setPassword("password123");
               }}
               className="font-mono text-primary font-bold hover:underline"
             >
               patient@carepulse.com (fill)
             </button>
+          </div>
+
+          {/* Registration Prompt */}
+          <div className="text-center text-xs text-muted-foreground pt-1">
+            New to VitalBook?{" "}
+            <Link href="/register" className="font-bold text-emerald-500 hover:text-emerald-400 hover:underline">
+              Create a Patient Account
+            </Link>
           </div>
 
           {/* Staff Switchers */}

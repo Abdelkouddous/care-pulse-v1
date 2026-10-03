@@ -118,6 +118,7 @@ function NewAppointmentContent() {
         scheduled_at: scheduledIso,
         reason: reason.trim(),
         notes: notes.trim() || undefined,
+        clinic_id: selectedDoctor?.clinic_id,
       });
 
       setBookedAppointment(appt);
@@ -127,14 +128,21 @@ function NewAppointmentContent() {
         description: "Your consultation has been registered in the clinic system.",
       });
     } catch (err: any) {
+      const responseData = err.response?.data;
       const detail =
-        err.response?.data?.errors?.scheduled_at?.[0] ||
-        err.response?.data?.message ||
-        "This slot has already been booked. Please choose another time.";
-      setErrorMsg(detail);
+        responseData?.errors?.scheduled_at?.[0] ||
+        (Array.isArray(responseData?.errors) && responseData.errors[0]?.detail) ||
+        (responseData?.errors && typeof responseData.errors === "object"
+          ? Object.values(responseData.errors).flat()[0]
+          : null) ||
+        responseData?.message ||
+        err.message ||
+        "Unable to schedule appointment. Please try again.";
+
+      setErrorMsg(String(detail));
       toast({
-        title: "Booking Conflict",
-        description: detail,
+        title: "Booking Notice",
+        description: String(detail),
         variant: "destructive",
       });
     } finally {
@@ -542,7 +550,7 @@ function NewAppointmentContent() {
                     Clinic Center
                   </span>
                   <span className="font-semibold text-foreground block">
-                    CarePulse Medical Center
+                    VitalBook Medical Center
                   </span>
                   <span className="text-xs text-muted-foreground">
                     12 Rue Didouche Mourad, Algiers
@@ -629,11 +637,11 @@ function NewAppointmentContent() {
               <Button
                 roleVariant="outline"
                 onClick={() => {
-                  const icsData = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:Medical Consultation with ${selectedDoctor?.name}\nDESCRIPTION:${reason}\nLOCATION:CarePulse Medical Center\nSTATUS:CONFIRMED\nEND:VEVENT\nEND:VCALENDAR`;
+                  const icsData = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:Medical Consultation with ${selectedDoctor?.name}\nDESCRIPTION:${reason}\nLOCATION:VitalBook Medical Center\nSTATUS:CONFIRMED\nEND:VEVENT\nEND:VCALENDAR`;
                   const blob = new Blob([icsData], { type: "text/calendar;charset=utf-8" });
                   const link = document.createElement("a");
                   link.href = window.URL.createObjectURL(blob);
-                  link.setAttribute("download", `carepulse_appointment_${selectedDate}.ics`);
+                  link.setAttribute("download", `vitalbook_appointment_${selectedDate}.ics`);
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);

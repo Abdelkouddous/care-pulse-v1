@@ -4,8 +4,8 @@
  */
 export const DICTIONARY_EN = {
   common: {
-    appName: "CarePulse",
-    brandSubtitle: "Pulse",
+    appName: "VitalBook",
+    brandSubtitle: "VitalBook",
     tagline: "Your Health, Our Priority",
     currency: "DZD",
     loading: "Processing...",
@@ -63,7 +63,7 @@ export const DICTIONARY_EN = {
   },
   metrics: {
     badge: "NATIONAL NETWORK",
-    title: "CarePulse by the Numbers",
+    title: "VitalBook by the Numbers",
     patients: {
       title: "Patients Treated",
       change: "↑ 7.2% this month — Algiers, Oran, Constantine",
@@ -79,10 +79,10 @@ export const DICTIONARY_EN = {
   },
   about: {
     badge: "OUR MISSION",
-    title: "About CarePulse",
-    p1: "CarePulse is a modern healthcare appointment booking network engineered to bridge patients with qualified and verified medical practitioners across Algeria.",
+    title: "About VitalBook",
+    p1: "VitalBook is a modern healthcare appointment booking network engineered to bridge patients with qualified and verified medical practitioners across Algeria.",
     p2: "Our platform removes long hospital queues and scheduling friction. Patients can easily search practitioners by specialty, review credentials, and secure verified consultation slots instantly.",
-    p3: "CarePulse prioritizes patient privacy, rapid triage, and streamlined healthcare management, ensuring quality care is accessible with a single click.",
+    p3: "VitalBook prioritizes patient privacy, rapid triage, and streamlined healthcare management, ensuring quality care is accessible with a single click.",
   },
   doctors: {
     badge: "HEALTHCARE EXPERTS",
@@ -137,7 +137,7 @@ export const DICTIONARY_EN = {
         initials: "AB",
         color: "bg-emerald-500",
         quote:
-          "CarePulse completely transformed how I manage my family's healthcare. Booking a specialist in seconds saves hours of waiting.",
+          "VitalBook completely transformed how I manage my family's healthcare. Booking a specialist in seconds saves hours of waiting.",
         rating: 5,
       },
       {
@@ -155,7 +155,7 @@ export const DICTIONARY_EN = {
         initials: "FM",
         color: "bg-teal-500",
         quote:
-          "Since adopting CarePulse in my clinic, patient scheduling is organized and no-shows have dropped significantly. A must-have tool.",
+          "Since adopting VitalBook in my clinic, patient scheduling is organized and no-shows have dropped significantly. A must-have tool.",
         rating: 5,
       },
       {
@@ -173,7 +173,7 @@ export const DICTIONARY_EN = {
         initials: "MH",
         color: "bg-orange-500",
         quote:
-          "CarePulse gives me quick access to verified medical records and appointment histories in one place. Reliable and secure.",
+          "VitalBook gives me quick access to verified medical records and appointment histories in one place. Reliable and secure.",
         rating: 4,
       },
     ],

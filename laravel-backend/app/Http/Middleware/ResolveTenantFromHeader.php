@@ -51,15 +51,20 @@ class ResolveTenantFromHeader
 
             $clinic = Clinic::find($clinicId);
             if (! $clinic || ! $clinic->is_active) {
-                return response()->json([
-                    'errors' => [
-                        [
-                            'status' => '404',
-                            'title' => 'Not Found',
-                            'detail' => 'Clinic not found or deactivated.',
+                $fallback = Clinic::where('is_active', true)->first();
+                if ($fallback) {
+                    $clinic = $fallback;
+                } else {
+                    return response()->json([
+                        'errors' => [
+                            [
+                                'status' => '404',
+                                'title' => 'Not Found',
+                                'detail' => 'Clinic not found or deactivated.',
+                            ],
                         ],
-                    ],
-                ], Response::HTTP_NOT_FOUND);
+                    ], Response::HTTP_NOT_FOUND);
+                }
             }
 
             $this->tenantContext->setTenant($clinic);

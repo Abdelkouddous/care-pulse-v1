@@ -3,12 +3,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: carepulse-api
+    container_name: vitalbook-api
     restart: unless-stopped
     ports:
       - "8000:8000"
     environment:
-      APP_NAME: CarePulse
+      APP_NAME: VitalBook
       APP_ENV: local
       APP_DEBUG: "true"
       APP_KEY: "base64:HrB/et5Yh+1paB4NOVNQTjpj5H2rRLxjS+gPCOYhT6A="
@@ -16,9 +16,9 @@ services:
       DB_CONNECTION: pgsql
       DB_HOST: postgres
       DB_PORT: 5432
-      DB_DATABASE: carepulse
-      DB_USERNAME: carepulse_user
-      DB_PASSWORD: carepulse_secret_password
+      DB_DATABASE: vitalbook
+      DB_USERNAME: vitalbook_user
+      DB_PASSWORD: vitalbook_secret_password
       REDIS_HOST: redis
       REDIS_PORT: 6379
       CACHE_STORE: redis
@@ -30,31 +30,31 @@ services:
       redis:
         condition: service_healthy
     networks:
-      - carepulse-network
+      - vitalbook-network
 
   postgres:
     image: postgres:18-alpine
-    container_name: carepulse-postgres
+    container_name: vitalbook-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: carepulse
-      POSTGRES_USER: carepulse_user
-      POSTGRES_PASSWORD: carepulse_secret_password
+      POSTGRES_DB: vitalbook
+      POSTGRES_USER: vitalbook_user
+      POSTGRES_PASSWORD: vitalbook_secret_password
     ports:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U carepulse_user -d carepulse"]
+      test: ["CMD-SHELL", "pg_isready -U vitalbook_user -d vitalbook"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - carepulse-network
+      - vitalbook-network
 
   redis:
     image: redis:alpine
-    container_name: carepulse-redis
+    container_name: vitalbook-redis
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -66,12 +66,12 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - carepulse-network
+      - vitalbook-network
 
 volumes:
   pgdata:
   redisdata:
 
 networks:
-  carepulse-network:
+  vitalbook-network:
     driver: bridge

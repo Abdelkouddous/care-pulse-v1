@@ -16,16 +16,18 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Create Default Clinic
+        // 1. Create Default Clinic (Deterministic Anchor UUID)
+        $defaultClinicId = '58b759e3-41f6-47d2-aa1d-35e004849e52';
         $clinic = Clinic::firstOrCreate(
-            ['email' => 'contact@carepulse.aymenhamel.com'],
+            ['id' => $defaultClinicId],
             [
-                'id' => (string) Str::uuid(),
-                'name' => 'CarePulse Medical Center',
+                'id' => $defaultClinicId,
+                'name' => 'VitalBook Medical Center',
+                'email' => 'contact@vitalsoft.aymenhamel.com',
                 'address' => '12 Rue Didouche Mourad, Algiers',
                 'phone' => '+213 21 00 11 22',
                 'timezone' => 'Africa/Algiers',
-                'logo_url' => 'https://carepulse.aymenhamel.com/assets/icons/logo-full.svg',
+                'logo_url' => 'https://vitalsoft.aymenhamel.com/assets/icons/logo-full.svg',
                 'is_active' => true,
             ]
         );
@@ -65,7 +67,7 @@ class DatabaseSeeder extends Seeder
             [
                 'first_name' => 'Amine',
                 'last_name' => 'Mansouri',
-                'email' => 'dr.ramirez@carepulse.com', // Retained for backwards-compatible login
+                'email' => 'dr.mansouri@carepulse.com',
                 'phone' => '+213 550 11 22 33',
                 'specialty' => 'Cardiology',
                 'fee_cents' => 450000, // 4,500.00 DZD

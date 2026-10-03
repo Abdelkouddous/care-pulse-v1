@@ -1,147 +1,180 @@
 <div align="center">
+  <img src="frontend/public/assets/icons/vitalsoft-logo.svg" alt="VitalSoft HealthTech Solutions" width="340" />
+
+  <br/><br/>
+
   <div>
-    <img src="https://img.shields.io/badge/-Next_JS-black?style=for-the-badge&logoColor=white&logo=nextdotjs&color=000000" alt="Next.js" />
-    <img src="https://img.shields.io/badge/-TypeScript-black?style=for-the-badge&logoColor=white&logo=typescript&color=3178C6" alt="TypeScript" />
-    <img src="https://img.shields.io/badge/-Tailwind_CSS-black?style=for-the-badge&logoColor=white&logo=tailwindcss&color=06B6D4" alt="Tailwind CSS" />
-    <img src="https://img.shields.io/badge/-Backend_Agnostic-black?style=for-the-badge&logoColor=white&logo=code&color=555555" alt="Backend-agnostic" />
+    <img src="https://img.shields.io/badge/Next.js_14-black?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js 14" />
+    <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+    <img src="https://img.shields.io/badge/Laravel_11-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 11" />
+    <img src="https://img.shields.io/badge/PHP_8.4-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.4" />
+    <img src="https://img.shields.io/badge/Supabase_PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase PostgreSQL" />
   </div>
+
+  <p align="center">
+    <strong>Enterprise-grade healthcare scheduling & clinical practice management platform engineered by <a href="https://vitalsoft.aymenhamel.com">Vital Soft</a>.</strong>
+  </p>
+</div>
+
+---
 
 ## 📋 Table of Contents
 
-1. 🏥 [Introduction](#introduction)
-2. 🛠️ [Tech Stack](#tech-stack)
-3. 💡 [Features](#features)
-4. 🚦 [Quick Start](#quick-start)
-5. 📁 [Project Structure](#structure)
-6. 📞 [Contact](#contact)
+1. 🏥 [System Overview](#-system-overview)
+2. 🛠️ [Tech Stack & Architecture](#️-tech-stack--architecture)
+3. 💡 [Core Features](#-core-features)
+4. 🚦 [Quick Start & Setup](#-quick-start--setup)
+   - [Frontend (Next.js 14)](#1-frontend-setup)
+   - [Backend (Laravel 11 + Supabase)](#2-backend-setup)
+5. 📁 [Monorepo Structure](#-monorepo-structure)
+6. 🔒 [Security & Compliance](#-security--compliance)
+7. 📞 [Contact & Leadership](#-contact--leadership)
 
-## <a name="introduction">🏥 Introduction</a>
+---
 
-**Pulse Pro** is an enterprise-grade healthcare management system developed by Vital Soft to modernize medical practice operations. Built on cutting-edge technology, this platform offers:
+## 🏥 System Overview
 
-- Patient relationship management (PRM)
-- AI-powered appointment scheduling
-- Real-time health monitoring integration
-- Blockchain-based medical records
-- Telemedicine capabilities
+**CarePulse V1** is a full-stack, enterprise-grade healthcare management system developed by **[Vital Soft](https://vitalsoft.aymenhamel.com)** to modernize clinical appointments and practice operations. Built with Algerian locale integration (CNAS/Chifa insurance, phone validations, and Wilaya mapping), the platform seamlessly connects patients, attending physicians, and clinic administrators.
 
-**[Vital Soft](https://vitalsoft.com)** specializes in developing secure, scalable healthcare solutions that comply with HIPAA and GDPR regulations.
+---
 
-## <a name="tech-stack">🛠️ Tech Stack</a>
+## 🛠️ Tech Stack & Architecture
 
-- **Core Framework**: Next.js 14 (App Router)
-- **State Management**: Zustand
-- **Database**: Backend-agnostic adapter (lib/db.ts) with planned Railway Postgres
-- **UI/UX**: Tailwind CSS + ShadCN
-- **Authentication**: Placeholder OTP + TokenManager (backend-agnostic)
-- **Monitoring**: Sentry (optional)
-- **CI/CD**: GitHub Actions + Docker
-- **DEPLOYMENT**: AWS + Vercel
+| Layer | Technologies | Key Responsibilities |
+|---|---|---|
+| **Frontend** | Next.js 14.2 (App Router), React 18, TypeScript, Tailwind CSS, Lucide Icons | Responsive UI, client-side triage, 3-step registration wizard, 4-step booking wizard |
+| **Backend API** | Laravel 11, PHP 8.4, Service-Repository Pattern, Laravel Sanctum | Token-based auth, slot generation, appointment state machines, integer money guardrails |
+| **Database** | PostgreSQL 18 via **Supabase** (Session Pooler & Direct Connection) | Relational schema, UUIDv4 primary keys, stored generated columns, automated migrations |
+| **Session & Auth** | `TokenManager` (dual tokens: `carepulse_token` + `user_token`), Cookies, LocalStorage | Cross-route session lifecycle, SSR route protection, role-based boundaries |
+| **Testing & CI/CD** | Pest PHP (PHP 8.4), TypeScript `tsc --noEmit`, GitHub Actions | Automated backend tests, frontend build checks, Dockerized production build |
 
-## <a name="features">💡 Key Features</a>
+---
 
-✅ **Advanced Patient Portal**
+## 💡 Core Features
 
-- Biometric authentication
-- Medical history timeline
-- Prescription management
-- Insurance verification API integration
+### 👤 Patient Onboarding & Portal
+- **3-Step Registration Wizard:** Structured progressive disclosure (Identity & Credentials $\rightarrow$ Clinical & CNAS Insurance $\rightarrow$ Emergency & Consents).
+- **4-Step Booking Wizard:** Real-time physician selection, dynamic 30-minute consultation slot calculation, clinical triage reasons, and confirmation.
+- **Health Profile:** Digital health record, CNAS policy tracking, and appointment management with 1-click status reviews.
 
-✅ **Smart Scheduling System**
+### 🩺 Physician Workspace
+- Dedicated clinical schedule portal (`/doctors/login` and `/doctors/dashboard`).
+- Daily patient consultation rosters, visit check-ins, cancellation reasons, and patient medical history inspection.
 
-- AI-powered appointment recommendations
-- Automated conflict detection
-- Multi-channel notifications (SMS/Email/WhatsApp)
+### 🛡️ Clinic Administration Control Center
+- Tri-tab operational dashboard (`/admin/dashboard`):
+  - **Appointments:** Live appointment status workflows (Scheduled, Completed, Cancelled).
+  - **Doctors:** Physician directory, licensing, consultation fees, and availability slots.
+  - **Patients:** Registered patient records with CNAS policy verification.
 
-✅ **Clinical Decision Support**
+### 🧪 MVP Interactive Demo Sandbox
+- 1-click credential-free simulator embedded in navigation ([`DemoTourModal.tsx`](file:///frontend/components/DemoTourModal.tsx)) for test-driving Patient, Doctor, or Super Admin personas without mutating production database tables.
 
-- Symptom checker with ML integration
-- Drug interaction alerts
-- Treatment protocol suggestions
+---
 
-✅ **Analytics Dashboard**
+## 🚦 Quick Start & Setup
 
-- Real-time practice metrics
-- Patient flow optimization
-- Financial reporting
-- Customizable KPI tracking
+### Prerequisites
+- **Node.js**: `v20+` & `npm`
+- **PHP**: `8.4+` & **Composer** `2.8+`
+- **Database**: Active Supabase PostgreSQL instance (or local PostgreSQL 18)
 
-✅ **Enterprise Security**
+---
 
-- End-to-end encryption
-- Audit logging
-- Role-based access control
-- Regular penetration testing
-
-## <a name="quick-start">🚦 Quick Start</a>
-
-**Prerequisites**
-
-- Node.js 18+ (no external backend required in placeholder mode)
-
-**1. Clone Repository**
+### 1. Frontend Setup
 
 ```bash
-git clone https://github.com/vitalsoft/Pulse-pro.git
-cd Pulse-pro
-```
+# Navigate to frontend directory
+cd frontend
 
-**2. Install Dependencies**
-
-````
-```bash
+# Install dependencies
 npm install
-````
 
-**3. Configure Environment**
+# Configure environment
+cp .env.example .env.local
+# Set NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1 (or production API)
 
-```env
-# .env.local
-
-# Enable MOCK MODE (in-memory data)
-# Use either flag; NEXT_PUBLIC_ is available to client and server, MOCK_MODE is server-only
-NEXT_PUBLIC_MOCK_MODE=true
-# or
-MOCK_MODE=true
-
-# When ready to use a real backend, set MOCK MODE to false:
-# NEXT_PUBLIC_MOCK_MODE=false
-# MOCK_MODE=false
-# Then implement lib/db.real.ts with Railway/Postgres logic.
-```
-
-**4. Run Development Server**
-
-```bash
+# Run development server
 npm run dev
+# Accessible at http://localhost:3000
 ```
 
-## <a name="structure">📁 Project Structure</a>
+---
+
+### 2. Backend Setup (Laravel + Supabase)
 
 ```bash
-├── app/
-│   ├── (auth)/          # Authentication flows
-│   ├── (portal)/        # Patient/Doctor portals
-│   ├── admin/           # Practice management
-│   └── api/             # Backend endpoints
-├── components/          # Reusable UI components
-├── lib/                 # Core business logic
-│   ├── analytics/       # Reporting tools
-│   ├── ai/              # ML models
-│   └── security/        # Encryption modules
-├── types/               # TypeScript definitions
-└── public/              # Static assets
+# Navigate to backend directory
+cd laravel-backend
+
+# Install PHP dependencies
+composer install
+
+# Configure environment
+cp .env.example .env
+
+# Configure your Supabase PostgreSQL credentials in .env:
+# DB_CONNECTION=pgsql
+# DB_HOST=aws-0-eu-west-2.pooler.supabase.com
+# DB_PORT=5432
+# DB_DATABASE=postgres
+# DB_USERNAME=postgres.mkmsjpfjvsbahydhthbp
+# DB_PASSWORD=your_password
+# DB_SSLMODE=require
+
+# Run database migrations and seed default test data
+php artisan migrate:fresh --seed
+
+# Start Laravel development server
+php artisan serve
+# API active at http://localhost:8000/api/v1
 ```
 
-## <a name="contact">📞 Contact</a>
+---
 
-**Vital Soft Development Team**
-✉️ [contact@vitalsoft.com](mailto:contact@vitalsoft.com)
-🌍 [https://vitalsoft.com](https://vitalsoft.com)
+## 📁 Monorepo Structure
 
-**Hamel Aymen**
-💼 [LinkedIn](https://linkedin.com/in/aymenehamel)
-🐙 [GitHub](https://github.com/aymenehamel)
+```bash
+care-pulse-v1/
+├── .agents/                 # Unified instructions & rules for AI assistants & Gemini
+│   ├── README.md            # Guidelines index
+│   └── rules/               # Auto-discovered brand, protocol, and stack rules
+├── docs/                    # Architectural reports, brand guidelines, and UI archives
+│   ├── brand/               # VitalSoft brand identity guidelines & logos
+│   ├── reports/             # MVP audit & validation reports
+│   └── archive/             # Historical execution steps and logs
+├── frontend/                # Next.js 14 App Router application
+│   ├── app/                 # Routes: (auth), appointments, patient, doctors, admin
+│   ├── components/          # Reusable UI components & multi-step wizards
+│   ├── lib/                 # Auth TokenManager, API client, Server Actions
+│   └── constants/           # Algerian wilayas, specialties, dictionary
+├── laravel-backend/         # Laravel 11 RESTful API
+│   ├── app/Http/            # Controllers, Form Requests, Resources
+│   ├── app/Services/        # Domain business logic
+│   ├── app/Repositories/    # Eloquent database abstractions
+│   └── database/            # PostgreSQL migrations and seeders
+└── .github/workflows/       # GitHub Actions CI/CD test and build pipelines
+```
+
+---
+
+## 🔒 Security & Compliance
+
+- **Role-Based Access Control (RBAC):** Strict boundaries separating Patient, Physician, and Admin API endpoints enforced via Laravel Sanctum and Next.js middleware.
+- **Integer Money Guardrail:** Financial consultation fees are strictly stored as integers in minor currency units (cents/centimes) to prevent float-rounding inaccuracies.
+- **Algerian Locale Validation:** Built-in sanitization for Algerian National Identification Numbers (18 digits), Carte Chifa insurance, and `+213` mobile prefixes.
+
+---
+
+## 📞 Contact & Leadership
+
+**Vital Soft Engineering Team**  
+✉️ [contact@vitalsoft.com](mailto:contact@vitalsoft.com)  
+🌍 [https://vitalsoft.aymenhamel.com](https://vitalsoft.aymenhamel.com)
+
+**Hamel Aymen** — *Founder & Chief Architect*  
+💼 [LinkedIn](https://linkedin.com/in/aymenehamel) · 🐙 [GitHub](https://github.com/aymenehamel)
 
 <div align="center" style="margin-top: 40px;">
   <sub>Built with ❤️ by Vital Soft · © 2026 All rights reserved</sub>

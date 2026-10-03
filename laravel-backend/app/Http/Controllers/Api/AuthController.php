@@ -155,6 +155,21 @@ class AuthController extends Controller
         ]);
     }
 
+    public function checkPhone(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'phone' => ['required', 'string'],
+        ]);
+
+        $exists = $this->authService->phoneExists($validated['phone']);
+
+        return response()->json([
+            'data' => [
+                'exists' => $exists,
+            ],
+        ]);
+    }
+
     public function registerWizard(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -183,7 +198,7 @@ class AuthController extends Controller
                 'role' => $result['role'],
             ],
             'meta' => [
-                'message' => 'Profile setup complete. Welcome to CarePulse.',
+                'message' => 'Profile setup complete. Welcome to VitalBook.',
             ],
         ], Response::HTTP_CREATED);
     }

@@ -9,18 +9,28 @@ export function useAuth() {
   const userQuery = useQuery({
     queryKey: ["auth", "me"],
     queryFn: () => authService.me(),
-    enabled: typeof window !== "undefined" && !!localStorage.getItem("carepulse_token"),
+    enabled: typeof window !== "undefined" && !!TokenManager.getToken(),
     retry: false,
   });
+
+  const persistSession = (data: AuthSession) => {
+    TokenManager.setSession(data.token, data.role, data.user);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("vitalbook_token", data.token);
+      localStorage.setItem("carepulse_token", data.token);
+      const userStr = JSON.stringify(data.user);
+      localStorage.setItem("vitalbook_user", userStr);
+      localStorage.setItem("carepulse_user", userStr);
+      localStorage.setItem("vitalbook_role", data.role);
+      localStorage.setItem("carepulse_role", data.role);
+    }
+  };
 
   const loginMutation = useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       authService.login(email, password),
     onSuccess: (data: AuthSession) => {
-      TokenManager.setSession(data.token, data.role);
-      localStorage.setItem("carepulse_token", data.token);
-      localStorage.setItem("carepulse_user", JSON.stringify(data.user));
-      localStorage.setItem("carepulse_role", data.role);
+      persistSession(data);
       queryClient.invalidateQueries({ queryKey: ["auth"] });
     },
   });
@@ -28,10 +38,7 @@ export function useAuth() {
   const registerMutation = useMutation({
     mutationFn: (data: any) => authService.register(data),
     onSuccess: (data: AuthSession) => {
-      TokenManager.setSession(data.token, data.role);
-      localStorage.setItem("carepulse_token", data.token);
-      localStorage.setItem("carepulse_user", JSON.stringify(data.user));
-      localStorage.setItem("carepulse_role", data.role);
+      persistSession(data);
       queryClient.invalidateQueries({ queryKey: ["auth"] });
     },
   });
@@ -40,10 +47,7 @@ export function useAuth() {
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       authService.adminLogin(email, password),
     onSuccess: (data: AuthSession) => {
-      TokenManager.setSession(data.token, data.role);
-      localStorage.setItem("carepulse_token", data.token);
-      localStorage.setItem("carepulse_user", JSON.stringify(data.user));
-      localStorage.setItem("carepulse_role", data.role);
+      persistSession(data);
       queryClient.invalidateQueries({ queryKey: ["auth"] });
     },
   });
@@ -52,10 +56,7 @@ export function useAuth() {
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       authService.doctorLogin(email, password),
     onSuccess: (data: AuthSession) => {
-      TokenManager.setSession(data.token, data.role);
-      localStorage.setItem("carepulse_token", data.token);
-      localStorage.setItem("carepulse_user", JSON.stringify(data.user));
-      localStorage.setItem("carepulse_role", data.role);
+      persistSession(data);
       queryClient.invalidateQueries({ queryKey: ["auth"] });
     },
   });
@@ -66,14 +67,6 @@ export function useAuth() {
       queryClient.clear();
       TokenManager.clearToken();
       if (typeof window !== "undefined") {
-        localStorage.removeItem("carepulse_token");
-        localStorage.removeItem("user_token");
-        localStorage.removeItem("carepulse_user");
-        localStorage.removeItem("carepulse_role");
-        localStorage.removeItem("carepulse_demo");
-        document.cookie = "carepulse_token=; path=/; max-age=0;";
-        document.cookie = "carepulse_demo=; path=/; max-age=0;";
-        document.cookie = "user_token=; path=/; max-age=0;";
         window.location.href = "/login";
       }
     },
@@ -83,8 +76,14 @@ export function useAuth() {
     typeof window !== "undefined"
       ? (() => {
           try {
-            const raw = localStorage.getItem("carepulse_user");
-            return raw ? JSON.parse(raw) : null;
+            return (
+              TokenManager.getUser() ||
+              JSON.parse(
+                localStorage.getItem("vitalbook_user") ||
+                localStorage.getItem("carepulse_user") ||
+                "null"
+              )
+            );
           } catch {
             return null;
           }
@@ -92,7 +91,7 @@ export function useAuth() {
       : null;
 
   const localRole =
-    typeof window !== "undefined" ? localStorage.getItem("carepulse_role") : null;
+    typeof window !== "undefined" ? TokenManager.getRole() : null;
 
   return {
     user: userQuery.data?.user || localUser,

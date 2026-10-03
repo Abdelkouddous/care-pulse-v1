@@ -46,13 +46,21 @@ export default function DemoLoginPage() {
     try {
       if (role === "patient") {
         const session = await authService.login(MOCK_PATIENT.email, "password123");
-        TokenManager.setSession(session.token, "patient");
+        TokenManager.setSession(session.token, "patient", session.user, true);
+        localStorage.setItem("vitalbook_token", session.token);
         localStorage.setItem("carepulse_token", session.token);
+        localStorage.setItem("vitalbook_role", "patient");
         localStorage.setItem("carepulse_role", "patient");
+        localStorage.setItem("vitalbook_demo", "true");
         localStorage.setItem("carepulse_demo", "true");
-        localStorage.setItem("carepulse_user", JSON.stringify(session.user));
+        const userStr = JSON.stringify(session.user);
+        localStorage.setItem("vitalbook_user", userStr);
+        localStorage.setItem("carepulse_user", userStr);
+        document.cookie = `vitalbook_token=${session.token}; path=/; max-age=86400; samesite=lax`;
         document.cookie = `carepulse_token=${session.token}; path=/; max-age=86400; samesite=lax`;
+        document.cookie = `vitalbook_role=patient; path=/; max-age=86400; samesite=lax`;
         document.cookie = `carepulse_role=patient; path=/; max-age=86400; samesite=lax`;
+        document.cookie = `vitalbook_demo=true; path=/; max-age=86400; samesite=lax`;
         document.cookie = `carepulse_demo=true; path=/; max-age=86400; samesite=lax`;
 
         toast({
@@ -63,13 +71,21 @@ export default function DemoLoginPage() {
         router.push("/patient/dashboard");
       } else if (role === "doctor") {
         const session = await authService.doctorLogin(MOCK_DOCTOR.email, "password123");
-        TokenManager.setSession(session.token, "doctor");
+        TokenManager.setSession(session.token, "doctor", session.user, true);
+        localStorage.setItem("vitalbook_token", session.token);
         localStorage.setItem("carepulse_token", session.token);
+        localStorage.setItem("vitalbook_role", "doctor");
         localStorage.setItem("carepulse_role", "doctor");
+        localStorage.setItem("vitalbook_demo", "true");
         localStorage.setItem("carepulse_demo", "true");
-        localStorage.setItem("carepulse_user", JSON.stringify(session.user));
+        const docUserStr = JSON.stringify(session.user);
+        localStorage.setItem("vitalbook_user", docUserStr);
+        localStorage.setItem("carepulse_user", docUserStr);
+        document.cookie = `vitalbook_token=${session.token}; path=/; max-age=86400; samesite=lax`;
         document.cookie = `carepulse_token=${session.token}; path=/; max-age=86400; samesite=lax`;
+        document.cookie = `vitalbook_role=doctor; path=/; max-age=86400; samesite=lax`;
         document.cookie = `carepulse_role=doctor; path=/; max-age=86400; samesite=lax`;
+        document.cookie = `vitalbook_demo=true; path=/; max-age=86400; samesite=lax`;
         document.cookie = `carepulse_demo=true; path=/; max-age=86400; samesite=lax`;
 
         toast({
@@ -98,9 +114,9 @@ export default function DemoLoginPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <Image src="/favicon.svg" alt="CarePulse Logo" width={34} height={34} priority />
+              <Image src="/favicon.svg" alt="VitalBook Logo" width={34} height={34} priority />
               <span className="font-extrabold text-lg tracking-tight">
-                Care<span className="font-light text-emerald-600 dark:text-emerald-400">Pulse</span>
+                Vital<span className="font-light text-emerald-600 dark:text-emerald-400">Book</span>
               </span>
             </Link>
             <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
@@ -381,7 +397,7 @@ export default function DemoLoginPage() {
 
       {/* Footer */}
       <footer className="w-full border-t border-slate-200 dark:border-slate-800 py-6 px-4 text-center text-xs text-slate-500 dark:text-slate-400">
-        CarePulse™ Health System Architecture • Built strictly with Integer Money Guard & UUIDv4 Entity Modeling.
+        VitalBook™ Health System Architecture • Built strictly with Integer Money Guard & UUIDv4 Entity Modeling.
       </footer>
     </div>
   );

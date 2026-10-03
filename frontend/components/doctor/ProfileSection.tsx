@@ -72,7 +72,7 @@ export function ProfileSection() {
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-primary font-semibold">
-                Department of {specialty} · CarePulse Medical Center
+                Department of {specialty} · VitalBook Medical Center
               </p>
               <div className="flex items-center gap-2 text-xs text-muted-foreground pt-0.5">
                 <Building2 className="size-3.5 text-muted-foreground" />

@@ -13,10 +13,11 @@ use Illuminate\Support\Str;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
+    /** @var \Tests\TestCase $this */
     $this->clinic = Clinic::create([
         'id' => (string) Str::uuid(),
-        'name' => 'CarePulse Algiers',
-        'email' => 'algiers@carepulse.com',
+        'name' => 'VitalBook Algiers',
+        'email' => 'algiers@vitalbook.com',
     ]);
 
     $this->admin = Admin::create([

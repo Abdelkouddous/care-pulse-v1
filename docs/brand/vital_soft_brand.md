@@ -4,7 +4,7 @@
 > **Brand Name:** Vital Soft (VitalSoft)  
 > **Tagline:** HealthTech Solutions  
 > **Founder & Chief Architect:** Hamel Aymen  
-> **Domain:** [https://vitalsoft.com](https://vitalsoft.com) | `contact@vitalsoft.com`
+> **Domain:** [https://vitalsoft.aymenhamel.com](https://vitalsoft.aymenhamel.com) | `contact@vitalsoft.com`
 
 ---
 
@@ -51,7 +51,7 @@ Flagship products include **Pulse Pro / CarePulse V1**.
 
 - **Founder & Chief Architect:** Hamel Aymen
 - **Headquarters / Operations:** Algiers, Algeria / Global
-- **Official Website:** [https://vitalsoft.com](https://vitalsoft.com)
+- **Official Website:** [https://vitalsoft.aymenhamel.com](https://vitalsoft.aymenhamel.com)
 - **General Inquiries:** `contact@vitalsoft.com`
 - **Architecture / Engineering:** `aymen@vitalsoft.com`
 

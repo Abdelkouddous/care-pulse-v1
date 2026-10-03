@@ -1,5 +1,5 @@
 {
-  "name": "care-pulse-monorepo",
+  "name": "vitalbook-monorepo",
   "private": true,
   "workspaces": [
     "frontend",

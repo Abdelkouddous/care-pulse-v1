@@ -37,7 +37,7 @@ export const SiteFooter = () => {
                 <Activity className="size-5 text-emerald-400" />
               </div>
               <div>
-                <span className="font-extrabold text-lg text-white tracking-tight block">CarePulse</span>
+                <span className="font-extrabold text-lg text-white tracking-tight block">VitalBook</span>
                 <span className="text-[10px] text-slate-500 font-semibold tracking-wider uppercase block">
                   Medical Center
                 </span>
@@ -49,9 +49,9 @@ export const SiteFooter = () => {
             </p>
             <div className="flex items-center gap-3 pt-1">
               {[
-                { icon: Globe, href: "https://vitalsoft.com", label: "Website" },
+                { icon: Globe, href: "https://vitalsoft.aymenhamel.com", label: "Website" },
                 { icon: Linkedin, href: "#", label: "LinkedIn" },
-                { icon: Mail, href: "mailto:contact@carepulse.aymenhamel.com", label: "Email" },
+                { icon: Mail, href: "mailto:contact@vitalbook.aymenhamel.com", label: "Email" },
               ].map((social) => (
                 <a
                   key={social.label}
@@ -124,7 +124,7 @@ export const SiteFooter = () => {
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="size-4 text-emerald-400 shrink-0" />
-                <span className="text-sm text-slate-400">contact@carepulse.aymenhamel.com</span>
+                <span className="text-sm text-slate-400">contact@vitalbook.aymenhamel.com</span>
               </div>
               <div className="flex items-center gap-3">
                 <Clock className="size-4 text-emerald-400 shrink-0" />
@@ -145,10 +145,10 @@ export const SiteFooter = () => {
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="text-sm text-slate-500">
               © {currentYear}{" "}
-              <span className="font-medium text-slate-300">CarePulse Medical Center</span>
+              <span className="font-medium text-slate-300">VitalBook Medical Center</span>
               . Engineered by{" "}
               <a
-                href="https://vitalsoft.com"
+                href="https://vitalsoft.aymenhamel.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-semibold text-emerald-400 hover:text-[#33CCCC] transition-colors"

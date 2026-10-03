@@ -1,4 +1,4 @@
-name: CarePulse CI/CD Pipeline
+name: VitalBook CI/CD Pipeline
 
 on:
   push:
@@ -56,7 +56,7 @@ jobs:
       - name: Build Next.js Production App
         working-directory: ./frontend
         env:
-          NEXT_PUBLIC_API_URL: https://api-carepulse.aymenhamel.com/api/v1
+          NEXT_PUBLIC_API_URL: https://api-vitalbook.aymenhamel.com/api/v1
           NEXT_PUBLIC_ADMIN_PASSKEY: '123456'
           NEXT_PUBLIC_DOCTOR_PASSKEY: '654321'
         run: npm run build

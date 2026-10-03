@@ -68,7 +68,13 @@ export function TrendingDoctorsSection({
         experience: `${8 + (idx % 8)} Years`,
       }));
     }
-    return [MOCK_DOCTOR_DISPLAY];
+
+    const isDemo =
+      typeof window !== "undefined" &&
+      (localStorage.getItem("vitalbook_demo") === "true" ||
+        localStorage.getItem("carepulse_demo") === "true");
+
+    return isDemo ? [MOCK_DOCTOR_DISPLAY] : [];
   }, [doctorsData]);
 
   // Filter doctors by active tab

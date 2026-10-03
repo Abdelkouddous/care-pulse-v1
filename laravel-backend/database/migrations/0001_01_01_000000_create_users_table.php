@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('first_name', 100);
             $table->string('last_name', 100);
-            $table->string('name')->virtualAs("first_name || ' ' || last_name")->nullable();
+            $table->string('name')->storedAs("first_name || ' ' || last_name")->nullable();
             $table->string('email')->unique();
             $table->string('phone', 30)->nullable();
             $table->date('date_of_birth')->nullable();

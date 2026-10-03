@@ -26,7 +26,7 @@ class AppointmentCancelledNotification extends Notification implements ShouldQue
         $timeStr = $this->appointment->scheduled_at->format('F j, Y - H:i');
 
         return (new MailMessage)
-            ->subject('CarePulse: Appointment Cancellation Notice')
+            ->subject('VitalBook: Appointment Cancellation Notice')
             ->greeting("Hello {$notifiable->name},")
             ->line("Your appointment scheduled for {$timeStr} has been cancelled.")
             ->line("Reason: {$this->appointment->cancellation_reason}")

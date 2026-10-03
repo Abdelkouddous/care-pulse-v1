@@ -34,14 +34,23 @@ export default function DoctorLoginPage() {
       const res = await authService.doctorLogin(email.trim(), password);
 
       if (res?.token) {
-        TokenManager.setToken(res.token);
+        TokenManager.setSession(res.token, "doctor", res.user, false);
 
         if (typeof window !== "undefined") {
+          localStorage.setItem("vitalbook_token", res.token);
           localStorage.setItem("carepulse_token", res.token);
+          localStorage.setItem("vitalbook_role", "doctor");
           localStorage.setItem("carepulse_role", "doctor");
-          localStorage.removeItem("carepulse_demo"); // Real account session
-          localStorage.setItem("carepulse_user", JSON.stringify(res.user));
+          localStorage.removeItem("vitalbook_demo");
+          localStorage.removeItem("carepulse_demo");
+          const userStr = JSON.stringify(res.user);
+          localStorage.setItem("vitalbook_user", userStr);
+          localStorage.setItem("carepulse_user", userStr);
+          document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
           document.cookie = `carepulse_token=${res.token}; path=/; max-age=86400; samesite=lax`;
+          document.cookie = `vitalbook_role=doctor; path=/; max-age=86400; samesite=lax`;
+          document.cookie = `carepulse_role=doctor; path=/; max-age=86400; samesite=lax`;
+          document.cookie = `vitalbook_demo=; path=/; max-age=0; samesite=lax`;
           document.cookie = `carepulse_demo=; path=/; max-age=0; samesite=lax`;
         }
 
@@ -80,7 +89,7 @@ export default function DoctorLoginPage() {
               <Activity className="size-5" />
             </div>
             <div>
-              <span className="font-extrabold text-lg tracking-tight block">CarePulse</span>
+              <span className="font-extrabold text-lg tracking-tight block">VitalBook</span>
               <span className="text-[10px] text-sky-300 font-semibold tracking-wider uppercase block">
                 Doctor Portal
               </span>
@@ -115,7 +124,7 @@ export default function DoctorLoginPage() {
 
           <div className="flex items-center gap-2 text-xs text-sky-300 pt-4 border-t border-white/10">
             <CheckCircle2 className="size-4 text-sky-400" />
-            <span>Active Clinic: CarePulse Medical Center (Cardiology / Pediatrics / General)</span>
+            <span>Active Clinic: VitalBook Medical Center (Cardiology / Pediatrics / General)</span>
           </div>
         </div>
 
@@ -200,18 +209,33 @@ export default function DoctorLoginPage() {
           </form>
 
           {/* Quick Helper for evaluation */}
-          <div className="p-3 rounded-xl bg-secondary/50 border border-border text-xs flex items-center justify-between">
-            <span className="text-muted-foreground">Seeded Doctor:</span>
-            <button
-              type="button"
-              onClick={() => {
-                setEmail("dr.mansouri@carepulse.com");
-                setPassword("password123");
-              }}
-              className="font-mono text-sky-600 dark:text-sky-400 font-bold hover:underline"
-            >
-              dr.mansouri@carepulse.com (fill)
-            </button>
+          <div className="p-3 rounded-xl bg-secondary/50 border border-border text-xs space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground font-semibold">Pediatrics (Dr. Yasmine Benali):</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail("dr.benali@carepulse.com");
+                  setPassword("password123");
+                }}
+                className="font-mono text-sky-600 dark:text-sky-400 font-bold hover:underline"
+              >
+                dr.benali@carepulse.com (fill)
+              </button>
+            </div>
+            <div className="flex items-center justify-between pt-1 border-t border-border/50">
+              <span className="text-muted-foreground">Cardiology (Dr. Mansouri):</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail("dr.mansouri@carepulse.com");
+                  setPassword("password123");
+                }}
+                className="font-mono text-muted-foreground hover:text-foreground font-bold hover:underline"
+              >
+                dr.mansouri (fill)
+              </button>
+            </div>
           </div>
 
           <div className="pt-4 border-t border-border flex items-center justify-between text-xs text-muted-foreground">

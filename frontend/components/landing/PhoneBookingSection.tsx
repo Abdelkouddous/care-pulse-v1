@@ -25,7 +25,7 @@ import { CustomFormField } from "@/components/forms/CustomFormField";
 import { FormFieldType } from "@/components/forms/PatientForm";
 import { SubmitButton } from "@/components/ui/SubmitButton";
 import { UserFormValidation } from "@/lib/validation";
-import { createUser, getPatient } from "@/lib/actions/patient.actions";
+import { authService } from "@/lib/api/auth.service";
 import { ALGERIAN_WILAYAS } from "@/constants/algeria";
 import { toast } from "@/hooks/use-toast";
 
@@ -64,24 +64,24 @@ export function PhoneBookingSection({ onSearchChange }: PhoneBookingSectionProps
   const onPhoneSubmit = async ({ phone }: z.infer<typeof UserFormValidation>) => {
     setIsSubmittingPhone(true);
     try {
-      const userData = { name: "Patient User", phone };
-      const user = await createUser(userData);
-
-      if (user) {
-        const patient = await getPatient(user.$id);
-        if (patient) {
-          router.push(`/login?phone=${encodeURIComponent(phone)}`);
-        } else {
-          router.push(`/register?phone=${encodeURIComponent(phone)}`);
-        }
+      const exists = await authService.checkPhone(phone);
+      if (exists) {
+        toast({
+          title: "Existing Account Detected",
+          description: "Welcome back! Please sign in to book your consultation.",
+        });
+        router.push(`/login?phone=${encodeURIComponent(phone)}`);
+      } else {
+        toast({
+          title: "New Patient Registration",
+          description: "Welcome to VitalBook! Please complete your registration wizard.",
+        });
+        router.push(`/register?phone=${encodeURIComponent(phone)}`);
       }
     } catch (error) {
       console.error("Fast-track phone error:", error);
-      toast({
-        title: "Submission Error",
-        description: "Could not proceed with phone number. Please try again.",
-        variant: "destructive",
-      });
+      // Fallback for new patients
+      router.push(`/register?phone=${encodeURIComponent(phone)}`);
     } finally {
       setIsSubmittingPhone(false);
     }

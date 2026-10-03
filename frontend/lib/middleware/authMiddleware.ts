@@ -4,16 +4,33 @@ import type { NextRequest } from "next/server";
 export function handleAuthMiddleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // Retrieve auth credentials from cookies for Edge SSR verification
+  // Retrieve auth credentials from cookies for Edge SSR verification (Dual-Read)
   const token =
+    request.cookies.get("vitalbook_token")?.value ||
     request.cookies.get("carepulse_token")?.value ||
     request.cookies.get("user_token")?.value;
   const role =
+    request.cookies.get("vitalbook_role")?.value ||
     request.cookies.get("carepulse_role")?.value ||
     request.cookies.get("user_role")?.value;
+  const demo =
+    request.cookies.get("vitalbook_demo")?.value ||
+    request.cookies.get("carepulse_demo")?.value;
   const expiry = request.cookies.get("token_expiry")?.value;
 
   const isExpired = !!expiry && !isNaN(parseInt(expiry, 10)) && Date.now() > parseInt(expiry, 10);
+
+  // Helper to purge all auth cookies on response
+  const purgeAuthCookies = (res: NextResponse) => {
+    res.cookies.delete("vitalbook_token");
+    res.cookies.delete("carepulse_token");
+    res.cookies.delete("user_token");
+    res.cookies.delete("vitalbook_role");
+    res.cookies.delete("carepulse_role");
+    res.cookies.delete("vitalbook_demo");
+    res.cookies.delete("carepulse_demo");
+    res.cookies.delete("token_expiry");
+  };
 
   // 1. Strict Edge Isolation & RBAC Gatekeeper for Admin Partition
   const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
@@ -40,10 +57,7 @@ export function handleAuthMiddleware(request: NextRequest) {
       redirectResponse.headers.set("Cache-Control", "no-store, max-age=0");
 
       if (isExpired) {
-        redirectResponse.cookies.delete("carepulse_token");
-        redirectResponse.cookies.delete("user_token");
-        redirectResponse.cookies.delete("carepulse_role");
-        redirectResponse.cookies.delete("token_expiry");
+        purgeAuthCookies(redirectResponse);
       }
 
       return redirectResponse;
@@ -104,16 +118,13 @@ export function handleAuthMiddleware(request: NextRequest) {
   const isProtectedRoute = pathname.startsWith("/patient/dashboard") || pathname.startsWith("/doctors/dashboard") || isShortRoute;
 
   if (isProtectedRoute) {
-    if (!token && !request.cookies.get("carepulse_demo")?.value) {
+    if (!token && !demo) {
       return NextResponse.next();
     }
 
     if (isExpired) {
       const response = NextResponse.redirect(new URL("/login", request.url));
-      response.cookies.delete("user_token");
-      response.cookies.delete("carepulse_token");
-      response.cookies.delete("carepulse_role");
-      response.cookies.delete("token_expiry");
+      purgeAuthCookies(response);
       return response;
     }
   }

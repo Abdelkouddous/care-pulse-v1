@@ -245,7 +245,7 @@ export default function PatientProfilePage() {
                     <span className="font-bold text-foreground">Cardiovascular Wellness Evaluation</span>
                     <span className="text-[11px] text-muted-foreground">Aug 15, 2026</span>
                   </div>
-                  <p className="text-muted-foreground">Dr. Amine Mansouri · CarePulse Medical Center</p>
+                  <p className="text-muted-foreground">Dr. Amine Mansouri · VitalBook Medical Center</p>
                   <p className="text-foreground/90 pt-1">
                     Electrocardiogram (ECG) normal. Blood pressure reading: 120/80 mmHg. Continued preventative regimen.
                   </p>
