@@ -1,0 +1,71 @@
+class Wilaya {
+  final int code;
+  final String name;
+
+  const Wilaya(this.code, this.name);
+}
+
+class AlgeriaWilayas {
+  AlgeriaWilayas._();
+
+  static const List<Wilaya> all = [
+    Wilaya(1, '01 - Adrar'),
+    Wilaya(2, '02 - Chlef'),
+    Wilaya(3, '03 - Laghouat'),
+    Wilaya(4, '04 - Oum El Bouaghi'),
+    Wilaya(5, '05 - Batna'),
+    Wilaya(6, '06 - Béjaïa'),
+    Wilaya(7, '07 - Biskra'),
+    Wilaya(8, '08 - Béchar'),
+    Wilaya(9, '09 - Blida'),
+    Wilaya(10, '10 - Bouira'),
+    Wilaya(11, '11 - Tamanrasset'),
+    Wilaya(12, '12 - Tébessa'),
+    Wilaya(13, '13 - Tlemcen'),
+    Wilaya(14, '14 - Tiaret'),
+    Wilaya(15, '15 - Tizi Ouzou'),
+    Wilaya(16, '16 - Alger'),
+    Wilaya(17, '17 - Djelfa'),
+    Wilaya(18, '18 - Jijel'),
+    Wilaya(19, '19 - Sétif'),
+    Wilaya(20, '20 - Saïda'),
+    Wilaya(21, '21 - Skikda'),
+    Wilaya(22, '22 - Sidi Bel Abbès'),
+    Wilaya(23, '23 - Annaba'),
+    Wilaya(24, '24 - Guelma'),
+    Wilaya(25, '25 - Constantine'),
+    Wilaya(26, '26 - Médéa'),
+    Wilaya(27, '27 - Mostaganem'),
+    Wilaya(28, '28 - M\'Sila'),
+    Wilaya(29, '29 - Mascara'),
+    Wilaya(30, '30 - Ouargla'),
+    Wilaya(31, '31 - Oran'),
+    Wilaya(32, '32 - El Bayadh'),
+    Wilaya(33, '33 - Illizi'),
+    Wilaya(34, '34 - Bordj Bou Arréridj'),
+    Wilaya(35, '35 - Boumerdès'),
+    Wilaya(36, '36 - El Tarf'),
+    Wilaya(37, '37 - Tindouf'),
+    Wilaya(38, '38 - Tissemsilt'),
+    Wilaya(39, '39 - El Oued'),
+    Wilaya(40, '40 - Khenchela'),
+    Wilaya(41, '41 - Souk Ahras'),
+    Wilaya(42, '42 - Tipaza'),
+    Wilaya(43, '43 - Mila'),
+    Wilaya(44, '44 - Aïn Defla'),
+    Wilaya(45, '45 - Naâma'),
+    Wilaya(46, '46 - Aïn Témouchent'),
+    Wilaya(47, '47 - Ghardaïa'),
+    Wilaya(48, '48 - Relizane'),
+    Wilaya(49, '49 - Timimoun'),
+    Wilaya(50, '50 - Bordj Badji Mokhtar'),
+    Wilaya(51, '51 - Ouled Djellal'),
+    Wilaya(52, '52 - Béni Abbès'),
+    Wilaya(53, '53 - In Salah'),
+    Wilaya(54, '54 - In Guezzam'),
+    Wilaya(55, '55 - Touggourt'),
+    Wilaya(56, '56 - Djanet'),
+    Wilaya(57, '57 - El M\'Ghair'),
+    Wilaya(58, '58 - El Meniaa'),
+  ];
+}

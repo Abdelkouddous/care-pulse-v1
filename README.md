@@ -1,74 +1,62 @@
 <div align="center">
   <img src="frontend/public/assets/icons/vitalsoft-logo.svg" alt="VitalSoft HealthTech Solutions" width="340" />
 
-  <br/><br/>
-
-  <div>
-    <img src="https://img.shields.io/badge/Next.js_14-black?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js 14" />
-    <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-    <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
-    <img src="https://img.shields.io/badge/Laravel_11-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 11" />
-    <img src="https://img.shields.io/badge/PHP_8.4-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.4" />
-    <img src="https://img.shields.io/badge/Supabase_PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase PostgreSQL" />
-  </div>
-
-  <p align="center">
-    <strong>Enterprise-grade healthcare scheduling & clinical practice management platform engineered by <a href="https://vitalsoft.aymenhamel.com">Vital Soft</a>.</strong>
-  </p>
-</div>
-
 ---
 
 ## 📋 Table of Contents
 
 1. 🏥 [System Overview](#-system-overview)
-2. 🛠️ [Tech Stack & Architecture](#️-tech-stack--architecture)
+2. 🛠️ [Tech Stack &amp; Architecture](#️-tech-stack--architecture)
 3. 💡 [Core Features](#-core-features)
-4. 🚦 [Quick Start & Setup](#-quick-start--setup)
+4. 🚦 [Quick Start &amp; Setup](#-quick-start--setup)
    - [Frontend (Next.js 14)](#1-frontend-setup)
    - [Backend (Laravel 11 + Supabase)](#2-backend-setup)
 5. 📁 [Monorepo Structure](#-monorepo-structure)
-6. 🔒 [Security & Compliance](#-security--compliance)
-7. 📞 [Contact & Leadership](#-contact--leadership)
+6. 🔒 [Security &amp; Compliance](#-security--compliance)
+7. 📞 [Contact &amp; Leadership](#-contact--leadership)
 
 ---
 
 ## 🏥 System Overview
 
-**CarePulse V1** is a full-stack, enterprise-grade healthcare management system developed by **[Vital Soft](https://vitalsoft.aymenhamel.com)** to modernize clinical appointments and practice operations. Built with Algerian locale integration (CNAS/Chifa insurance, phone validations, and Wilaya mapping), the platform seamlessly connects patients, attending physicians, and clinic administrators.
+**VitalBook V1** is a full-stack, enterprise-grade healthcare management system developed by **[Vital Soft](https://vitalsoft.aymenhamel.com)** to modernize clinical appointments and practice operations. Built with Algerian locale integration (CNAS/Chifa insurance, phone validations, and Wilaya mapping), the platform seamlessly connects patients, attending physicians, and clinic administrators.
 
----
+--- 
 
 ## 🛠️ Tech Stack & Architecture
 
-| Layer | Technologies | Key Responsibilities |
-|---|---|---|
-| **Frontend** | Next.js 14.2 (App Router), React 18, TypeScript, Tailwind CSS, Lucide Icons | Responsive UI, client-side triage, 3-step registration wizard, 4-step booking wizard |
-| **Backend API** | Laravel 11, PHP 8.4, Service-Repository Pattern, Laravel Sanctum | Token-based auth, slot generation, appointment state machines, integer money guardrails |
-| **Database** | PostgreSQL 18 via **Supabase** (Session Pooler & Direct Connection) | Relational schema, UUIDv4 primary keys, stored generated columns, automated migrations |
-| **Session & Auth** | `TokenManager` (dual tokens: `carepulse_token` + `user_token`), Cookies, LocalStorage | Cross-route session lifecycle, SSR route protection, role-based boundaries |
-| **Testing & CI/CD** | Pest PHP (PHP 8.4), TypeScript `tsc --noEmit`, GitHub Actions | Automated backend tests, frontend build checks, Dockerized production build |
+| Layer                     | Technologies                                                                                | Key Responsibilities                                                                    |
+| ------------------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| **Frontend**        | Next.js 14.2 (App Router), React 18, TypeScript, Tailwind CSS, Lucide Icons                 | Responsive UI, client-side triage, 3-step registration wizard, 4-step booking wizard    |
+| **Backend API**     | Laravel 11, PHP 8.4, Service-Repository Pattern, Laravel Sanctum                            | Token-based auth, slot generation, appointment state machines, integer money guardrails |
+| **Database**        | PostgreSQL 18 via**Supabase** (Session Pooler & Direct Connection)                    | Relational schema, UUIDv4 primary keys, stored generated columns, automated migrations  |
+| **Session & Auth**  | `TokenManager` (dual tokens: `carepulse_token` + `user_token`), Cookies, LocalStorage | Cross-route session lifecycle, SSR route protection, role-based boundaries              |
+| **Testing & CI/CD** | Pest PHP (PHP 8.4), TypeScript`tsc --noEmit`, GitHub Actions                              | Automated backend tests, frontend build checks, Dockerized production build             |
 
 ---
 
 ## 💡 Core Features
 
 ### 👤 Patient Onboarding & Portal
+
 - **3-Step Registration Wizard:** Structured progressive disclosure (Identity & Credentials $\rightarrow$ Clinical & CNAS Insurance $\rightarrow$ Emergency & Consents).
 - **4-Step Booking Wizard:** Real-time physician selection, dynamic 30-minute consultation slot calculation, clinical triage reasons, and confirmation.
 - **Health Profile:** Digital health record, CNAS policy tracking, and appointment management with 1-click status reviews.
 
 ### 🩺 Physician Workspace
+
 - Dedicated clinical schedule portal (`/doctors/login` and `/doctors/dashboard`).
 - Daily patient consultation rosters, visit check-ins, cancellation reasons, and patient medical history inspection.
 
 ### 🛡️ Clinic Administration Control Center
+
 - Tri-tab operational dashboard (`/admin/dashboard`):
   - **Appointments:** Live appointment status workflows (Scheduled, Completed, Cancelled).
   - **Doctors:** Physician directory, licensing, consultation fees, and availability slots.
   - **Patients:** Registered patient records with CNAS policy verification.
 
 ### 🧪 MVP Interactive Demo Sandbox
+
 - 1-click credential-free simulator embedded in navigation ([`DemoTourModal.tsx`](file:///frontend/components/DemoTourModal.tsx)) for test-driving Patient, Doctor, or Super Admin personas without mutating production database tables.
 
 ---
@@ -76,6 +64,7 @@
 ## 🚦 Quick Start & Setup
 
 ### Prerequisites
+
 - **Node.js**: `v20+` & `npm`
 - **PHP**: `8.4+` & **Composer** `2.8+`
 - **Database**: Active Supabase PostgreSQL instance (or local PostgreSQL 18)
@@ -169,11 +158,11 @@ care-pulse-v1/
 
 ## 📞 Contact & Leadership
 
-**Vital Soft Engineering Team**  
-✉️ [contact@vitalsoft.com](mailto:contact@vitalsoft.com)  
+**Vital Soft Engineering Team**
+✉️ [contact@vitalsoft.com](mailto:contact@vitalsoft.com)
 🌍 [https://vitalsoft.aymenhamel.com](https://vitalsoft.aymenhamel.com)
 
-**Hamel Aymen** — *Founder & Chief Architect*  
+**Hamel Aymen** — *Founder & Chief Architect*
 💼 [LinkedIn](https://linkedin.com/in/aymenehamel) · 🐙 [GitHub](https://github.com/aymenehamel)
 
 <div align="center" style="margin-top: 40px;">

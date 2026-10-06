@@ -1,0 +1,474 @@
+[
+  {
+    "key": "VTB-5",
+    "summary": "Mobile Foundation & Theming",
+    "type": "Epic",
+    "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-5",
+    "stories": [
+      {
+        "key": "VTB-6",
+        "summary": "Flutter Project Scaffolding & Core Architecture Setup",
+        "type": "Story",
+        "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-6",
+        "subtasks": [
+          {
+            "key": "VTB-7",
+            "summary": "Setup Riverpod 2.x code-gen & GoRouter structure",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-7"
+          },
+          {
+            "key": "VTB-8",
+            "summary": "Configure Dio client with Sanctum interceptor & dual-token storage",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-8"
+          },
+          {
+            "key": "VTB-9",
+            "summary": "Unit test network interceptors, token persistence, and router guards",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-9"
+          }
+        ]
+      },
+      {
+        "key": "VTB-10",
+        "summary": "Design System & Token Porting (Colors, Typography, Spacing)",
+        "type": "Story",
+        "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-10",
+        "subtasks": [
+          {
+            "key": "VTB-11",
+            "summary": "Port Next.js Tailwind/CSS tokens into Flutter ThemeData & ColorScheme",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-11"
+          },
+          {
+            "key": "VTB-12",
+            "summary": "Configure Poppins & Inter typography scale and spacing constants",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-12"
+          },
+          {
+            "key": "VTB-13",
+            "summary": "Widget tests for themed core components (Buttons, Inputs, Cards)",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-13"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "VTB-14",
+    "summary": "Patient Auth & Onboarding",
+    "type": "Epic",
+    "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-14",
+    "stories": [
+      {
+        "key": "VTB-15",
+        "summary": "Patient Phone Number Login with Firebase OTP",
+        "type": "Story",
+        "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-15",
+        "subtasks": [
+          {
+            "key": "VTB-16",
+            "summary": "Build phone input & OTP verification UI with +213 validation",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-16"
+          },
+          {
+            "key": "VTB-17",
+            "summary": "Wire Firebase Phone Auth & OTP verification Riverpod Notifier",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-17"
+          },
+          {
+            "key": "VTB-18",
+            "summary": "Integrate /api/v1/auth/verify-otp Sanctum token exchange",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-18"
+          },
+          {
+            "key": "VTB-19",
+            "summary": "Unit and integration tests for phone auth state machine",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-19"
+          }
+        ]
+      },
+      {
+        "key": "VTB-20",
+        "summary": "Patient Profile Registration & CNAS Insurance Info",
+        "type": "Story",
+        "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-20",
+        "subtasks": [
+          {
+            "key": "VTB-21",
+            "summary": "Build patient registration form UI with Wilaya dropdown & CNAS input",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-21"
+          },
+          {
+            "key": "VTB-22",
+            "summary": "Wire registration state notifier and field validation",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-22"
+          },
+          {
+            "key": "VTB-23",
+            "summary": "Connect /api/v1/patients/register API endpoint",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-23"
+          },
+          {
+            "key": "VTB-24",
+            "summary": "Unit tests for registration validation and submission",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-24"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "VTB-25",
+    "summary": "Doctor Discovery & Booking",
+    "type": "Epic",
+    "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-25",
+    "stories": [
+      {
+        "key": "VTB-26",
+        "summary": "Patient Home & Medical Categories Directory",
+        "type": "Story",
+        "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-26",
+        "subtasks": [
+          {
+            "key": "VTB-27",
+            "summary": "Build Patient Home dashboard & category grid UI",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-27"
+          },
+          {
+            "key": "VTB-28",
+            "summary": "Wire Riverpod AsyncNotifier for doctor categories and featured providers",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-28"
+          },
+          {
+            "key": "VTB-29",
+            "summary": "Connect /api/v1/specialties and /api/v1/doctors/featured APIs",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-29"
+          },
+          {
+            "key": "VTB-30",
+            "summary": "Widget and state tests for Patient Home",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-30"
+          }
+        ]
+      },
+      {
+        "key": "VTB-31",
+        "summary": "Doctor Directory Search & Filtering",
+        "type": "Story",
+        "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-31",
+        "subtasks": [
+          {
+            "key": "VTB-32",
+            "summary": "Build doctor listing and filter modal UI (Wilaya, Specialty, Rating)",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-32"
+          },
+          {
+            "key": "VTB-33",
+            "summary": "Wire search query & filter state provider",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-33"
+          },
+          {
+            "key": "VTB-34",
+            "summary": "Connect /api/v1/doctors search API with pagination",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-34"
+          },
+          {
+            "key": "VTB-35",
+            "summary": "Unit tests for filter state and search query debounce",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-35"
+          }
+        ]
+      },
+      {
+        "key": "VTB-36",
+        "summary": "Doctor Profile & Specialty Details",
+        "type": "Story",
+        "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-36",
+        "subtasks": [
+          {
+            "key": "VTB-37",
+            "summary": "Build Doctor profile view, credentials, clinic gallery UI",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-37"
+          },
+          {
+            "key": "VTB-38",
+            "summary": "Wire doctor detail Riverpod provider",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-38"
+          },
+          {
+            "key": "VTB-39",
+            "summary": "Connect /api/v1/doctors/{id} API endpoint",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-39"
+          },
+          {
+            "key": "VTB-40",
+            "summary": "Widget tests for doctor profile details",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-40"
+          }
+        ]
+      },
+      {
+        "key": "VTB-41",
+        "summary": "Real-Time Slot Picker & Booking Request",
+        "type": "Story",
+        "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-41",
+        "subtasks": [
+          {
+            "key": "VTB-42",
+            "summary": "Build real-time calendar and time-slot selector UI",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-42"
+          },
+          {
+            "key": "VTB-43",
+            "summary": "Wire slot selection & appointment reservation state notifier",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-43"
+          },
+          {
+            "key": "VTB-44",
+            "summary": "Integrate /api/v1/doctors/{id}/available-slots and /api/v1/appointments API",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-44"
+          },
+          {
+            "key": "VTB-45",
+            "summary": "End-to-end booking flow tests",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-45"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "VTB-46",
+    "summary": "Appointment Management",
+    "type": "Epic",
+    "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-46",
+    "stories": [
+      {
+        "key": "VTB-47",
+        "summary": "Patient Appointments Dashboard (Upcoming & Past)",
+        "type": "Story",
+        "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-47",
+        "subtasks": [
+          {
+            "key": "VTB-48",
+            "summary": "Build tabbed My Bookings list UI (Upcoming / Completed / Cancelled)",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-48"
+          },
+          {
+            "key": "VTB-49",
+            "summary": "Wire appointment list Riverpod AsyncNotifier with pull-to-refresh",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-49"
+          },
+          {
+            "key": "VTB-50",
+            "summary": "Connect /api/v1/patient/appointments API",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-50"
+          },
+          {
+            "key": "VTB-51",
+            "summary": "Widget tests for booking list states (empty, loaded, error)",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-51"
+          }
+        ]
+      },
+      {
+        "key": "VTB-52",
+        "summary": "Appointment Details & Cancellation",
+        "type": "Story",
+        "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-52",
+        "subtasks": [
+          {
+            "key": "VTB-53",
+            "summary": "Build appointment detail view with cancellation confirmation dialog",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-53"
+          },
+          {
+            "key": "VTB-54",
+            "summary": "Wire cancellation action notifier with status update",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-54"
+          },
+          {
+            "key": "VTB-55",
+            "summary": "Connect /api/v1/appointments/{id}/cancel API endpoint",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-55"
+          },
+          {
+            "key": "VTB-56",
+            "summary": "Integration tests for appointment cancellation flow",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-56"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "VTB-57",
+    "summary": "Post-MVP Backlog",
+    "type": "Epic",
+    "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-57",
+    "stories": [
+      {
+        "key": "VTB-58",
+        "summary": "Doctor & Provider Mobile Portal",
+        "type": "Story",
+        "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-58",
+        "subtasks": [
+          {
+            "key": "VTB-59",
+            "summary": "Build Provider home and navigation shell",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-59"
+          },
+          {
+            "key": "VTB-60",
+            "summary": "Implement Provider slot management UI",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-60"
+          },
+          {
+            "key": "VTB-61",
+            "summary": "Connect Provider appointments and schedule APIs",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-61"
+          }
+        ]
+      },
+      {
+        "key": "VTB-62",
+        "summary": "Real-Time Patient-Doctor Chat & Teleconsultation",
+        "type": "Story",
+        "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-62",
+        "subtasks": [
+          {
+            "key": "VTB-63",
+            "summary": "Build Chat interface and message bubbles UI",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-63"
+          },
+          {
+            "key": "VTB-64",
+            "summary": "Integrate WebSocket / Pusher channel for real-time messages",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-64"
+          },
+          {
+            "key": "VTB-65",
+            "summary": "Setup Video consultation interface",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-65"
+          }
+        ]
+      },
+      {
+        "key": "VTB-66",
+        "summary": "In-App Digital Payments & Wallet Top-up",
+        "type": "Story",
+        "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-66",
+        "subtasks": [
+          {
+            "key": "VTB-67",
+            "summary": "Build Wallet and transaction history UI",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-67"
+          },
+          {
+            "key": "VTB-68",
+            "summary": "Integrate payment gateway SDK/webview",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-68"
+          },
+          {
+            "key": "VTB-69",
+            "summary": "Connect wallet transaction APIs",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-69"
+          }
+        ]
+      },
+      {
+        "key": "VTB-70",
+        "summary": "Push Notifications & Reminders",
+        "type": "Story",
+        "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-70",
+        "subtasks": [
+          {
+            "key": "VTB-71",
+            "summary": "Setup Firebase Cloud Messaging & device token sync",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-71"
+          },
+          {
+            "key": "VTB-72",
+            "summary": "Build Notification Center UI",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-72"
+          },
+          {
+            "key": "VTB-73",
+            "summary": "Configure deep-linking from push payloads",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-73"
+          }
+        ]
+      },
+      {
+        "key": "VTB-74",
+        "summary": "Biometric Authentication & Offline Sync",
+        "type": "Story",
+        "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-74",
+        "subtasks": [
+          {
+            "key": "VTB-75",
+            "summary": "Implement local_auth biometric lock",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-75"
+          },
+          {
+            "key": "VTB-76",
+            "summary": "Setup local cache with sync on reconnect",
+            "type": "Subtask",
+            "url": "https://abdelkouddoushamel.atlassian.net/browse/VTB-76"
+          }
+        ]
+      }
+    ]
+  }
+]

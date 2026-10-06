@@ -12,6 +12,7 @@ node_modules/
 .env.local
 .env.production
 .env.development
+.env.jira
 !.env.example
 .env.sentry-build-plugin
 
