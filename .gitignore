@@ -28,10 +28,38 @@ dist/
 
 # OS & IDE
 .DS_Store
+._*
 Thumbs.db
 *.pem
+*.key
+*.keystore
+*.jks
 .vscode/
 .idea/
+*.iml
+*.ipr
+*.iws
+
+# AI assistants & local tooling
+.gemini
+.gemini/
+.cursor/
+.cursorrules
+.claude/
+.windsurf/
+.copilot/
+.cline/
+.roo/
+.trae/
+
+# Flutter / Dart fallbacks
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+custom_lint.log
+local.properties
 
 # debug & logs
 npm-debug.log*
