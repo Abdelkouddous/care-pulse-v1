@@ -35,6 +35,13 @@ export const adminService = {
     return res.data.data.success;
   },
 
+  async triggerWhatsAppPing(id: string): Promise<boolean> {
+    const res = await apiClient.post<ApiEnvelope<{ success: boolean }>>(
+      `/admin/appointments/${id}/whatsapp-ping`
+    );
+    return res.data.data.success;
+  },
+
   async getPatients(perPage = 15): Promise<{ patients: PatientUser[]; meta?: any }> {
     const res = await apiClient.get<ApiEnvelope<PatientUser[]>>("/admin/patients", {
       params: { per_page: perPage },

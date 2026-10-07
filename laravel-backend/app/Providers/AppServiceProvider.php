@@ -33,6 +33,10 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\Contracts\IAdminRepository::class,
             \App\Repositories\Eloquent\EloquentAdminRepository::class
         );
+        $this->app->bind(
+            \App\Services\Contracts\IWhatsAppGateway::class,
+            \App\Services\WhatsApp\LogWhatsAppGateway::class
+        );
     }
 
     /**

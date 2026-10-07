@@ -22,6 +22,13 @@ export function useAdminDashboard(filters: AdminAppointmentFilters = {}) {
     },
   });
 
+  const triggerWhatsAppPingMutation = useMutation({
+    mutationFn: (id: string) => adminService.triggerWhatsAppPing(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin", "appointments"] });
+    },
+  });
+
   const doctorsQuery = useQuery({
     queryKey: ["admin", "doctors"],
     queryFn: () => adminService.getDoctors(),
@@ -51,6 +58,7 @@ export function useAdminDashboard(filters: AdminAppointmentFilters = {}) {
     patients: patientsQuery.data?.patients ?? [],
     isPatientsLoading: patientsQuery.isLoading,
     updateStatus: updateStatusMutation,
+    triggerWhatsAppPing: triggerWhatsAppPingMutation,
     createDoctor: createDoctorMutation,
     refetch: () => {
       statsQuery.refetch();

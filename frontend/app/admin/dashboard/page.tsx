@@ -22,11 +22,13 @@ import {
   User,
   FileText,
   ShieldAlert,
+  MessageSquare,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { StatCard } from "@/components/ui/StatCard";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { WhatsAppBadge } from "@/components/ui/WhatsAppBadge";
 import { TableSkeleton } from "@/components/ui/SkeletonLoader";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Button } from "@/components/ui/button";
@@ -54,6 +56,7 @@ export default function AdminDashboardPage() {
     patients,
     isPatientsLoading,
     updateStatus,
+    triggerWhatsAppPing,
     refetch,
   } = useAdminDashboard({
     status: statusFilter || undefined,
@@ -70,6 +73,22 @@ export default function AdminDashboardPage() {
       toast({
         title: "Update Failed",
         description: "Could not update status on backend API.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleSendWhatsAppPing = async (id: string, patientName: string, phone?: string) => {
+    try {
+      await triggerWhatsAppPing.mutateAsync(id);
+      toast({
+        title: "WhatsApp Dispatch Queued",
+        description: `Interactive confirmation request dispatched to ${patientName} (${phone || "patient phone"}).`,
+      });
+    } catch {
+      toast({
+        title: "Dispatch Failed",
+        description: "Could not trigger WhatsApp message via API.",
         variant: "destructive",
       });
     }
@@ -376,10 +395,27 @@ export default function AdminDashboardPage() {
                         </td>
 
                         <td className="px-6 py-4">
-                          <StatusBadge status={appt.status} />
+                          <div className="flex flex-col gap-1.5 items-start">
+                            <StatusBadge status={appt.status} />
+                            <WhatsAppBadge
+                              status={appt.whatsapp_status}
+                              confirmedAt={appt.whatsapp_confirmed_at}
+                            />
+                          </div>
                         </td>
 
-                        <td className="px-6 py-4 text-right space-x-2">
+                        <td className="px-6 py-4 text-right space-x-1.5 whitespace-nowrap">
+                          <Button
+                            size="sm"
+                            roleVariant="outline"
+                            onClick={() => handleSendWhatsAppPing(appt.id, patientName, appt.patient?.phone)}
+                            disabled={triggerWhatsAppPing.isPending}
+                            className="text-xs rounded-xl gap-1 border-emerald-500/40 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-600/50 dark:text-emerald-400 dark:hover:bg-emerald-950/40"
+                            title="Dispatch interactive WhatsApp confirmation prompt"
+                          >
+                            <MessageSquare className="size-3" />
+                            <span>Ping WA</span>
+                          </Button>
                           {appt.status === "pending" && (
                             <Button
                               size="sm"

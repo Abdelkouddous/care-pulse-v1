@@ -21,6 +21,10 @@ class Appointment extends Model
         'clinic_id',
         'scheduled_at',
         'status',
+        'whatsapp_status',
+        'whatsapp_message_id',
+        'whatsapp_last_sent_at',
+        'whatsapp_confirmed_at',
         'reason',
         'notes',
         'cancellation_reason',
@@ -34,6 +38,8 @@ class Appointment extends Model
         return [
             'scheduled_at' => 'datetime',
             'reminder_sent_at' => 'datetime',
+            'whatsapp_last_sent_at' => 'datetime',
+            'whatsapp_confirmed_at' => 'datetime',
             'consultation_fee_cents' => 'integer',
         ];
     }

@@ -36,7 +36,13 @@ return [
     ],
 
     'firebase' => [
-        'project_id' => env('FIREBASE_PROJECT_ID', 'gen-lang-client-0222855501'),
+        'project_id' => env('FIREBASE_PROJECT_ID'),
+    ],
+
+    'whatsapp' => [
+        'driver' => env('WHATSAPP_DRIVER', 'log'),
+        'from_number' => env('WHATSAPP_FROM_NUMBER', '+14155238886'),
+        'webhook_secret' => env('WHATSAPP_WEBHOOK_SECRET', 'carepulse_secret_key'),
     ],
 
 ];

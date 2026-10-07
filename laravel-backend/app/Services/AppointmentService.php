@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\SendWhatsAppAppointmentReminderJob;
 use App\Models\Appointment;
 use App\Repositories\Contracts\IAppointmentRepository;
 use App\Repositories\Contracts\IDoctorRepository;
@@ -40,7 +41,7 @@ class AppointmentService
         }
 
         try {
-            return DB::transaction(function () use ($dto, $doctorId, $scheduledAt) {
+            $appointment = DB::transaction(function () use ($dto, $doctorId, $scheduledAt) {
                 // Verify slot is still free
                 if ($this->appointmentRepo->isSlotBooked($doctorId, $scheduledAt)) {
                     throw ValidationException::withMessages([
@@ -59,12 +60,32 @@ class AppointmentService
                 $dto['consultation_fee_cents'] = $doctor->consultation_fee_cents ?? 0;
                 $dto['clinic_id'] = $dto['clinic_id'] ?? $doctor->clinic_id ?? $this->tenantContext->getTenantId();
                 $dto['status'] = 'pending';
+                $dto['whatsapp_status'] = 'pending';
 
                 return $this->appointmentRepo->create($dto);
             });
+
+            // Asynchronously dispatch interactive WhatsApp confirmation reminder
+            SendWhatsAppAppointmentReminderJob::dispatch($appointment->id);
+
+            return $appointment;
         } finally {
             $lock->release();
         }
+    }
+
+    /**
+     * Manually trigger a WhatsApp reminder ping from the receptionist/admin control center.
+     */
+    public function dispatchWhatsAppReminder(string $appointmentId): bool
+    {
+        $appointment = $this->appointmentRepo->findById($appointmentId);
+        if (! $appointment) {
+            return false;
+        }
+
+        SendWhatsAppAppointmentReminderJob::dispatch($appointment->id);
+        return true;
     }
 
     public function cancelAppointment(string $appointmentId, string $reason, string $cancelledBy): bool

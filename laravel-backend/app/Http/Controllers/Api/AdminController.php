@@ -9,6 +9,7 @@ use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\DoctorResource;
 use App\Http\Resources\UserResource;
 use App\Services\AdminService;
+use App\Services\AppointmentService;
 use App\Services\DoctorService;
 use App\Services\PatientService;
 use Illuminate\Http\JsonResponse;
@@ -20,7 +21,8 @@ class AdminController extends Controller
     public function __construct(
         protected AdminService $adminService,
         protected DoctorService $doctorService,
-        protected PatientService $patientService
+        protected PatientService $patientService,
+        protected AppointmentService $appointmentService
     ) {}
 
     public function dashboard(): JsonResponse
@@ -132,6 +134,35 @@ class AdminController extends Controller
             ],
             'meta' => [
                 'message' => 'Doctor deactivated successfully.',
+            ],
+        ]);
+    }
+
+    /**
+     * Receptionist manual WhatsApp interactive ping dispatch.
+     */
+    public function triggerWhatsAppPing(string $id): JsonResponse
+    {
+        $dispatched = $this->appointmentService->dispatchWhatsAppReminder($id);
+
+        if (! $dispatched) {
+            return response()->json([
+                'errors' => [
+                    [
+                        'status' => '404',
+                        'title' => 'Not Found',
+                        'detail' => 'Appointment not found.',
+                    ],
+                ],
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        return response()->json([
+            'data' => [
+                'success' => true,
+            ],
+            'meta' => [
+                'message' => 'WhatsApp interactive confirmation prompt dispatched to patient.',
             ],
         ]);
     }

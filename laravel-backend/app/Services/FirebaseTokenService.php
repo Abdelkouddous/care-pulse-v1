@@ -13,7 +13,7 @@ class FirebaseTokenService
 
     public function __construct()
     {
-        $this->projectId = config('services.firebase.project_id', 'gen-lang-client-0222855501');
+        $this->projectId = (string) (config('services.firebase.project_id') ?? env('FIREBASE_PROJECT_ID', ''));
     }
 
     /**
@@ -24,6 +24,10 @@ class FirebaseTokenService
      */
     public function verifyIdToken(string $jwt): array
     {
+        if (empty($this->projectId)) {
+            throw new Exception('Firebase project ID is not configured.');
+        }
+
         $parts = explode('.', $jwt);
         if (count($parts) !== 3) {
             throw new Exception('Invalid JWT segment count.');

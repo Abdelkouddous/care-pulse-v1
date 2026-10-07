@@ -70,6 +70,8 @@ export interface PatientUser {
 
 export type AppointmentStatus = 'pending' | 'scheduled' | 'cancelled' | 'completed' | 'no_show';
 
+export type WhatsAppStatus = 'not_sent' | 'pending' | 'sent' | 'delivered' | 'confirmed' | 'cancelled' | 'failed';
+
 export interface Appointment {
   id: string;
   patient_id: string;
@@ -77,6 +79,10 @@ export interface Appointment {
   clinic_id: string;
   scheduled_at: string;
   status: AppointmentStatus;
+  whatsapp_status?: WhatsAppStatus;
+  whatsapp_message_id?: string;
+  whatsapp_last_sent_at?: string;
+  whatsapp_confirmed_at?: string;
   reason: string;
   notes?: string;
   cancellation_reason?: string;

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\PatientController;
 use App\Http\Controllers\Api\SpecialtyController;
+use App\Http\Controllers\Api\WhatsAppWebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -21,6 +22,8 @@ Route::prefix('v1')->group(function () {
         Route::post('/check-phone', [AuthController::class, 'checkPhone']);
         Route::post('/register-wizard', [AuthController::class, 'registerWizard']);
     });
+
+    Route::post('/webhooks/whatsapp', [WhatsAppWebhookController::class, 'handle']);
 
     Route::get('/specialties', [SpecialtyController::class, 'index']);
     Route::get('/doctors', [DoctorController::class, 'index']);
@@ -57,6 +60,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/dashboard', [AdminController::class, 'dashboard']);
             Route::get('/appointments', [AdminController::class, 'appointments']);
             Route::put('/appointments/{id}/status', [AdminController::class, 'updateAppointmentStatus']);
+            Route::post('/appointments/{id}/whatsapp-ping', [AdminController::class, 'triggerWhatsAppPing']);
             Route::get('/patients', [AdminController::class, 'patients']);
             Route::get('/doctors', [AdminController::class, 'doctors']);
             Route::post('/doctors', [AdminController::class, 'createDoctor']);
@@ -65,3 +69,4 @@ Route::prefix('v1')->group(function () {
         });
     });
 });
+
