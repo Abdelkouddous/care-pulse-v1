@@ -341,7 +341,7 @@ function SignInContent() {
             </div>
             <div>
               <span className="text-xl font-black tracking-tight text-white">
-                Vital<span className="text-emerald-400">Book</span>
+                Vital<span className="text-teal-400">Book</span>
               </span>
               <span className="text-[10px] block font-mono text-emerald-300/80 -mt-1 tracking-wider uppercase">
                 Santé Algérie

@@ -110,7 +110,7 @@ export function MainNav({ items, userId }: MainNavProps) {
               priority
             />
             <span className="font-sans text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">
-              Vital<span className="font-light text-emerald-600 dark:text-emerald-400">Book</span>
+              Vital<span className="font-light text-teal-600 dark:text-teal-400">Book</span>
             </span>
           </Link>
 

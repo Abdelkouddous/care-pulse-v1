@@ -116,7 +116,7 @@ export default function DemoLoginPage() {
             <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
               <Image src="/favicon.svg" alt="VitalBook Logo" width={34} height={34} priority />
               <span className="font-extrabold text-lg tracking-tight">
-                Vital<span className="font-light text-emerald-600 dark:text-emerald-400">Book</span>
+                Vital<span className="font-light text-teal-600 dark:text-teal-400">Book</span>
               </span>
             </Link>
             <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
