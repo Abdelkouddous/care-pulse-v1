@@ -42,7 +42,7 @@ return [
     'whatsapp' => [
         'driver' => env('WHATSAPP_DRIVER', 'log'),
         'from_number' => env('WHATSAPP_FROM_NUMBER', '+14155238886'),
-        'webhook_secret' => env('WHATSAPP_WEBHOOK_SECRET', 'vitalbook_secret_key'),
+        'webhook_secret' => env('WHATSAPP_WEBHOOK_SECRET'),
     ],
 
 ];
