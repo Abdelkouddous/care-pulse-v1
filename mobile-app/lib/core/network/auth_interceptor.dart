@@ -17,7 +17,7 @@ class AuthInterceptor extends Interceptor {
   ) async {
     options.headers['Accept'] = 'application/json';
 
-    final token = await tokenStorage.getCarePulseToken();
+    final token = await tokenStorage.getVitalBookToken();
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
     }

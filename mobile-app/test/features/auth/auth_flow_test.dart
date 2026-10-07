@@ -1,31 +1,31 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:carepulse_mobile/core/storage/token_storage.dart';
-import 'package:carepulse_mobile/features/auth/data/auth_repository.dart';
-import 'package:carepulse_mobile/features/auth/domain/auth_models.dart';
-import 'package:carepulse_mobile/features/auth/presentation/auth_controller.dart';
+import 'package:vitalbook_mobile/core/storage/token_storage.dart';
+import 'package:vitalbook_mobile/features/auth/data/auth_repository.dart';
+import 'package:vitalbook_mobile/features/auth/domain/auth_models.dart';
+import 'package:vitalbook_mobile/features/auth/presentation/auth_controller.dart';
 
 // In-memory mock storage
 class MockTokenStorage extends Fake implements TokenStorage {
-  String? savedCarePulseToken;
+  String? savedVitalBookToken;
   String? savedRole;
 
   @override
-  Future<bool> hasValidToken() async => savedCarePulseToken != null;
+  Future<bool> hasValidToken() async => savedVitalBookToken != null;
 
   @override
   Future<void> saveTokens({
-    required String carePulseToken,
+    required String vitalBookToken,
     required String userToken,
     String? role,
   }) async {
-    savedCarePulseToken = carePulseToken;
+    savedVitalBookToken = vitalBookToken;
     savedRole = role;
   }
 
   @override
   Future<void> clearTokens() async {
-    savedCarePulseToken = null;
+    savedVitalBookToken = null;
     savedRole = null;
   }
 }
@@ -127,7 +127,7 @@ void main() {
       final state = container.read(authControllerProvider);
       expect(state.status, equals(AuthStatus.authenticated));
       expect(state.user?.name, equals('Sarah Benali'));
-      expect(mockStorage.savedCarePulseToken, equals('mock_sanctum_token_sarah'));
+      expect(mockStorage.savedVitalBookToken, equals('mock_sanctum_token_sarah'));
     });
 
     test('routes new patient to registration wizard with onboarding token', () async {

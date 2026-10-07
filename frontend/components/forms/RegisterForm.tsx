@@ -186,14 +186,14 @@ export default function RegisterForm({ user }: { user?: any }) {
         if (result.token) {
           TokenManager.setSession(result.token, "patient", result.user);
           localStorage.setItem("vitalbook_token", result.token);
-          localStorage.setItem("carepulse_token", result.token);
+          localStorage.setItem("vitalbook_token", result.token);
           localStorage.setItem("vitalbook_role", "patient");
-          localStorage.setItem("carepulse_role", "patient");
+          localStorage.setItem("vitalbook_role", "patient");
         }
         if (result.user || result.$id) {
           const userStr = JSON.stringify(result.user || { name: payload.name, email: payload.email, role: "patient" });
           localStorage.setItem("vitalbook_user", userStr);
-          localStorage.setItem("carepulse_user", userStr);
+          localStorage.setItem("vitalbook_user", userStr);
         }
 
         toast({

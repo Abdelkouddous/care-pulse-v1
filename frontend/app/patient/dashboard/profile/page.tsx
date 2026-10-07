@@ -31,7 +31,7 @@ export default function PatientProfilePage() {
 
   const patient = {
     name: user?.name || "Sarah Benali",
-    email: user?.email || "patient@carepulse.com",
+    email: user?.email || "patient@vitalbook.com",
     phone: user?.phone || "+213 555 99 88 77",
     nationalId: "DZ-CNAS-99887711",
     dateOfBirth: "April 12, 1995",

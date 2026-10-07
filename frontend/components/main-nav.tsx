@@ -36,11 +36,11 @@ export function MainNav({ items, userId }: MainNavProps) {
     if (typeof window !== "undefined") {
       const token =
         localStorage.getItem("vitalbook_token") ||
-        localStorage.getItem("carepulse_token") ||
+        localStorage.getItem("vitalbook_token") ||
         localStorage.getItem("user_token");
       const role =
         localStorage.getItem("vitalbook_role") ||
-        localStorage.getItem("carepulse_role") ||
+        localStorage.getItem("vitalbook_role") ||
         "patient";
       setIsAuthenticated(!!token);
       setUserRole(role);

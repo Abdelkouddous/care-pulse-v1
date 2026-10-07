@@ -18,15 +18,15 @@ beforeEach(function () {
     /** @var \Tests\TestCase $this */
     $this->clinic = Clinic::create([
         'id' => (string) Str::uuid(),
-        'name' => 'CarePulse Algiers',
-        'email' => 'algiers@carepulse.com',
+        'name' => 'VitalBook Algiers',
+        'email' => 'algiers@vitalbook.com',
     ]);
 
     $this->admin = Admin::create([
         'id' => (string) Str::uuid(),
         'clinic_id' => $this->clinic->id,
         'name' => 'Receptionist Admin',
-        'email' => 'reception@carepulse.com',
+        'email' => 'reception@vitalbook.com',
         'password' => bcrypt('password'),
         'role' => 'clinic_admin',
     ]);
@@ -51,7 +51,7 @@ beforeEach(function () {
         'specialty_id' => $this->specialty->id,
         'first_name' => 'Alex',
         'last_name' => 'Ramirez',
-        'email' => 'dr.ramirez@carepulse.com',
+        'email' => 'dr.ramirez@vitalbook.com',
         'consultation_fee_cents' => 450000,
         'license_number' => 'DZ-MED-10492',
     ]);

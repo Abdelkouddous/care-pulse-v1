@@ -1,19 +1,19 @@
 export class TokenManager {
   private static readonly PRIMARY_TOKEN_KEY = "vitalbook_token";
-  private static readonly FALLBACK_TOKEN_KEY = "carepulse_token";
+  private static readonly FALLBACK_TOKEN_KEY = "vitalbook_token";
   private static readonly LEGACY_TOKEN_KEY = "user_token";
 
   private static readonly PRIMARY_ROLE_KEY = "vitalbook_role";
-  private static readonly FALLBACK_ROLE_KEY = "carepulse_role";
+  private static readonly FALLBACK_ROLE_KEY = "vitalbook_role";
 
   private static readonly PRIMARY_USER_KEY = "vitalbook_user";
-  private static readonly FALLBACK_USER_KEY = "carepulse_user";
+  private static readonly FALLBACK_USER_KEY = "vitalbook_user";
 
   private static readonly PRIMARY_DEMO_KEY = "vitalbook_demo";
-  private static readonly FALLBACK_DEMO_KEY = "carepulse_demo";
+  private static readonly FALLBACK_DEMO_KEY = "vitalbook_demo";
 
   private static readonly PRIMARY_CLINIC_KEY = "vitalbook_clinic_id";
-  private static readonly FALLBACK_CLINIC_KEY = "carepulse_clinic_id";
+  private static readonly FALLBACK_CLINIC_KEY = "vitalbook_clinic_id";
 
   private static readonly EXPIRY_KEY = "token_expiry";
   private static readonly EXPIRY_DURATION = 6 * 60 * 60 * 1000; // 6 hours in milliseconds

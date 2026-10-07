@@ -18,7 +18,7 @@ export const appointmentService = {
       if (
         typeof window !== "undefined" &&
         (localStorage.getItem("vitalbook_demo") === "true" ||
-          localStorage.getItem("carepulse_demo") === "true" ||
+          localStorage.getItem("vitalbook_demo") === "true" ||
           localStorage.getItem("vitalbook_token")?.startsWith("patient_otp_token_") ||
           localStorage.getItem("vitalbook_token")?.startsWith("mock_bearer_token_"))
       ) {

@@ -8,7 +8,7 @@ export const patientService = {
       const res = await apiClient.get<ApiEnvelope<PatientUser>>("/patients/me");
       return res.data.data;
     } catch (err) {
-      if (typeof window !== "undefined" && (localStorage.getItem("vitalbook_demo") === "true" || localStorage.getItem("carepulse_demo") === "true")) {
+      if (typeof window !== "undefined" && (localStorage.getItem("vitalbook_demo") === "true" || localStorage.getItem("vitalbook_demo") === "true")) {
         return MOCK_PATIENT;
       }
       throw err;
@@ -28,7 +28,7 @@ export const patientService = {
       }
       return [];
     } catch (err) {
-      if (typeof window !== "undefined" && (localStorage.getItem("vitalbook_demo") === "true" || localStorage.getItem("carepulse_demo") === "true")) {
+      if (typeof window !== "undefined" && (localStorage.getItem("vitalbook_demo") === "true" || localStorage.getItem("vitalbook_demo") === "true")) {
         return MOCK_APPOINTMENTS_LIST;
       }
       return [];

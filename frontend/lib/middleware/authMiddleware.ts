@@ -7,15 +7,15 @@ export function handleAuthMiddleware(request: NextRequest) {
   // Retrieve auth credentials from cookies for Edge SSR verification (Dual-Read)
   const token =
     request.cookies.get("vitalbook_token")?.value ||
-    request.cookies.get("carepulse_token")?.value ||
+    request.cookies.get("vitalbook_token")?.value ||
     request.cookies.get("user_token")?.value;
   const role =
     request.cookies.get("vitalbook_role")?.value ||
-    request.cookies.get("carepulse_role")?.value ||
+    request.cookies.get("vitalbook_role")?.value ||
     request.cookies.get("user_role")?.value;
   const demo =
     request.cookies.get("vitalbook_demo")?.value ||
-    request.cookies.get("carepulse_demo")?.value;
+    request.cookies.get("vitalbook_demo")?.value;
   const expiry = request.cookies.get("token_expiry")?.value;
 
   const isExpired = !!expiry && !isNaN(parseInt(expiry, 10)) && Date.now() > parseInt(expiry, 10);
@@ -23,12 +23,12 @@ export function handleAuthMiddleware(request: NextRequest) {
   // Helper to purge all auth cookies on response
   const purgeAuthCookies = (res: NextResponse) => {
     res.cookies.delete("vitalbook_token");
-    res.cookies.delete("carepulse_token");
+    res.cookies.delete("vitalbook_token");
     res.cookies.delete("user_token");
     res.cookies.delete("vitalbook_role");
-    res.cookies.delete("carepulse_role");
+    res.cookies.delete("vitalbook_role");
     res.cookies.delete("vitalbook_demo");
-    res.cookies.delete("carepulse_demo");
+    res.cookies.delete("vitalbook_demo");
     res.cookies.delete("token_expiry");
   };
 

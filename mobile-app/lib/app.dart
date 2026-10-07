@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 
-class CarePulseApp extends ConsumerWidget {
-  const CarePulseApp({super.key});
+class VitalBookApp extends ConsumerWidget {
+  const VitalBookApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

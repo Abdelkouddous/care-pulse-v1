@@ -38,20 +38,20 @@ export default function DoctorLoginPage() {
 
         if (typeof window !== "undefined") {
           localStorage.setItem("vitalbook_token", res.token);
-          localStorage.setItem("carepulse_token", res.token);
+          localStorage.setItem("vitalbook_token", res.token);
           localStorage.setItem("vitalbook_role", "doctor");
-          localStorage.setItem("carepulse_role", "doctor");
+          localStorage.setItem("vitalbook_role", "doctor");
           localStorage.removeItem("vitalbook_demo");
-          localStorage.removeItem("carepulse_demo");
+          localStorage.removeItem("vitalbook_demo");
           const userStr = JSON.stringify(res.user);
           localStorage.setItem("vitalbook_user", userStr);
-          localStorage.setItem("carepulse_user", userStr);
+          localStorage.setItem("vitalbook_user", userStr);
           document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
-          document.cookie = `carepulse_token=${res.token}; path=/; max-age=86400; samesite=lax`;
+          document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
           document.cookie = `vitalbook_role=doctor; path=/; max-age=86400; samesite=lax`;
-          document.cookie = `carepulse_role=doctor; path=/; max-age=86400; samesite=lax`;
+          document.cookie = `vitalbook_role=doctor; path=/; max-age=86400; samesite=lax`;
           document.cookie = `vitalbook_demo=; path=/; max-age=0; samesite=lax`;
-          document.cookie = `carepulse_demo=; path=/; max-age=0; samesite=lax`;
+          document.cookie = `vitalbook_demo=; path=/; max-age=0; samesite=lax`;
         }
 
         toast({
@@ -162,7 +162,7 @@ export default function DoctorLoginPage() {
                 <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 <input
                   type="email"
-                  placeholder="dr.mansouri@carepulse.com"
+                  placeholder="dr.mansouri@vitalbook.com"
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
@@ -215,12 +215,12 @@ export default function DoctorLoginPage() {
               <button
                 type="button"
                 onClick={() => {
-                  setEmail("dr.benali@carepulse.com");
+                  setEmail("dr.benali@vitalbook.com");
                   setPassword("password123");
                 }}
                 className="font-mono text-sky-600 dark:text-sky-400 font-bold hover:underline"
               >
-                dr.benali@carepulse.com (fill)
+                dr.benali@vitalbook.com (fill)
               </button>
             </div>
             <div className="flex items-center justify-between pt-1 border-t border-border/50">
@@ -228,7 +228,7 @@ export default function DoctorLoginPage() {
               <button
                 type="button"
                 onClick={() => {
-                  setEmail("dr.mansouri@carepulse.com");
+                  setEmail("dr.mansouri@vitalbook.com");
                   setPassword("password123");
                 }}
                 className="font-mono text-muted-foreground hover:text-foreground font-bold hover:underline"

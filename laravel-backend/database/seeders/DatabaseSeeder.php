@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
 
         // 3. Create Admin
         Admin::firstOrCreate(
-            ['email' => 'admin@carepulse.com'],
+            ['email' => 'admin@vitalbook.com'],
             [
                 'id' => (string) Str::uuid(),
                 'clinic_id' => $clinic->id,
@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
             [
                 'first_name' => 'Amine',
                 'last_name' => 'Mansouri',
-                'email' => 'dr.mansouri@carepulse.com',
+                'email' => 'dr.mansouri@vitalbook.com',
                 'phone' => '+213 550 11 22 33',
                 'specialty' => 'Cardiology',
                 'fee_cents' => 450000, // 4,500.00 DZD
@@ -77,7 +77,7 @@ class DatabaseSeeder extends Seeder
             [
                 'first_name' => 'Yasmine',
                 'last_name' => 'Benali',
-                'email' => 'dr.lee@carepulse.com',
+                'email' => 'dr.lee@vitalbook.com',
                 'phone' => '+213 550 22 33 44',
                 'specialty' => 'Pediatrics',
                 'fee_cents' => 350000, // 3,500.00 DZD
@@ -87,7 +87,7 @@ class DatabaseSeeder extends Seeder
             [
                 'first_name' => 'Sofiane',
                 'last_name' => 'Brahimi',
-                'email' => 'dr.sharma@carepulse.com',
+                'email' => 'dr.sharma@vitalbook.com',
                 'phone' => '+213 550 33 44 55',
                 'specialty' => 'General Medicine',
                 'fee_cents' => 300000, // 3,000.00 DZD
@@ -97,7 +97,7 @@ class DatabaseSeeder extends Seeder
             [
                 'first_name' => 'Leila',
                 'last_name' => 'Khelifi',
-                'email' => 'dr.cruz@carepulse.com',
+                'email' => 'dr.cruz@vitalbook.com',
                 'phone' => '+213 550 44 55 66',
                 'specialty' => 'Dermatology',
                 'fee_cents' => 400000, // 4,000.00 DZD
@@ -143,7 +143,7 @@ class DatabaseSeeder extends Seeder
 
         // 5. Create Test Patient (Sarah Benali with Algerian Civic Identifiers)
         User::updateOrCreate(
-            ['email' => 'patient@carepulse.com'],
+            ['email' => 'patient@vitalbook.com'],
             [
                 'first_name' => 'Sarah',
                 'last_name' => 'Benali',

@@ -6,7 +6,7 @@ export const MOCK_ADMIN = {
   id: "c2eebc99-9c0b-4ef8-bb6d-6bb9bd380a33",
   admin_id: "admin_pulse_demo_01",
   name: "Dr. Aymen Hamel",
-  email: "admin@carepulse.com",
+  email: "admin@vitalbook.com",
   role: "admin",
   scope: "Multi-Tenant Clinical Center",
 };

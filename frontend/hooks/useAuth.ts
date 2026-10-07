@@ -17,12 +17,12 @@ export function useAuth() {
     TokenManager.setSession(data.token, data.role, data.user);
     if (typeof window !== "undefined") {
       localStorage.setItem("vitalbook_token", data.token);
-      localStorage.setItem("carepulse_token", data.token);
+      localStorage.setItem("vitalbook_token", data.token);
       const userStr = JSON.stringify(data.user);
       localStorage.setItem("vitalbook_user", userStr);
-      localStorage.setItem("carepulse_user", userStr);
+      localStorage.setItem("vitalbook_user", userStr);
       localStorage.setItem("vitalbook_role", data.role);
-      localStorage.setItem("carepulse_role", data.role);
+      localStorage.setItem("vitalbook_role", data.role);
     }
   };
 
@@ -80,7 +80,7 @@ export function useAuth() {
               TokenManager.getUser() ||
               JSON.parse(
                 localStorage.getItem("vitalbook_user") ||
-                localStorage.getItem("carepulse_user") ||
+                localStorage.getItem("vitalbook_user") ||
                 "null"
               )
             );

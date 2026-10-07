@@ -30,7 +30,7 @@
 | **Frontend**        | Next.js 14.2 (App Router), React 18, TypeScript, Tailwind CSS, Lucide Icons                 | Responsive UI, client-side triage, 3-step registration wizard, 4-step booking wizard    |
 | **Backend API**     | Laravel 11, PHP 8.4, Service-Repository Pattern, Laravel Sanctum                            | Token-based auth, slot generation, appointment state machines, integer money guardrails |
 | **Database**        | PostgreSQL 18 via**Supabase** (Session Pooler & Direct Connection)                    | Relational schema, UUIDv4 primary keys, stored generated columns, automated migrations  |
-| **Session & Auth**  | `TokenManager` (dual tokens: `carepulse_token` + `user_token`), Cookies, LocalStorage | Cross-route session lifecycle, SSR route protection, role-based boundaries              |
+| **Session & Auth**  | `TokenManager` (dual tokens: `vitalbook_token` + `user_token`), Cookies, LocalStorage | Cross-route session lifecycle, SSR route protection, role-based boundaries              |
 | **Testing & CI/CD** | Pest PHP (PHP 8.4), TypeScript`tsc --noEmit`, GitHub Actions                              | Automated backend tests, frontend build checks, Dockerized production build             |
 
 ---
@@ -125,7 +125,7 @@ php artisan serve
 ## 📁 Monorepo Structure
 
 ```bash
-care-pulse-v1/
+vitalbook-v1/
 ├── .agents/                 # Unified instructions & rules for AI assistants & Gemini
 │   ├── README.md            # Guidelines index
 │   └── rules/               # Auto-discovered brand, protocol, and stack rules

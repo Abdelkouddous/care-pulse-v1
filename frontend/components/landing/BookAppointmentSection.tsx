@@ -52,7 +52,7 @@ export function BookAppointmentSection({
   const isDemo =
     typeof window !== "undefined" &&
     (localStorage.getItem("vitalbook_demo") === "true" ||
-      localStorage.getItem("carepulse_demo") === "true");
+      localStorage.getItem("vitalbook_demo") === "true");
 
   // Resolve doctors from API or centralized canonical mock fixture strictly in demo mode
   const doctorsList = doctorsData?.doctors && doctorsData.doctors.length > 0

@@ -18,7 +18,7 @@ export const MOCK_PATIENT: PatientUser & {
   first_name: "Sarah",
   last_name: "Benali",
   name: "Sarah Benali",
-  email: "patient@carepulse.com",
+  email: "patient@vitalbook.com",
   phone: "+213 549 88 24 56", // Test OTP verification number
   date_of_birth: "1995-04-12",
   gender: "female",

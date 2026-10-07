@@ -99,18 +99,18 @@ function SignInContent() {
 
         if (typeof window !== "undefined") {
           localStorage.setItem("vitalbook_token", res.token);
-          localStorage.setItem("carepulse_token", res.token);
+          localStorage.setItem("vitalbook_token", res.token);
           localStorage.setItem("vitalbook_role", res.role || "patient");
-          localStorage.setItem("carepulse_role", res.role || "patient");
+          localStorage.setItem("vitalbook_role", res.role || "patient");
           localStorage.removeItem("vitalbook_demo");
-          localStorage.removeItem("carepulse_demo");
+          localStorage.removeItem("vitalbook_demo");
           const userStr = JSON.stringify(res.user);
           localStorage.setItem("vitalbook_user", userStr);
-          localStorage.setItem("carepulse_user", userStr);
+          localStorage.setItem("vitalbook_user", userStr);
           document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
-          document.cookie = `carepulse_token=${res.token}; path=/; max-age=86400; samesite=lax`;
+          document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
           document.cookie = `vitalbook_demo=; path=/; max-age=0; samesite=lax`;
-          document.cookie = `carepulse_demo=; path=/; max-age=0; samesite=lax`;
+          document.cookie = `vitalbook_demo=; path=/; max-age=0; samesite=lax`;
         }
 
         toast({
@@ -280,16 +280,16 @@ function SignInContent() {
         TokenManager.setSession(res.token, "patient", res.user, false);
         if (typeof window !== "undefined") {
           localStorage.setItem("vitalbook_token", res.token);
-          localStorage.setItem("carepulse_token", res.token);
+          localStorage.setItem("vitalbook_token", res.token);
           localStorage.setItem("vitalbook_role", res.role || "patient");
-          localStorage.setItem("carepulse_role", res.role || "patient");
+          localStorage.setItem("vitalbook_role", res.role || "patient");
           localStorage.removeItem("vitalbook_demo");
-          localStorage.removeItem("carepulse_demo");
+          localStorage.removeItem("vitalbook_demo");
           const userStr = JSON.stringify(res.user);
           localStorage.setItem("vitalbook_user", userStr);
-          localStorage.setItem("carepulse_user", userStr);
+          localStorage.setItem("vitalbook_user", userStr);
           document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
-          document.cookie = `carepulse_token=${res.token}; path=/; max-age=86400; samesite=lax`;
+          document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
         }
 
         toast({
@@ -605,12 +605,12 @@ function SignInContent() {
               type="button"
               onClick={() => {
                 setAuthMethod("credentials");
-                setEmail("patient@carepulse.com");
+                setEmail("patient@vitalbook.com");
                 setPassword("password123");
               }}
               className="font-mono text-primary font-bold hover:underline"
             >
-              patient@carepulse.com (fill)
+              patient@vitalbook.com (fill)
             </button>
           </div>
 

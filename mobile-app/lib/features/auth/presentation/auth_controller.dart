@@ -120,7 +120,7 @@ class AuthController extends _$AuthController {
 
       if (result.registered && result.token != null) {
         await storage.saveTokens(
-          carePulseToken: result.token!,
+          vitalBookToken: result.token!,
           userToken: result.token!,
           role: result.role ?? 'patient',
         );
@@ -166,7 +166,7 @@ class AuthController extends _$AuthController {
 
       if (result.token != null) {
         await storage.saveTokens(
-          carePulseToken: result.token!,
+          vitalBookToken: result.token!,
           userToken: result.token!,
           role: 'patient',
         );

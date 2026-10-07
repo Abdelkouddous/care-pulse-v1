@@ -1,4 +1,4 @@
-package com.vitalsoft.carepulse_mobile
+package com.vitalsoft.vitalbook_mobile
 
 import io.flutter.embedding.android.FlutterActivity
 

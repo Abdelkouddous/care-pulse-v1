@@ -1,9 +1,9 @@
-# Architecture & Stack Guidelines: CarePulse V1
+# Architecture & Stack Guidelines: VitalBook V1
 
 ## 1. Monorepo Architecture
 - **Frontend:** Next.js 14.2 (App Router), TypeScript, Tailwind CSS, TanStack Query, Zustand.
 - **Backend:** Laravel 11 + Laravel Sanctum, PostgreSQL 18, Repository-Service pattern.
-- **Auth & Session Management:** `TokenManager` managing dual token storage (`carepulse_token` / `user_token`) with synchronized cookies and local storage.
+- **Auth & Session Management:** `TokenManager` managing dual token storage (`vitalbook_token` / `user_token`) with synchronized cookies and local storage.
 
 ## 2. Core Guardrails & Invariants
 - **Integer Money Guardrail:** Store all currency amounts in minor units (cents / centimes). E.g. $4,500$ DZD = `450,000` cents.

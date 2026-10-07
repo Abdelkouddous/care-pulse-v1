@@ -12,7 +12,7 @@ export const MOCK_DOCTOR: Doctor = {
   first_name: "Amine",
   last_name: "Mansouri",
   name: "Dr. Amine Mansouri",
-  email: "dr.mansouri@carepulse.com",
+  email: "dr.mansouri@vitalbook.com",
   phone: "+213 550 11 22 33",
   avatar_url: "/assets/images/dr-remirez.png",
   bio: "Senior Consulting Cardiologist specializing in preventive cardiovascular diagnostics, non-invasive imaging, and hypertension management.",

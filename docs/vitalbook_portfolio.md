@@ -1,4 +1,4 @@
-# CarePulse — Portfolio Screenshots
+# VitalBook — Portfolio Screenshots
 
 > Healthcare Management System · Next.js 14 · Mock-Data Architecture · Algerian Locale
 
@@ -44,7 +44,7 @@
 
 ## 🎥 Full Session Recording
 
-![Browser Session Recording](/Users/morsistoredz/.gemini/antigravity-ide/brain/2fbe5f28-0505-45e4-917b-7b885ffd442c/carepulse_portfolio_screenshots_1784065588098.webp)
+![Browser Session Recording](/Users/morsistoredz/.gemini/antigravity-ide/brain/2fbe5f28-0505-45e4-917b-7b885ffd442c/vitalbook_portfolio_screenshots_1784065588098.webp)
 
 ---
 

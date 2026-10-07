@@ -18,7 +18,7 @@ apiClient.interceptors.request.use(
     if (typeof window !== "undefined") {
       const token =
         localStorage.getItem("vitalbook_token") ||
-        localStorage.getItem("carepulse_token") ||
+        localStorage.getItem("vitalbook_token") ||
         localStorage.getItem("user_token");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -26,7 +26,7 @@ apiClient.interceptors.request.use(
 
       const clinicId =
         localStorage.getItem("vitalbook_clinic_id") ||
-        localStorage.getItem("carepulse_clinic_id") ||
+        localStorage.getItem("vitalbook_clinic_id") ||
         process.env.NEXT_PUBLIC_DEFAULT_CLINIC_ID;
       if (clinicId) {
         config.headers["X-Clinic-ID"] = clinicId;
@@ -53,11 +53,11 @@ apiClient.interceptors.response.use(
       // Only redirect if explicitly on a protected page AND not already redirecting AND not demo mode
       const isDemo =
         localStorage.getItem("vitalbook_demo") === "true" ||
-        localStorage.getItem("carepulse_demo") === "true";
+        localStorage.getItem("vitalbook_demo") === "true";
       if (!isAuthPage && !isRedirecting && !isDemo) {
         const hasToken = !!(
           localStorage.getItem("vitalbook_token") ||
-          localStorage.getItem("carepulse_token") ||
+          localStorage.getItem("vitalbook_token") ||
           localStorage.getItem("user_token")
         );
         if (!hasToken) {

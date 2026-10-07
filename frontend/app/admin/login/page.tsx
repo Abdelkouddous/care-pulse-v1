@@ -38,20 +38,20 @@ export default function AdminLoginPage() {
 
         if (typeof window !== "undefined") {
           localStorage.setItem("vitalbook_token", res.token);
-          localStorage.setItem("carepulse_token", res.token);
+          localStorage.setItem("vitalbook_token", res.token);
           localStorage.setItem("vitalbook_role", "admin");
-          localStorage.setItem("carepulse_role", "admin");
+          localStorage.setItem("vitalbook_role", "admin");
           localStorage.removeItem("vitalbook_demo");
-          localStorage.removeItem("carepulse_demo");
+          localStorage.removeItem("vitalbook_demo");
           const userStr = JSON.stringify(res.user);
           localStorage.setItem("vitalbook_user", userStr);
-          localStorage.setItem("carepulse_user", userStr);
+          localStorage.setItem("vitalbook_user", userStr);
           document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
-          document.cookie = `carepulse_token=${res.token}; path=/; max-age=86400; samesite=lax`;
+          document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
           document.cookie = `vitalbook_role=admin; path=/; max-age=86400; samesite=lax`;
-          document.cookie = `carepulse_role=admin; path=/; max-age=86400; samesite=lax`;
+          document.cookie = `vitalbook_role=admin; path=/; max-age=86400; samesite=lax`;
           document.cookie = `vitalbook_demo=; path=/; max-age=0; samesite=lax`;
-          document.cookie = `carepulse_demo=; path=/; max-age=0; samesite=lax`;
+          document.cookie = `vitalbook_demo=; path=/; max-age=0; samesite=lax`;
         }
 
         toast({
@@ -162,7 +162,7 @@ export default function AdminLoginPage() {
                 <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 <input
                   type="email"
-                  placeholder="admin@carepulse.com"
+                  placeholder="admin@vitalbook.com"
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
@@ -214,12 +214,12 @@ export default function AdminLoginPage() {
             <button
               type="button"
               onClick={() => {
-                setEmail("admin@carepulse.com");
+                setEmail("admin@vitalbook.com");
                 setPassword("password123");
               }}
               className="font-mono text-slate-900 dark:text-slate-100 font-bold hover:underline"
             >
-              admin@carepulse.com (fill)
+              admin@vitalbook.com (fill)
             </button>
           </div>
 

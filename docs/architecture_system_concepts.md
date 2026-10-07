@@ -1,4 +1,4 @@
-# Project VitalWork / CarePulse: System Architecture & Engineering Concepts
+# Project VitalWork / VitalBook: System Architecture & Engineering Concepts
 
 > **Status:** Production Architecture Blueprint
 > **Audience:** Principal Architects, Staff Software Engineers, Security & Infrastructure Leads
@@ -12,7 +12,7 @@
 
 Enterprise healthcare systems require extreme data guarantees: zero tolerance for financial rounding drift, deterministic multi-tenant isolation, cryptographic audit trails, and mathematically sound concurrency control.
 
-Building CarePulse upon modern software design principles requires understanding four fundamental computer science pillars:
+Building VitalBook upon modern software design principles requires understanding four fundamental computer science pillars:
 
 1. **State Isolation & Memory Footprint:**
    State must never leak across concurrent execution threads. In a multi-tenant medical environment, request context must be strictly scoped to the tenant's execution lifecycle. Global singleton state in long-running processes (e.g., Octane, Swoole, or worker pools) causes cross-tenant data corruption if not bound to ephemeral container instances.
@@ -21,13 +21,13 @@ Building CarePulse upon modern software design principles requires understanding
 3. **Distributed Sharding & Entity Identity:**
    Centralized auto-incrementing serial IDs (`BIGSERIAL`) create synchronization bottlenecks, facilitate enumeration attacks, and prevent zero-collision database partitioning. Universally Unique Identifiers (UUIDv4, 128-bit pseudorandom numbers) allow client or service nodes to generate collision-free primary keys asynchronously without cross-node locks.
 4. **Concurrency & Linearizability:**
-   Doctor appointment calendars represent finite shared resources. Concurrent attempts to reserve the identical time slice constitute a race condition. CarePulse enforces concurrency control at both the application tier (Redis distributed locks) and the database engine tier (PostgreSQL transactional row-level isolation and compound unique index constraints).
+   Doctor appointment calendars represent finite shared resources. Concurrent attempts to reserve the identical time slice constitute a race condition. VitalBook enforces concurrency control at both the application tier (Redis distributed locks) and the database engine tier (PostgreSQL transactional row-level isolation and compound unique index constraints).
 
 ---
 
 ## 2. Comparative Framework
 
-The following matrix contrasts common junior engineering anti-patterns against the senior architectural implementations enforced within Project VitalWork / CarePulse:
+The following matrix contrasts common junior engineering anti-patterns against the senior architectural implementations enforced within Project VitalWork / VitalBook:
 
 | Dimension                        | Junior / Fragile Approach                                                              | Senior / Elite Engineering Architecture                                                                                                 | Architectural Rationale                                                                                                      |
 | :------------------------------- | :------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------- |
@@ -165,7 +165,7 @@ sequenceDiagram
 
 ## 6. Role-Based Access Control (RBAC) & Actor Lifecycle
 
-The CarePulse ecosystem supports three distinct primary actors with explicit boundaries:
+The VitalBook ecosystem supports three distinct primary actors with explicit boundaries:
 
 ```mermaid
 stateDiagram-v2

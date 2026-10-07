@@ -212,21 +212,21 @@ export function AppShell({
     TokenManager.clearToken();
     if (typeof window !== "undefined") {
       localStorage.removeItem("vitalbook_token");
-      localStorage.removeItem("carepulse_token");
+      localStorage.removeItem("vitalbook_token");
       localStorage.removeItem("user_token");
       localStorage.removeItem("vitalbook_user");
-      localStorage.removeItem("carepulse_user");
+      localStorage.removeItem("vitalbook_user");
       localStorage.removeItem("vitalbook_role");
-      localStorage.removeItem("carepulse_role");
+      localStorage.removeItem("vitalbook_role");
       localStorage.removeItem("vitalbook_demo");
-      localStorage.removeItem("carepulse_demo");
+      localStorage.removeItem("vitalbook_demo");
       document.cookie = "vitalbook_token=; path=/; max-age=0";
-      document.cookie = "carepulse_token=; path=/; max-age=0";
+      document.cookie = "vitalbook_token=; path=/; max-age=0";
       document.cookie = "user_token=; path=/; max-age=0";
       document.cookie = "vitalbook_role=; path=/; max-age=0";
-      document.cookie = "carepulse_role=; path=/; max-age=0";
+      document.cookie = "vitalbook_role=; path=/; max-age=0";
       document.cookie = "vitalbook_demo=; path=/; max-age=0";
-      document.cookie = "carepulse_demo=; path=/; max-age=0";
+      document.cookie = "vitalbook_demo=; path=/; max-age=0";
       window.location.href = "/login";
     } else {
       router.push("/login");

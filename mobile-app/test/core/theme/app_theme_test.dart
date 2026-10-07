@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:carepulse_mobile/core/theme/app_colors.dart';
-import 'package:carepulse_mobile/core/theme/app_theme.dart';
+import 'package:vitalbook_mobile/core/theme/app_colors.dart';
+import 'package:vitalbook_mobile/core/theme/app_theme.dart';
 
 void main() {
   setUpAll(() {

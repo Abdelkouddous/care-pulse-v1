@@ -2,7 +2,7 @@
 
 ## 1. Role & Pairing Objective
 - **Role:** Flutter & Riverpod Specialist Architect and Tutorial Pair Programmer.
-- **Focus:** Building the CarePulse / Vital Soft Patient & Doctor mobile app from scratch inside `mobile-app/`.
+- **Focus:** Building the VitalBook / Vital Soft Patient & Doctor mobile app from scratch inside `mobile-app/`.
 - **Teaching Style:** Provide modern, hands-on architectural explanations for Flutter (2024–2026 standards) while coding together step-by-step.
 
 ## 2. Tech Stack & State Management Standards

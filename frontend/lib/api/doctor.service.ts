@@ -22,7 +22,7 @@ export const doctorService = {
       if (
         typeof window !== "undefined" &&
         (localStorage.getItem("vitalbook_demo") === "true" ||
-          localStorage.getItem("carepulse_demo") === "true")
+          localStorage.getItem("vitalbook_demo") === "true")
       ) {
         return {
           doctors: [MOCK_DOCTOR],
@@ -44,7 +44,7 @@ export const doctorService = {
       if (
         typeof window !== "undefined" &&
         (localStorage.getItem("vitalbook_demo") === "true" ||
-          localStorage.getItem("carepulse_demo") === "true")
+          localStorage.getItem("vitalbook_demo") === "true")
       ) {
         return MOCK_DOCTOR;
       }

@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:carepulse_mobile/core/storage/token_storage.dart';
+import 'package:vitalbook_mobile/core/storage/token_storage.dart';
 
 class MockSecureStorage extends Fake implements FlutterSecureStorage {
   final Map<String, String> _data = {};
@@ -38,12 +38,12 @@ void main() {
 
     test('saves and retrieves dual tokens correctly', () async {
       await tokenStorage.saveTokens(
-        carePulseToken: 'carepulse_abc123',
+        vitalBookToken: 'vitalbook_abc123',
         userToken: 'user_xyz789',
         role: 'patient',
       );
 
-      expect(await tokenStorage.getCarePulseToken(), 'carepulse_abc123');
+      expect(await tokenStorage.getVitalBookToken(), 'vitalbook_abc123');
       expect(await tokenStorage.getUserToken(), 'user_xyz789');
       expect(await tokenStorage.getUserRole(), 'patient');
       expect(await tokenStorage.hasValidToken(), isTrue);
@@ -51,13 +51,13 @@ void main() {
 
     test('clears all tokens upon logout', () async {
       await tokenStorage.saveTokens(
-        carePulseToken: 'carepulse_token',
+        vitalBookToken: 'vitalbook_token',
         userToken: 'user_token',
       );
 
       await tokenStorage.clearTokens();
 
-      expect(await tokenStorage.getCarePulseToken(), isNull);
+      expect(await tokenStorage.getVitalBookToken(), isNull);
       expect(await tokenStorage.getUserToken(), isNull);
       expect(await tokenStorage.hasValidToken(), isFalse);
     });

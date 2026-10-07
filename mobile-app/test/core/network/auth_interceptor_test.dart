@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:carepulse_mobile/core/network/auth_interceptor.dart';
-import 'package:carepulse_mobile/core/storage/token_storage.dart';
+import 'package:vitalbook_mobile/core/network/auth_interceptor.dart';
+import 'package:vitalbook_mobile/core/storage/token_storage.dart';
 
 class MockSecureStorage extends Fake implements FlutterSecureStorage {
   final Map<String, String> _data = {};
@@ -55,7 +55,7 @@ void main() {
 
     test('injects Bearer token into outgoing requests when present', () async {
       await tokenStorage.saveTokens(
-        carePulseToken: 'my_sanctum_token_123',
+        vitalBookToken: 'my_sanctum_token_123',
         userToken: 'user_jwt',
       );
 
@@ -70,7 +70,7 @@ void main() {
 
     test('clears tokens and triggers callback on 401 response error', () async {
       await tokenStorage.saveTokens(
-        carePulseToken: 'expired_token',
+        vitalBookToken: 'expired_token',
         userToken: 'user_jwt',
       );
 

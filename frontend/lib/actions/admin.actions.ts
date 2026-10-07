@@ -8,7 +8,7 @@ export const getAdmin = async (adminId: string) => {
   return {
     $id: adminId,
     name: "VitalBook Admin",
-    email: "admin@carepulse.com",
+    email: "admin@vitalbook.com",
     role: "super_admin",
   };
 };

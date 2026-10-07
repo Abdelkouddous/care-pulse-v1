@@ -1,6 +1,6 @@
 {
-    "name": "carepulse_mobile",
-    "short_name": "carepulse_mobile",
+    "name": "vitalbook_mobile",
+    "short_name": "vitalbook_mobile",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

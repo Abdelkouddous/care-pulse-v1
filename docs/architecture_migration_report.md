@@ -1,15 +1,15 @@
-# Architectural Migration Completion Report: CarePulse V1
+# Architectural Migration Completion Report: VitalBook V1
 
 > **Status:** ✅ Migration Completed & MVP End-to-End Verified  
 > **Date:** September 2026  
-> **Project:** CarePulse V1 / Project VitalWork  
+> **Project:** VitalBook V1 / Project VitalWork  
 > **Engineering Leads:** Principal Architect & Senior Full-Stack Engineering Team  
 
 ---
 
 ## 1. Executive Summary
 
-This report documents the completed migration of the CarePulse healthcare platform from a legacy full-stack monolith (formerly tightly coupled with Appwrite and Next.js Server Actions) to a production-grade Decoupled Monorepo Architecture.
+This report documents the completed migration of the VitalBook healthcare platform from a legacy full-stack monolith (formerly tightly coupled with Appwrite and Next.js Server Actions) to a production-grade Decoupled Monorepo Architecture.
 
 The application now operates on a physically isolated presentation layer (**Next.js 14 App Router**) communicating over authenticated JSON REST contracts with a high-performance **Laravel 13 API**, backed by **PostgreSQL 18** and **Redis 7** running on containerized Docker infrastructure.
 
@@ -18,7 +18,7 @@ The application now operates on a physically isolated presentation layer (**Next
 ## 2. Completed Architecture Topography
 
 ```text
-/care-pulse-v1
+/vitalbook-v1
 ├── package.json                         # Monorepo Workspace Configuration
 │
 ├── frontend/                            # 100% Isolated Next.js 14 Presentation Tier (Port 3000)
@@ -49,7 +49,7 @@ The application now operates on a physically isolated presentation layer (**Next
 ├── docs/                                # Enterprise Architectural Documentation
 │   ├── architecture_system_concepts.md  # Core CS paradigms, diagrams, and state machines
 │   ├── architecture_migration_report.md # Migration execution report (This document)
-│   └── carepulse_portfolio.md           # Visual artifact captures & gallery
+│   └── vitalbook_portfolio.md           # Visual artifact captures & gallery
 │
 └── old-backend/                         # Quarantined legacy BaaS logic (Preserved for historical audit)
 ```
@@ -74,12 +74,12 @@ The application now operates on a physically isolated presentation layer (**Next
 During the initial deployment and testing cycle of the MVP on macOS / Docker Desktop, four critical architectural edge cases were identified and resolved:
 
 ### 4.1 PostgreSQL 18 Volume Initialization Scheme
-* **Anomaly:** `carepulse-postgres` failed to initialize with an error stating that `/var/lib/postgresql/data` collided with PostgreSQL 18's new cluster format.
+* **Anomaly:** `vitalbook-postgres` failed to initialize with an error stating that `/var/lib/postgresql/data` collided with PostgreSQL 18's new cluster format.
 * **Root Cause:** PostgreSQL 18 Alpine uses version-specific directory clusters (`/var/lib/postgresql/18/docker`).
 * **Resolution:** Updated `docker-compose.yml` volume mount to target `/var/lib/postgresql` directly, allowing Postgres 18 to manage internal cluster directories cleanly.
 
 ### 4.2 Host Port Collision on TCP 5432
-* **Anomaly:** `php artisan migrate` failed with `FATAL: role "carepulse_user" does not exist`.
+* **Anomaly:** `php artisan migrate` failed with `FATAL: role "vitalbook_user" does not exist`.
 * **Root Cause:** A preexisting macOS PostgreSQL instance was already listening on local port `5432`, intercepting Docker port forwarding.
 * **Resolution:** Re-mapped container port in `docker-compose.yml` to `5433:5432` and synchronized `laravel-backend/.env` with `DB_PORT=5433`.
 
@@ -103,8 +103,8 @@ The following end-to-end integration flows were tested and verified via live aut
 | **System Health** | `GET /up` | None | `HTTP 200 OK` (Laravel Healthcheck) | **PASSED** |
 | **Specialties Catalog** | `GET /api/v1/specialties` | None | Array of 6 medical specialties with UUIDs | **PASSED** |
 | **Doctors Directory** | `GET /api/v1/doctors` | None | 4 seeded physicians with `consultation_fee_cents` | **PASSED** |
-| **Admin Authentication** | `POST /api/v1/auth/admin/login` | `admin@carepulse.com` / `password123` | Sanctum Bearer Token + Admin Role Profile | **PASSED** |
-| **Patient Authentication** | `POST /api/v1/auth/login` | `patient@carepulse.com` / `password123` | Sanctum Bearer Token + Sarah Benali Profile | **PASSED** |
+| **Admin Authentication** | `POST /api/v1/auth/admin/login` | `admin@vitalbook.com` / `password123` | Sanctum Bearer Token + Admin Role Profile | **PASSED** |
+| **Patient Authentication** | `POST /api/v1/auth/login` | `patient@vitalbook.com` / `password123` | Sanctum Bearer Token + Sarah Benali Profile | **PASSED** |
 | **Appointment Booking** | `POST /api/v1/appointments` | Doctor UUID + Slot `2026-10-05T10:00:00Z` | `201 Created` + UUIDv4 Appointment Record | **PASSED** |
 | **Anti-Double-Booking Guard** | `POST /api/v1/appointments` | Same Doctor UUID + Duplicate Slot | `422 Unprocessable` ("This slot has already been booked") | **PASSED** |
 | **Admin Metrics Aggregation** | `GET /api/v1/admin/dashboard` | Admin Bearer + `X-Clinic-ID` | Live counters: Total=1, Pending=1, Scheduled=0 | **PASSED** |

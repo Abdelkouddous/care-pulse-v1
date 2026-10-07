@@ -17,8 +17,8 @@ class EloquentDoctorRepository implements IDoctorRepository
     public function findByEmail(string $email): ?Doctor
     {
         $doctor = Doctor::where('email', $email)->first();
-        if (! $doctor && in_array(strtolower($email), ['dr.benali@carepulse.com', 'dr.yasmine@carepulse.com', 'yasmine.benali@carepulse.com'])) {
-            $doctor = Doctor::where('email', 'dr.lee@carepulse.com')->first();
+        if (! $doctor && in_array(strtolower($email), ['dr.benali@vitalbook.com', 'dr.yasmine@vitalbook.com', 'yasmine.benali@vitalbook.com'])) {
+            $doctor = Doctor::where('email', 'dr.lee@vitalbook.com')->first();
         }
         return $doctor;
     }

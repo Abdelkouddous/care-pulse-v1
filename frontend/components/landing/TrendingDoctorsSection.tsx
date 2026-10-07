@@ -72,7 +72,7 @@ export function TrendingDoctorsSection({
     const isDemo =
       typeof window !== "undefined" &&
       (localStorage.getItem("vitalbook_demo") === "true" ||
-        localStorage.getItem("carepulse_demo") === "true");
+        localStorage.getItem("vitalbook_demo") === "true");
 
     return isDemo ? [MOCK_DOCTOR_DISPLAY] : [];
   }, [doctorsData]);

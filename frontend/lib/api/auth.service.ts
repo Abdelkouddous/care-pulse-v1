@@ -111,20 +111,20 @@ export const authService = {
       if (typeof window !== "undefined") {
         TokenManager.clearToken();
         localStorage.removeItem("vitalbook_token");
-        localStorage.removeItem("carepulse_token");
+        localStorage.removeItem("vitalbook_token");
         localStorage.removeItem("user_token");
         localStorage.removeItem("vitalbook_user");
-        localStorage.removeItem("carepulse_user");
+        localStorage.removeItem("vitalbook_user");
         localStorage.removeItem("vitalbook_role");
-        localStorage.removeItem("carepulse_role");
+        localStorage.removeItem("vitalbook_role");
         localStorage.removeItem("vitalbook_demo");
-        localStorage.removeItem("carepulse_demo");
+        localStorage.removeItem("vitalbook_demo");
         document.cookie = "vitalbook_token=; path=/; max-age=0";
-        document.cookie = "carepulse_token=; path=/; max-age=0";
+        document.cookie = "vitalbook_token=; path=/; max-age=0";
         document.cookie = "vitalbook_role=; path=/; max-age=0";
-        document.cookie = "carepulse_role=; path=/; max-age=0";
+        document.cookie = "vitalbook_role=; path=/; max-age=0";
         document.cookie = "vitalbook_demo=; path=/; max-age=0";
-        document.cookie = "carepulse_demo=; path=/; max-age=0";
+        document.cookie = "vitalbook_demo=; path=/; max-age=0";
       }
     }
   },
@@ -137,11 +137,11 @@ export const authService = {
       if (typeof window !== "undefined") {
         const storedRole =
           localStorage.getItem("vitalbook_role") ||
-          localStorage.getItem("carepulse_role") ||
+          localStorage.getItem("vitalbook_role") ||
           "patient";
         const storedUser =
           localStorage.getItem("vitalbook_user") ||
-          localStorage.getItem("carepulse_user");
+          localStorage.getItem("vitalbook_user");
         if (storedUser) {
           try {
             return { user: JSON.parse(storedUser), role: storedRole };
