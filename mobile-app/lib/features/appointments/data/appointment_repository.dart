@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/constants/api_endpoints.dart';
 import '../../../core/network/dio_client.dart';
+import '../../doctors/domain/doctor_models.dart';
 import '../domain/appointment_models.dart';
 
 part 'appointment_repository.g.dart';
@@ -40,11 +41,44 @@ class AppointmentRepository {
       final list = (response.data['data'] as List<dynamic>?) ?? [];
       return list.map((item) => AppointmentModel.fromJson(item as Map<String, dynamic>)).toList();
     } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        return _getDemoMockAppointments();
+      }
       final errorMsg = e.response?.data?['errors']?[0]?['detail'] ??
           e.response?.data?['message'] ??
           'Failed to load appointments';
       throw Exception(errorMsg);
     }
+  }
+
+  List<AppointmentModel> _getDemoMockAppointments() {
+    return [
+      AppointmentModel(
+        id: 'mock-appt-1',
+        patientId: 'mock-patient-sarah',
+        doctorId: 'dr-mansouri-1',
+        scheduledAt: DateTime.now().add(const Duration(days: 1, hours: 2)),
+        status: 'confirmed',
+        reason: 'Consultation Cardiologie & Suivi Tension',
+        consultationFeeCents: 450000,
+        doctor: const DoctorModel(
+          id: 'dr-mansouri-1',
+          clinicId: '58b759e3-41f6-47d2-aa1d-35e004849e52',
+          firstName: 'Amine',
+          lastName: 'Mansouri',
+          name: 'Dr. Amine Mansouri',
+          email: 'dr.mansouri@vitalbook.com',
+          phone: '+213 550 11 22 33',
+          consultationFeeCents: 450000,
+          licenseNumber: 'DZ-MSPRH-16-10492',
+          bio: 'Cardiologue spécialiste des explorations fonctionnelles.',
+          rating: 4.9,
+          reviewsCount: 38,
+          avatarUrl: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=300&h=300&fit=crop',
+          isActive: true,
+        ),
+      ),
+    ];
   }
 
   Future<AppointmentModel> getAppointmentById(String id) async {

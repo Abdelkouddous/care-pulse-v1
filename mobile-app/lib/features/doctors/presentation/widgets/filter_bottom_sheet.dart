@@ -45,7 +45,7 @@ class FilterBottomSheet extends ConsumerWidget {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.3),
+                color: Colors.grey.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -90,7 +90,7 @@ class FilterBottomSheet extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           DropdownButtonFormField<String>(
-            value: filter.wilaya,
+            initialValue: filter.wilaya,
             hint: const Text('All Wilayas (National)'),
             isExpanded: true,
             decoration: InputDecoration(
@@ -140,7 +140,7 @@ class FilterBottomSheet extends ConsumerWidget {
                 return ChoiceChip(
                   label: Text(spec.name),
                   selected: isSelected,
-                  selectedColor: AppColors.primaryTeal.withOpacity(0.15),
+                  selectedColor: AppColors.primaryTeal.withValues(alpha: 0.15),
                   labelStyle: TextStyle(
                     color: isSelected
                         ? AppColors.primaryTeal
@@ -160,7 +160,7 @@ class FilterBottomSheet extends ConsumerWidget {
                 child: CircularProgressIndicator(),
               ),
             ),
-            error: (_, __) => const Text('Could not load specialties'),
+            error: (_, _) => const Text('Could not load specialties'),
           ),
           const SizedBox(height: 18),
 
@@ -188,7 +188,7 @@ class FilterBottomSheet extends ConsumerWidget {
                     ],
                   ),
                   selected: isSelected,
-                  selectedColor: AppColors.warmOrange.withOpacity(0.15),
+                  selectedColor: AppColors.warmOrange.withValues(alpha: 0.15),
                   onSelected: (selected) {
                     filterNotifier.setMinRating(selected ? rating : null);
                   },

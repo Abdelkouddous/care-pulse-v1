@@ -40,7 +40,7 @@ echo -e "${YELLOW}  -> Running Backend Tests...${NC}"
 php artisan test --parallel || echo -e "${RED}⚠️ Some backend tests failed, but proceeding...${NC}"
 
 echo -e "${GREEN}  ✓ Backend setup complete! Starting API Server on http://127.0.0.1:8000${NC}"
-php artisan serve --port=8000 &
+php artisan serve --host=0.0.0.0 --port=8000 &
 cd ..
 
 # ─── 2. FRONTEND ──────────────────────────────────────────────────────────────

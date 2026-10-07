@@ -98,6 +98,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
+  Future<void> _quickMockPatientLogin() async {
+    final notifier = ref.read(authControllerProvider.notifier);
+    _phoneController.text = '0555998877';
+    _otpController.text = '123456';
+    final sent = await notifier.sendPhoneOtp('0555998877');
+    if (sent) {
+      final success = await notifier.verifyOtp('123456');
+      if (!success && mounted) {
+        final error = ref.read(authControllerProvider).errorMessage;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error ?? 'Mock login failed'),
+            backgroundColor: AppColors.destructive,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -264,6 +283,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                         )
                       : const Text('Send Verification Code (OTP)'),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.bolt_rounded, color: AppColors.primaryTeal),
+                  label: const Text('Quick Sign In as Mock Patient (Sarah Benali)'),
+                  onPressed: authState.isLoading ? null : _quickMockPatientLogin,
                 ),
               ] else ...[
                 Text(

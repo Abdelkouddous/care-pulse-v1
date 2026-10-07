@@ -61,12 +61,19 @@ class AuthController extends _$AuthController {
   }
 
   Future<void> _checkInitialAuth() async {
-    final storage = ref.read(tokenStorageProvider);
-    final hasToken = await storage.hasValidToken();
-    if (state.status == AuthStatus.initial) {
-      state = state.copyWith(
-        status: hasToken ? AuthStatus.authenticated : AuthStatus.unauthenticated,
-      );
+    try {
+      final storage = ref.read(tokenStorageProvider);
+      final hasToken = await storage.hasValidToken();
+      if (state.status == AuthStatus.initial) {
+        state = state.copyWith(
+          status: hasToken ? AuthStatus.authenticated : AuthStatus.unauthenticated,
+        );
+      }
+    } catch (e) {
+      debugPrint('Initial auth check fallback to unauthenticated: $e');
+      if (state.status == AuthStatus.initial) {
+        state = state.copyWith(status: AuthStatus.unauthenticated);
+      }
     }
   }
 

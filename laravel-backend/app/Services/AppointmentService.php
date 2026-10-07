@@ -93,6 +93,11 @@ class AppointmentService
         return $this->appointmentRepo->updateStatus($appointmentId, 'cancelled', $reason, $cancelledBy);
     }
 
+    public function updateStatus(string $appointmentId, string $status, ?string $reason = null, ?string $actor = null): bool
+    {
+        return $this->appointmentRepo->updateStatus($appointmentId, $status, $reason, $actor);
+    }
+
     public function getAppointment(string $id): ?Appointment
     {
         return $this->appointmentRepo->findById($id);

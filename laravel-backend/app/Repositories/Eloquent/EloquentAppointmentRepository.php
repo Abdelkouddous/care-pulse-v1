@@ -47,11 +47,15 @@ class EloquentAppointmentRepository implements IAppointmentRepository
         }
 
         $appointment->status = $status;
-        if ($reason) {
-            $appointment->cancellation_reason = $reason;
-        }
-        if ($cancelledBy) {
-            $appointment->cancelled_by = $cancelledBy;
+        if ($status === 'cancelled') {
+            $appointment->cancellation_reason = $reason ?? 'Cancelled by ' . ($cancelledBy ?? 'user');
+            $appointment->cancelled_by = $cancelledBy ?? 'user';
+        } else {
+            $appointment->cancellation_reason = null;
+            $appointment->cancelled_by = null;
+            if ($reason && ! $appointment->notes) {
+                $appointment->notes = $reason;
+            }
         }
 
         return $appointment->save();

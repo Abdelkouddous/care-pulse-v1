@@ -145,3 +145,51 @@ test('patient can cancel an appointment', function () {
         'cancellation_reason' => 'Emergency travel',
     ]);
 });
+
+test('doctor can transition appointment to completed without cancelling it', function () {
+    $nextMonday = Carbon::now()->next('Monday')->setTime(15, 0, 0);
+
+    $appointment = Appointment::create([
+        'id' => (string) Str::uuid(),
+        'clinic_id' => $this->clinic->id,
+        'doctor_id' => $this->doctor->id,
+        'patient_id' => $this->patient->id,
+        'scheduled_at' => $nextMonday,
+        'status' => 'scheduled',
+        'reason' => 'Chest discomfort evaluation',
+        'consultation_fee_cents' => 350000,
+    ]);
+
+    // 1. Doctor starts visit
+    $resInConsult = $this->actingAs($this->doctor, 'sanctum')
+        ->withHeader('X-Clinic-ID', $this->clinic->id)
+        ->putJson("/api/v1/doctor-portal/appointments/{$appointment->id}/status", [
+            'status' => 'in_consultation',
+        ]);
+
+    $resInConsult->assertStatus(200)
+        ->assertJsonPath('data.status', 'in_consultation');
+
+    $this->assertDatabaseHas('appointments', [
+        'id' => $appointment->id,
+        'status' => 'in_consultation',
+        'cancellation_reason' => null,
+    ]);
+
+    // 2. Doctor finishes visit
+    $resComplete = $this->actingAs($this->doctor, 'sanctum')
+        ->withHeader('X-Clinic-ID', $this->clinic->id)
+        ->putJson("/api/v1/doctor-portal/appointments/{$appointment->id}/status", [
+            'status' => 'completed',
+        ]);
+
+    $resComplete->assertStatus(200)
+        ->assertJsonPath('data.status', 'completed');
+
+    $this->assertDatabaseHas('appointments', [
+        'id' => $appointment->id,
+        'status' => 'completed',
+        'cancellation_reason' => null,
+    ]);
+});
+

@@ -74,7 +74,7 @@ class DoctorProfileScreen extends ConsumerWidget {
                                     ? Image.network(
                                         doctor.avatarUrl!,
                                         fit: BoxFit.cover,
-                                        errorBuilder: (_, __, ___) => const Icon(
+                                        errorBuilder: (_, _, _) => const Icon(
                                           Icons.person_rounded,
                                           size: 48,
                                           color: AppColors.primaryTeal,

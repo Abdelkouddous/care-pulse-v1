@@ -37,6 +37,7 @@ return [
 
     'firebase' => [
         'project_id' => env('FIREBASE_PROJECT_ID'),
+        'test_phone' => env('FIREBASE_TEST_PHONE', '+213'),
     ],
 
     'whatsapp' => [

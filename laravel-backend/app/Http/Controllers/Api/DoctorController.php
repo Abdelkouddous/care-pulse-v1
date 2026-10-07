@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateAppointmentStatusRequest;
+use App\Models\Appointment;
 use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\DoctorResource;
 use App\Services\AppointmentService;
@@ -88,15 +89,48 @@ class DoctorController extends Controller
 
     public function updateAppointmentStatus(string $id, UpdateAppointmentStatusRequest $request): JsonResponse
     {
-        $updated = $this->appointmentService->cancelAppointment(
+        $status = $request->validated('status');
+        $reason = $request->validated('reason');
+
+        $doctor = $request->user();
+        if ($doctor instanceof \App\Models\Doctor) {
+            $appointment = Appointment::where('id', $id)->first();
+            if (! $appointment || $appointment->doctor_id !== $doctor->id) {
+                return response()->json([
+                    'errors' => [
+                        [
+                            'status' => '404',
+                            'title' => 'Not Found',
+                            'detail' => 'Appointment not found or does not belong to this doctor.',
+                        ],
+                    ],
+                ], Response::HTTP_NOT_FOUND);
+            }
+        }
+
+        $updated = $this->appointmentService->updateStatus(
             $id,
-            $request->validated('reason') ?? 'Status updated by doctor',
+            $status,
+            $reason,
             'doctor'
         );
 
+        if (! $updated) {
+            return response()->json([
+                'errors' => [
+                    [
+                        'status' => '404',
+                        'title' => 'Not Found',
+                        'detail' => 'Appointment not found or status could not be updated.',
+                    ],
+                ],
+            ], Response::HTTP_NOT_FOUND);
+        }
+
         return response()->json([
             'data' => [
-                'success' => $updated,
+                'success' => true,
+                'status' => $status,
             ],
             'meta' => [
                 'message' => 'Appointment status updated.',

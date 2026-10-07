@@ -50,7 +50,7 @@ class _PatientHomeScreenState extends ConsumerState<PatientHomeScreen> {
                       children: [
                         CircleAvatar(
                           radius: 24,
-                          backgroundColor: AppColors.primaryTeal.withOpacity(0.15),
+                          backgroundColor: AppColors.primaryTeal.withValues(alpha: 0.15),
                           child: Text(
                             user?.name.isNotEmpty == true ? user!.name[0].toUpperCase() : 'P',
                             style: const TextStyle(
@@ -206,7 +206,7 @@ class _PatientHomeScreenState extends ConsumerState<PatientHomeScreen> {
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         itemCount: specialties.length,
-                        separatorBuilder: (_, __) => const SizedBox(width: 12),
+                        separatorBuilder: (_, _) => const SizedBox(width: 12),
                         itemBuilder: (context, index) {
                           final spec = specialties[index];
                           return SizedBox(
@@ -230,7 +230,7 @@ class _PatientHomeScreenState extends ConsumerState<PatientHomeScreen> {
                       child: CircularProgressIndicator(color: AppColors.primaryTeal),
                     ),
                   ),
-                  error: (_, __) => const Text('Could not load specialties'),
+                  error: (_, _) => const Text('Could not load specialties'),
                 ),
 
                 const SizedBox(height: 24),

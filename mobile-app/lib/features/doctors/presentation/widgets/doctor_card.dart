@@ -30,7 +30,7 @@ class DoctorCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
+            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -55,12 +55,12 @@ class DoctorCard extends StatelessWidget {
                       child: Container(
                         width: 72,
                         height: 72,
-                        color: AppColors.primaryTeal.withOpacity(0.12),
+                        color: AppColors.primaryTeal.withValues(alpha: 0.12),
                         child: doctor.avatarUrl != null && doctor.avatarUrl!.isNotEmpty
                             ? Image.network(
                                 doctor.avatarUrl!,
                                 fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => _buildFallbackAvatar(),
+                                errorBuilder: (_, _, _) => _buildFallbackAvatar(),
                               )
                             : _buildFallbackAvatar(),
                       ),
@@ -98,7 +98,7 @@ class DoctorCard extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                             decoration: BoxDecoration(
-                              color: AppColors.primaryTeal.withOpacity(0.1),
+                              color: AppColors.primaryTeal.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
@@ -145,7 +145,7 @@ class DoctorCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 Divider(
-                  color: isDark ? AppColors.darkBorder : AppColors.border.withOpacity(0.6),
+                  color: isDark ? AppColors.darkBorder : AppColors.border.withValues(alpha: 0.6),
                   height: 1,
                 ),
                 const SizedBox(height: 12),

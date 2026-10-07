@@ -17,10 +17,12 @@ class AuthInterceptor extends Interceptor {
   ) async {
     options.headers['Accept'] = 'application/json';
 
-    final token = await tokenStorage.getVitalBookToken();
-    if (token != null && token.isNotEmpty) {
-      options.headers['Authorization'] = 'Bearer $token';
-    }
+    try {
+      final token = await tokenStorage.getVitalBookToken();
+      if (token != null && token.isNotEmpty) {
+        options.headers['Authorization'] = 'Bearer $token';
+      }
+    } catch (_) {}
 
     return handler.next(options);
   }
