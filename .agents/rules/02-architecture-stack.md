@@ -15,3 +15,13 @@
 - **Demo vs. Live Flow Isolation:**
   - Demo interactive sessions run strictly via client-side mocks (`DemoTourModal.tsx`).
   - Live production routes (`/signin`, `/doctors/login`, `/admin/login`) connect strictly to live Laravel Sanctum endpoints.
+
+## 3. Environment & Secret Protocol (Native Cascading)
+- **Local Dev:** Track committed `.env.example` templates in each app (`apps/web/.env.example`, `apps/api/.env.example`, `apps/mobile/.env.example`).
+  - Web: copy to untracked `.env.local`
+  - API: copy to untracked `.env`
+  - Mobile: copy to untracked `.env` or inject via `--dart-define`
+- **Production (Zero-Disk Secrets):** Zero `.env` files stored on disk.
+  - Web: Variables injected in-memory at build time by hosting provider (Netlify).
+  - API: Variables injected into container memory via task definitions (AWS ECS / Docker secrets).
+  - CI/CD: Injected via GitHub Actions environment secrets.
