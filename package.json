@@ -2,8 +2,7 @@
   "name": "vitalbook-monorepo",
   "private": true,
   "workspaces": [
-    "frontend",
-    "old-backend"
+    "apps/web"
   ],
   "devDependencies": {
     "playwright-core": "^1.63.0"

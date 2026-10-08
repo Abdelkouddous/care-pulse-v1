@@ -23,9 +23,11 @@ cleanup() {
 
 trap cleanup INT TERM EXIT
 
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # ─── 1. BACKEND ───────────────────────────────────────────────────────────────
 echo -e "${YELLOW}🐘 Setting up VitalBook Laravel Backend...${NC}"
-cd laravel-backend
+cd "$ROOT_DIR/apps/api"
 
 if [ ! -f .env ]; then
     echo -e "${YELLOW}  -> Copying .env.example to .env...${NC}"
@@ -41,11 +43,10 @@ php artisan test --parallel || echo -e "${RED}⚠️ Some backend tests failed, 
 
 echo -e "${GREEN}  ✓ Backend setup complete! Starting API Server on http://127.0.0.1:8000${NC}"
 php artisan serve --host=0.0.0.0 --port=8000 &
-cd ..
 
 # ─── 2. FRONTEND ──────────────────────────────────────────────────────────────
 echo -e "\n${YELLOW}⚛️ Setting up VitalBook Next.js Frontend...${NC}"
-cd frontend
+cd "$ROOT_DIR/apps/web"
 
 if [ ! -f .env.local ]; then
     echo "NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000/api" > .env.local
@@ -57,7 +58,7 @@ fi
 
 echo -e "${GREEN}  ✓ Frontend setup complete! Starting Next.js Dev Server on http://localhost:3000${NC}"
 npm run dev &
-cd ..
+cd "$ROOT_DIR"
 
 # ─── 3. MONITOR ───────────────────────────────────────────────────────────────
 echo -e "\n${GREEN}✨ VitalBook Full-Stack App is Live!${NC}"

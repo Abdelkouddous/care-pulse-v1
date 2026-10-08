@@ -4,7 +4,7 @@ set -euo pipefail
 
 OUT="${TMPDIR:-/tmp}/vitalbook-icons"
 mkdir -p "$OUT"
-ROUNDED=frontend/public/favicon.svg
+ROUNDED=apps/web/public/favicon.svg
 
 # Full-bleed square variant (iOS masks corners itself; also used for maskable/apple-touch).
 sed -e 's/<rect width="1024" height="1024" rx="232"/<rect width="1024" height="1024"/' \
@@ -22,9 +22,9 @@ flatten() { # remove alpha (App Store rejects transparent iOS icons)
 }
 
 # ---- Frontend (Next.js) ----
-png "$OUT/rounded.png"   16  frontend/public/favicon-16x16.png
-png "$OUT/rounded.png"   32  frontend/public/favicon-32x32.png
-png "$OUT/fullbleed.png" 180 frontend/public/apple-touch-icon.png
+png "$OUT/rounded.png"   16  apps/web/public/favicon-16x16.png
+png "$OUT/rounded.png"   32  apps/web/public/favicon-32x32.png
+png "$OUT/fullbleed.png" 180 apps/web/public/apple-touch-icon.png
 png "$OUT/rounded.png"   16  "$OUT/ico16.png"
 png "$OUT/rounded.png"   32  "$OUT/ico32.png"
 png "$OUT/rounded.png"   48  "$OUT/ico48.png"
@@ -35,16 +35,16 @@ blobs = [(out / f"ico{s}.png").read_bytes() for s in sizes]
 header = struct.pack("<HHH", 0, 1, len(sizes)); offset = 6 + 16 * len(sizes); entries = b""
 for s, b in zip(sizes, blobs):
     entries += struct.pack("<BBBBHHII", s % 256, s % 256, 0, 0, 1, 32, len(b), offset); offset += len(b)
-pathlib.Path("frontend/app/favicon.ico").write_bytes(header + entries + b"".join(blobs))
+pathlib.Path("apps/web/app/favicon.ico").write_bytes(header + entries + b"".join(blobs))
 PY
 
 # ---- Android launcher ----
 for pair in mdpi:48 hdpi:72 xhdpi:96 xxhdpi:144 xxxhdpi:192; do
-  png "$OUT/rounded.png" "${pair#*:}" "mobile-app/android/app/src/main/res/mipmap-${pair%%:*}/ic_launcher.png"
+  png "$OUT/rounded.png" "${pair#*:}" "apps/mobile/android/app/src/main/res/mipmap-${pair%%:*}/ic_launcher.png"
 done
 
 # ---- iOS AppIcon (opaque, full-bleed) ----
-IOS=mobile-app/ios/Runner/Assets.xcassets/AppIcon.appiconset
+IOS=apps/mobile/ios/Runner/Assets.xcassets/AppIcon.appiconset
 for spec in 20:1 20:2 20:3 29:1 29:2 29:3 40:1 40:2 40:3 60:2 60:3 76:1 76:2 83.5:2 1024:1; do
   pt="${spec%%:*}"; scale="${spec#*:}"
   px=$(/usr/bin/python3 -c "print(int(round($pt*$scale)))")
@@ -54,14 +54,14 @@ done
 
 # ---- macOS AppIcon ----
 for s in 16 32 64 128 256 512 1024; do
-  png "$OUT/rounded.png" "$s" "mobile-app/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_${s}.png"
+  png "$OUT/rounded.png" "$s" "apps/mobile/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_${s}.png"
 done
 
 # ---- Flutter web ----
-png "$OUT/rounded.png"   32  mobile-app/web/favicon.png
-png "$OUT/rounded.png"   192 mobile-app/web/icons/Icon-192.png
-png "$OUT/rounded.png"   512 mobile-app/web/icons/Icon-512.png
-png "$OUT/fullbleed.png" 192 mobile-app/web/icons/Icon-maskable-192.png
-png "$OUT/fullbleed.png" 512 mobile-app/web/icons/Icon-maskable-512.png
+png "$OUT/rounded.png"   32  apps/mobile/web/favicon.png
+png "$OUT/rounded.png"   192 apps/mobile/web/icons/Icon-192.png
+png "$OUT/rounded.png"   512 apps/mobile/web/icons/Icon-512.png
+png "$OUT/fullbleed.png" 192 apps/mobile/web/icons/Icon-maskable-192.png
+png "$OUT/fullbleed.png" 512 apps/mobile/web/icons/Icon-maskable-512.png
 
 echo "Icons generated."

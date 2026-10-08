@@ -95,7 +95,7 @@ npm run dev
 
 ```bash
 # Navigate to backend directory
-cd laravel-backend
+cd apps/api
 
 # Install PHP dependencies
 composer install
@@ -126,23 +126,27 @@ php artisan serve
 
 ```bash
 vitalbook-v1/
-├── .agents/                 # Unified instructions & rules for AI assistants & Gemini
+├── AGENTS.md                # Standard model-agnostic agent entry point
+├── .agents/                 # Central declarative rules & guidelines
 │   ├── README.md            # Guidelines index
-│   └── rules/               # Auto-discovered brand, protocol, and stack rules
+│   └── rules/               # Brand, protocol, and architectural rules
+├── .claude/                 # Encapsulated Claude Code adapter
+├── .cursor/                 # Encapsulated Cursor rules
+├── apps/
+│   ├── web/                 # Next.js 14 App Router application
+│   │   ├── app/             # Routes: (auth), appointments, patient, doctors, admin
+│   │   ├── components/      # Reusable UI components & multi-step wizards
+│   │   ├── lib/             # Auth TokenManager, API client, Server Actions
+│   │   └── constants/       # Algerian wilayas, specialties, dictionary
+│   ├── api/                 # Laravel 11 RESTful API
+│   │   ├── app/Http/        # Controllers, Form Requests, Resources
+│   │   ├── app/Services/    # Domain business logic
+│   │   ├── app/Repositories/# Eloquent database abstractions
+│   │   └── database/        # PostgreSQL migrations and seeders
+│   └── mobile/              # Flutter cross-platform client
+├── tools/                   # Scripts, screen export pipeline, dev tooling
+├── archive/                 # Deprecated legacy codebases (old-backend)
 ├── docs/                    # Architectural reports, brand guidelines, and UI archives
-│   ├── brand/               # VitalSoft brand identity guidelines & logos
-│   ├── reports/             # MVP audit & validation reports
-│   └── archive/             # Historical execution steps and logs
-├── frontend/                # Next.js 14 App Router application
-│   ├── app/                 # Routes: (auth), appointments, patient, doctors, admin
-│   ├── components/          # Reusable UI components & multi-step wizards
-│   ├── lib/                 # Auth TokenManager, API client, Server Actions
-│   └── constants/           # Algerian wilayas, specialties, dictionary
-├── laravel-backend/         # Laravel 11 RESTful API
-│   ├── app/Http/            # Controllers, Form Requests, Resources
-│   ├── app/Services/        # Domain business logic
-│   ├── app/Repositories/    # Eloquent database abstractions
-│   └── database/            # PostgreSQL migrations and seeders
 └── .github/workflows/       # GitHub Actions CI/CD test and build pipelines
 ```
 

@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 
 const BASE_URL = "http://localhost:3000";
-const OUTPUT_DIR = path.resolve(process.cwd(), "screens");
+const OUTPUT_DIR = path.resolve(process.cwd(), "tools/screens");
 
 // Ensure screens directory exists
 if (!fs.existsSync(OUTPUT_DIR)) {
@@ -643,7 +643,7 @@ async function renderHeroMockupCover(browser) {
     patientBase64 = fs.readFileSync(patientScreenPath).toString("base64");
   }
 
-  const faviconSvgPath = path.resolve(process.cwd(), "frontend/public/favicon.svg");
+  const faviconSvgPath = path.resolve(process.cwd(), "apps/web/public/favicon.svg");
   let faviconSvg = "";
   if (fs.existsSync(faviconSvgPath)) {
     faviconSvg = fs.readFileSync(faviconSvgPath, "utf8");
