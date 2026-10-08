@@ -81,6 +81,17 @@ export function AppShell({
     return () => window.removeEventListener("hashchange", updateHash);
   }, []);
 
+  const handleNavClick = (href: string) => {
+    const [itemPath, itemHash] = href.split("#");
+    if (itemHash && typeof window !== "undefined") {
+      setCurrentHash(`#${itemHash}`);
+      if (pathname === itemPath || (!itemPath && pathname.startsWith("/doctors/dashboard"))) {
+        window.location.hash = itemHash;
+        window.dispatchEvent(new Event("hashchange"));
+      }
+    }
+  };
+
   // Auto-detect role from path if not provided
   let detectedRole: RoleType = "patient";
   if (forcedRole) {
@@ -351,6 +362,7 @@ export function AppShell({
               <Link
                 key={item.label}
                 href={item.href}
+                onClick={() => handleNavClick(item.href)}
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all group relative",
                   isActive
@@ -460,7 +472,10 @@ export function AppShell({
                     <Link
                       key={item.label}
                       href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
+                      onClick={() => {
+                        handleNavClick(item.href);
+                        setMobileMenuOpen(false);
+                      }}
                       className={cn(
                         "flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all",
                         isActive

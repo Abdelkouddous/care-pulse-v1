@@ -136,7 +136,7 @@ export function TrendingDoctorsSection({
   ];
 
   return (
-    <section id="book-appointment" className="w-full py-10 scroll-mt-20">
+    <section id="doctors" className="w-full py-10 scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Unified Outer Container Card (Single Visual Hierarchy) */}
         <Card className="overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl dark:bg-slate-900/80 rounded-3xl">
