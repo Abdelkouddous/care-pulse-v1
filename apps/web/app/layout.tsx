@@ -1,6 +1,6 @@
 import "@/app/globals.css";
 
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
 import { ReactQueryProvider } from "@/components/providers/ReactQueryProvider";
@@ -15,13 +15,17 @@ const fontSans = Plus_Jakarta_Sans({
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-sans",
 });
-export const metadata: Metadata = {
-  title: { default: siteConfig.name, template: `%s - ${siteConfig.name}` },
-  description: siteConfig.description,
+
+export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
     { media: "(prefers-color-scheme: dark)", color: "black" },
   ],
+};
+
+export const metadata: Metadata = {
+  title: { default: siteConfig.name, template: `%s - ${siteConfig.name}` },
+  description: siteConfig.description,
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
