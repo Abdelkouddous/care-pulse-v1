@@ -7,9 +7,10 @@ const __dirname = path.dirname(__filename);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
+  // Disable standalone mode on Vercel (Vercel natively optimizes serverless lambdas)
+  ...(process.env.VERCEL ? {} : { output: "standalone" }),
   experimental: {
-    outputFileTracingRoot: path.join(__dirname, "../"),
+    outputFileTracingRoot: path.join(__dirname, "../../"),
   },
   images: {
     remotePatterns: [
