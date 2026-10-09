@@ -16,7 +16,7 @@
 - **Edu Health:** Medical educational portals, clinical continuous learning, and patient health literacy.
 - **Healthcare Digital Transformation:** Secure, HIPAA/GDPR-compliant cloud architectures, with Algerian locale integration (CNAS/Chifa).
 
-Flagship products include **Pulse Pro / CarePulse V1**.
+Flagship products include **Pulse Pro / VitalBook V1**.
 
 ---
 

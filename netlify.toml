@@ -4,9 +4,9 @@
 
 [build]
   # Target directory containing the Next.js application
-  base = "frontend"
+  base = "apps/web"
 
-  # Build command executed inside the 'frontend' directory
+  # Build command executed inside the 'apps/web' directory
   command = "npm run build"
 
   # Publish directory relative to the base directory

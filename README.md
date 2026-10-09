@@ -30,7 +30,7 @@
 | **Frontend**        | Next.js 14.2 (App Router), React 18, TypeScript, Tailwind CSS, Lucide Icons                 | Responsive UI, client-side triage, 3-step registration wizard, 4-step booking wizard    |
 | **Backend API**     | Laravel 11, PHP 8.4, Service-Repository Pattern, Laravel Sanctum                            | Token-based auth, slot generation, appointment state machines, integer money guardrails |
 | **Database**        | PostgreSQL 18 via**Supabase** (Session Pooler & Direct Connection)                    | Relational schema, UUIDv4 primary keys, stored generated columns, automated migrations  |
-| **Session & Auth**  | `TokenManager` (dual tokens: `carepulse_token` + `user_token`), Cookies, LocalStorage | Cross-route session lifecycle, SSR route protection, role-based boundaries              |
+| **Session & Auth**  | `TokenManager` (dual tokens: `vitalbook_token` + `user_token`), Cookies, LocalStorage | Cross-route session lifecycle, SSR route protection, role-based boundaries              |
 | **Testing & CI/CD** | Pest PHP (PHP 8.4), TypeScript`tsc --noEmit`, GitHub Actions                              | Automated backend tests, frontend build checks, Dockerized production build             |
 
 ---
@@ -95,7 +95,7 @@ npm run dev
 
 ```bash
 # Navigate to backend directory
-cd laravel-backend
+cd apps/api
 
 # Install PHP dependencies
 composer install
@@ -125,24 +125,28 @@ php artisan serve
 ## 📁 Monorepo Structure
 
 ```bash
-care-pulse-v1/
-├── .agents/                 # Unified instructions & rules for AI assistants & Gemini
+vitalbook-v1/
+├── AGENTS.md                # Standard model-agnostic agent entry point
+├── .agents/                 # Central declarative rules & guidelines
 │   ├── README.md            # Guidelines index
-│   └── rules/               # Auto-discovered brand, protocol, and stack rules
+│   └── rules/               # Brand, protocol, and architectural rules
+├── .claude/                 # Encapsulated Claude Code adapter
+├── .cursor/                 # Encapsulated Cursor rules
+├── apps/
+│   ├── web/                 # Next.js 14 App Router application
+│   │   ├── app/             # Routes: (auth), appointments, patient, doctors, admin
+│   │   ├── components/      # Reusable UI components & multi-step wizards
+│   │   ├── lib/             # Auth TokenManager, API client, Server Actions
+│   │   └── constants/       # Algerian wilayas, specialties, dictionary
+│   ├── api/                 # Laravel 11 RESTful API
+│   │   ├── app/Http/        # Controllers, Form Requests, Resources
+│   │   ├── app/Services/    # Domain business logic
+│   │   ├── app/Repositories/# Eloquent database abstractions
+│   │   └── database/        # PostgreSQL migrations and seeders
+│   └── mobile/              # Flutter cross-platform client
+├── tools/                   # Scripts, screen export pipeline, dev tooling
+├── archive/                 # Deprecated legacy codebases (old-backend)
 ├── docs/                    # Architectural reports, brand guidelines, and UI archives
-│   ├── brand/               # VitalSoft brand identity guidelines & logos
-│   ├── reports/             # MVP audit & validation reports
-│   └── archive/             # Historical execution steps and logs
-├── frontend/                # Next.js 14 App Router application
-│   ├── app/                 # Routes: (auth), appointments, patient, doctors, admin
-│   ├── components/          # Reusable UI components & multi-step wizards
-│   ├── lib/                 # Auth TokenManager, API client, Server Actions
-│   └── constants/           # Algerian wilayas, specialties, dictionary
-├── laravel-backend/         # Laravel 11 RESTful API
-│   ├── app/Http/            # Controllers, Form Requests, Resources
-│   ├── app/Services/        # Domain business logic
-│   ├── app/Repositories/    # Eloquent database abstractions
-│   └── database/            # PostgreSQL migrations and seeders
 └── .github/workflows/       # GitHub Actions CI/CD test and build pipelines
 ```
 
