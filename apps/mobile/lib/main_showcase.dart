@@ -164,8 +164,8 @@ class TypewriterSplashPreview extends StatefulWidget {
 }
 
 class _TypewriterSplashPreviewState extends State<TypewriterSplashPreview> {
-  String _typed = 'VitalBo';
-  bool _cursor = true;
+  final String _typed = 'VitalBo';
+  final bool _cursor = true;
   Timer? _anim;
 
   @override
