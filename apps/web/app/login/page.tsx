@@ -15,6 +15,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BrandLogo } from "@/components/BrandLogo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { DemoTourModal } from "@/components/DemoTourModal";
 import { toast } from "@/hooks/use-toast";
@@ -335,19 +336,12 @@ function SignInContent() {
         <div className="absolute -bottom-24 -right-24 size-96 rounded-full bg-teal-500/10 blur-3xl pointer-events-none" />
 
         <div className="flex items-center justify-between z-10">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-lg shadow-emerald-900/40 group-hover:scale-105 transition-transform">
-              <Activity className="size-5" />
-            </div>
-            <div>
-              <span className="text-xl font-black tracking-tight text-white">
-                Vital<span className="text-teal-400">Book</span>
-              </span>
-              <span className="text-[10px] block font-mono text-emerald-300/80 -mt-1 tracking-wider uppercase">
-                Santé Algérie
-              </span>
-            </div>
-          </Link>
+          <BrandLogo
+            size={40}
+            subtitle="Santé Algérie"
+            textClassName="text-white text-xl"
+            subtitleClassName="text-emerald-300/80 font-mono"
+          />
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <DemoTourModal />

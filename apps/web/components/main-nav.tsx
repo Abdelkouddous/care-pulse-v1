@@ -12,6 +12,7 @@ import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import { NavItem } from "@/types/nav";
 import { Button } from "@/components/ui/button";
+import { BrandLogo } from "@/components/BrandLogo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { DemoTourModal } from "@/components/DemoTourModal";
 import { DICTIONARY_EN } from "@/constants/locales/en";
@@ -101,18 +102,7 @@ export function MainNav({ items, userId }: MainNavProps) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Brand Logo */}
-          <Link href="/" className="transition-opacity hover:opacity-80 flex items-center gap-2.5">
-            <Image
-              src="/favicon.svg"
-              alt="VitalBook"
-              width={38}
-              height={38}
-              priority
-            />
-            <span className="font-sans text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">
-              Vital<span className="font-light text-teal-600 dark:text-teal-400">Book</span>
-            </span>
-          </Link>
+          <BrandLogo size={38} />
 
           {/* Desktop Navigation Links */}
           <div className="hidden items-center space-x-6 md:flex">

@@ -324,6 +324,28 @@ class _DoctorBookingScreenState extends ConsumerState<DoctorBookingScreen> {
                                   if (!mounted) return;
                                   if (success) {
                                     _showSuccessDialog(this.context);
+                                  } else {
+                                    final error = ref.read(bookingControllerProvider).errorMessage;
+                                    ScaffoldMessenger.of(this.context).hideCurrentSnackBar();
+                                    ScaffoldMessenger.of(this.context).showSnackBar(
+                                      SnackBar(
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor: AppColors.destructive,
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                        content: Row(
+                                          children: [
+                                            const Icon(Icons.cloud_off_rounded, color: Colors.white, size: 20),
+                                            const SizedBox(width: 10),
+                                            Expanded(
+                                              child: Text(
+                                                error ?? 'Failed to book appointment. Please check server connection.',
+                                                style: const TextStyle(color: Colors.white, fontSize: 13),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
                                   }
                                 },
                           style: ElevatedButton.styleFrom(

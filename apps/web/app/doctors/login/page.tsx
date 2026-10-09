@@ -12,6 +12,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BrandLogo } from "@/components/BrandLogo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { DemoTourModal } from "@/components/DemoTourModal";
 import { authService } from "@/lib/api/auth.service";
@@ -84,17 +85,12 @@ export default function DoctorLoginPage() {
       {/* Brand & Security Panel (Left) */}
       <div className="lg:w-1/2 bg-gradient-to-br from-sky-950 via-slate-900 to-[#031d28] text-white p-8 sm:p-12 lg:p-16 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-border/40 relative">
         <div className="flex items-center justify-between z-10">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-sky-600 text-white shadow-lg shadow-sky-900/40">
-              <Activity className="size-5" />
-            </div>
-            <div>
-              <span className="font-extrabold text-lg tracking-tight block">VitalBook</span>
-              <span className="text-[10px] text-sky-300 font-semibold tracking-wider uppercase block">
-                Doctor Portal
-              </span>
-            </div>
-          </Link>
+          <BrandLogo
+            size={40}
+            subtitle="Doctor Portal"
+            textClassName="text-white text-xl"
+            subtitleClassName="text-sky-300 font-semibold"
+          />
 
           <Link href="/">
             <Button

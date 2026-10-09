@@ -13,6 +13,7 @@ import {
   Shield,
   Globe,
 } from "lucide-react";
+import { BrandLogo } from "@/components/BrandLogo";
 
 export const SiteFooter = () => {
   const currentYear = new Date().getFullYear();
@@ -32,17 +33,11 @@ export const SiteFooter = () => {
 
           {/* Column 1: Brand */}
           <div className="flex flex-col space-y-5 lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-colors">
-                <Activity className="size-5 text-emerald-400" />
-              </div>
-              <div>
-                <span className="font-extrabold text-lg text-white tracking-tight block">VitalBook</span>
-                <span className="text-[10px] text-slate-500 font-semibold tracking-wider uppercase block">
-                  Medical Center
-                </span>
-              </div>
-            </Link>
+            <BrandLogo
+              size={38}
+              subtitle="Medical Center"
+              textClassName="text-white text-lg"
+            />
             <p className="text-sm leading-relaxed text-slate-400 max-w-xs">
               Enterprise-grade healthcare appointment platform connecting patients
               with trusted physicians. Built for Algerian clinics with CNAS integration.

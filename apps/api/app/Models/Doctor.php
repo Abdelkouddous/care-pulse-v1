@@ -61,6 +61,11 @@ class Doctor extends Authenticatable
         return $this->hasMany(Appointment::class, 'doctor_id');
     }
 
+    public function getNameAttribute(): string
+    {
+        return 'Dr. ' . trim("{$this->first_name} {$this->last_name}");
+    }
+
     public function medicalRecords()
     {
         return $this->hasMany(MedicalRecord::class, 'doctor_id');

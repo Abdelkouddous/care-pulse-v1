@@ -33,10 +33,13 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\Contracts\IAdminRepository::class,
             \App\Repositories\Eloquent\EloquentAdminRepository::class
         );
-        $this->app->bind(
-            \App\Services\Contracts\IWhatsAppGateway::class,
-            \App\Services\WhatsApp\LogWhatsAppGateway::class
-        );
+        $this->app->bind(\App\Services\Contracts\IWhatsAppGateway::class, function () {
+            $driver = config('services.whatsapp.driver', 'log');
+            if ($driver === 'twilio') {
+                return new \App\Services\WhatsApp\TwilioWhatsAppGateway();
+            }
+            return new \App\Services\WhatsApp\LogWhatsAppGateway();
+        });
     }
 
     /**

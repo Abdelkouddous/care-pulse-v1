@@ -32,12 +32,12 @@ class WhatsAppNotificationService
         }
 
         $patientName = $patient->name ?? 'Patient';
-        $doctorName = $doctor->name ?? 'votre médecin';
+        $doctorName = $doctor->name ?? ('Dr. ' . trim(($doctor->first_name ?? '') . ' ' . ($doctor->last_name ?? '')));
         $scheduledTime = Carbon::parse($appointment->scheduled_at);
         $dateStr = $scheduledTime->format('d/m/Y');
         $timeStr = $scheduledTime->format('H:i');
 
-        $message = "Bonjour {$patientName}, votre consultation chez VitalBook avec Dr. {$doctorName} est prévue pour le {$dateStr} à {$timeStr}.\n\n"
+        $message = "Bonjour {$patientName}, votre consultation chez VitalBook avec {$doctorName} est prévue pour le {$dateStr} à {$timeStr}.\n\n"
             . "👉 Répondez 1 (ou OUI) pour CONFIRMER votre présence.\n"
             . "👉 Répondez 2 (ou NON) pour ANNULER la consultation.";
 
@@ -83,9 +83,10 @@ class WhatsAppNotificationService
         }
 
         if (! $appointment) {
-            // Find patient by phone variant (e.g. +213555... or 0555...)
-            $cleanSuffix = substr($normalizedPhone, -8);
-            $patient = User::where('phone', 'LIKE', '%' . $cleanSuffix)->first();
+            // Find patient by phone variant (matching digits without spaces)
+            $cleanDigits = preg_replace('/[^0-9]/', '', $normalizedPhone);
+            $cleanSuffix = substr($cleanDigits, -8);
+            $patient = User::whereRaw("REPLACE(REPLACE(phone, ' ', ''), '-', '') LIKE ?", ['%' . $cleanSuffix])->first();
 
             if ($patient) {
                 $appointment = Appointment::where('patient_id', $patient->id)

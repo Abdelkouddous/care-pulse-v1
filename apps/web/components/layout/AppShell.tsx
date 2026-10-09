@@ -28,6 +28,7 @@ import {
   Layers,
   Sparkles,
 } from "lucide-react";
+import { BrandLogo } from "@/components/BrandLogo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -330,26 +331,18 @@ export function AppShell({
         )}
       >
         {/* Brand Header */}
-        <div className="h-16 px-4 flex items-center justify-between border-b border-border">
-          <Link href="/" className="flex items-center gap-2.5 overflow-hidden group">
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm shadow-primary/20 group-hover:scale-105 transition-transform">
-              <Activity className="size-5" />
-            </div>
-            {!isCollapsed && (
-              <div className="flex flex-col">
-                <span className="font-extrabold text-base tracking-tight text-foreground leading-none">
-                  VitalBook
-                </span>
-                <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider mt-0.5">
-                  {detectedRole === "admin"
-                    ? "Admin Console"
-                    : detectedRole === "doctor"
-                    ? "Doctor Portal"
-                    : "Patient Clinic"}
-                </span>
-              </div>
-            )}
-          </Link>
+        <div className="h-16 px-4 flex items-center justify-between border-b border-border overflow-hidden">
+          <BrandLogo
+            size={36}
+            isCollapsed={isCollapsed}
+            subtitle={
+              detectedRole === "admin"
+                ? "Admin Console"
+                : detectedRole === "doctor"
+                ? "Doctor Portal"
+                : "Patient Clinic"
+            }
+          />
         </div>
 
         {/* Navigation Items */}
@@ -443,17 +436,16 @@ export function AppShell({
           >
             <div className="space-y-6">
               <div className="flex items-center justify-between pb-4 border-b border-border">
-                <div className="flex items-center gap-2.5">
-                  <div className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-                    <Activity className="size-5" />
-                  </div>
-                  <div>
-                    <span className="font-bold text-base text-foreground block">VitalBook</span>
-                    <span className="text-[10px] text-muted-foreground uppercase font-semibold">
-                      {detectedRole} Portal
-                    </span>
-                  </div>
-                </div>
+                <BrandLogo
+                  size={36}
+                  subtitle={
+                    detectedRole === "admin"
+                      ? "Admin Console"
+                      : detectedRole === "doctor"
+                      ? "Doctor Portal"
+                      : "Patient Clinic"
+                  }
+                />
                 <Button
                   roleVariant="ghost"
                   size="icon"

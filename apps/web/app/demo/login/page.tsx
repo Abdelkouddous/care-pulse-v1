@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   User,
@@ -27,6 +26,7 @@ import { authService } from "@/lib/api/auth.service";
 import { TokenManager } from "@/lib/auth";
 import { toast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { BrandLogo } from "@/components/BrandLogo";
 import { MOCK_PATIENT, MOCK_DOCTOR } from "@/mocks/data";
 
 export default function DemoLoginPage() {
@@ -113,12 +113,7 @@ export default function DemoLoginPage() {
       <header className="w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <Image src="/favicon.svg" alt="VitalBook Logo" width={34} height={34} priority />
-              <span className="font-extrabold text-lg tracking-tight">
-                Vital<span className="font-light text-teal-600 dark:text-teal-400">Book</span>
-              </span>
-            </Link>
+            <BrandLogo size={34} />
             <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
               Interactive Demo Sandbox
             </span>

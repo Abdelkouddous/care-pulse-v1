@@ -44,6 +44,11 @@ return [
         'driver' => env('WHATSAPP_DRIVER', 'log'),
         'from_number' => env('WHATSAPP_FROM_NUMBER', '+14155238886'),
         'webhook_secret' => env('WHATSAPP_WEBHOOK_SECRET'),
+        'twilio' => [
+            'sid' => env('TWILIO_ACCOUNT_SID'),
+            'token' => env('TWILIO_AUTH_TOKEN'),
+            'from' => env('TWILIO_WHATSAPP_FROM', '+14155238886'),
+        ],
     ],
 
 ];

@@ -14,14 +14,22 @@ export const Icons = {
   moon: Moon,
 
   // main app logo
-  logo: (props: LucideProps) => (
-    <Image 
-      src="/logo.svg"
-      alt='VitalBook'
-      width={160}
-      height={40}
-      priority />
-    
+  logo: (props: { className?: string; size?: number } & Partial<LucideProps>) => (
+    <div className="inline-flex items-center gap-2.5">
+      <Image
+        src="/favicon.svg"
+        alt="VitalBook"
+        width={props.size || 38}
+        height={props.size || 38}
+        priority
+      />
+      <span className="font-sans text-lg font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+        Vital
+        <span className="font-light text-teal-600 dark:text-teal-400">
+          Book
+        </span>
+      </span>
+    </div>
   ),
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>

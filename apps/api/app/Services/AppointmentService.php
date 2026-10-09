@@ -95,7 +95,11 @@ class AppointmentService
 
     public function updateStatus(string $appointmentId, string $status, ?string $reason = null, ?string $actor = null): bool
     {
-        return $this->appointmentRepo->updateStatus($appointmentId, $status, $reason, $actor);
+        $updated = $this->appointmentRepo->updateStatus($appointmentId, $status, $reason, $actor);
+        if ($updated && in_array($status, ['scheduled', 'confirmed'])) {
+            $this->dispatchWhatsAppReminder($appointmentId);
+        }
+        return $updated;
     }
 
     public function getAppointment(string $id): ?Appointment
