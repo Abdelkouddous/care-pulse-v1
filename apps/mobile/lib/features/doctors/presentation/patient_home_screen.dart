@@ -80,7 +80,7 @@ class _PatientHomeScreenState extends ConsumerState<PatientHomeScreen> {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              user?.name.isNotEmpty == true ? 'Hello, ${user!.name}' : 'Welcome to VitalBook',
+                              user?.name.isNotEmpty == true ? 'Hello, ${user!.name}' : 'Welcome to Wateen Book',
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.w800,
                                 fontSize: 17,

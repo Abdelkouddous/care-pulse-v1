@@ -1,10 +1,10 @@
-# Architecture & Stack Guidelines: VitalBook V1
+# Architecture & Stack Guidelines: Wateen Book V1
 
 ## 1. Monorepo Architecture
 - **Web App (`apps/web`):** Next.js 14.2 (App Router), TypeScript, Tailwind CSS, TanStack Query, Zustand.
 - **Backend API (`apps/api`):** Laravel 11 + Laravel Sanctum, PostgreSQL 18, Repository-Service pattern.
-- **Mobile Client (`apps/mobile`):** Flutter cross-platform client.
-- **Auth & Session Management:** `TokenManager` managing dual token storage (`vitalbook_token` / `user_token`) with synchronized cookies and local storage.
+- **Mobile Client (`apps/mobile`):** Flutter cross-platform client (`com.wateensoft.wateenbook`).
+- **Auth & Session Management:** `TokenManager` managing dual token storage (`wateenbook_token` / `vitalbook_token` / `user_token`) with synchronized cookies and local storage.
 
 ## 2. Core Guardrails & Invariants
 - **Integer Money Guardrail:** Store all currency amounts in minor units (cents / centimes). E.g. $4,500$ DZD = `450,000` cents.

@@ -13,6 +13,7 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, HasUuids, Notifiable;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     /**

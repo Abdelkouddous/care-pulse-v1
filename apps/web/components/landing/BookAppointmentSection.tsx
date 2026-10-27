@@ -99,7 +99,7 @@ export function BookAppointmentSection({
       } else {
         toast({
           title: "New Patient Registration",
-          description: "Welcome to VitalBook! Please complete your registration wizard.",
+          description: "Welcome to Wateen Book! Please complete your registration wizard.",
         });
         router.push(`/register?phone=${encodeURIComponent(phone)}`);
       }
@@ -286,7 +286,7 @@ export function BookAppointmentSection({
               <div className="flex items-center gap-2">
                 <Sparkles className="size-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                 <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
-                  Evaluating VitalBook SaaS?
+                  Evaluating Wateen Book SaaS?
                 </span>
               </div>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">

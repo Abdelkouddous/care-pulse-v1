@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wateen Book — Affiche Patients Salle d'Attente & Comptoir</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@700;800&family=Poppins:wght@600;700;800;900&display=swap');
+
+    :root {
+      --brand-primary: #008668;
+      --brand-aqua: #33CCCC;
+      --brand-accent: #FF9B33;
+      --surface-dark: #0B131E;
+      --surface-light: #F8FAFC;
+      --card-white: #FFFFFF;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --border-light: #E2E8F0;
+      --success: #10B981;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #FFFFFF;
+      color: var(--text-main);
+      width: 1200px;
+      min-height: 1650px;
+      margin: 0 auto;
+      padding: 56px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* TOP ACCENT BAR */
+    .top-accent {
+      height: 8px;
+      width: 100%;
+      background: linear-gradient(90deg, var(--brand-primary) 0%, var(--brand-aqua) 100%);
+      border-radius: 4px;
+      margin-bottom: 24px;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-light);
+      padding-bottom: 22px;
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .logo-icon {
+      width: 72px;
+      height: 72px;
+      filter: drop-shadow(0 4px 12px rgba(0, 134, 104, 0.25));
+    }
+    .logo-icon svg { width: 100%; height: 100%; }
+
+    .brand-title h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: var(--text-main);
+    }
+    .brand-title h1 span { color: var(--brand-primary); }
+    .brand-title p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .badge-free {
+      background: #F0FDF4;
+      border: 2px solid var(--success);
+      color: #065F46;
+      font-family: 'Poppins', 'Cairo', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      padding: 10px 24px;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.12);
+    }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      margin: 28px 0;
+    }
+
+    .hero-pill {
+      display: inline-block;
+      background: #F0FDFA;
+      border: 1.5px solid var(--brand-aqua);
+      color: var(--brand-primary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 800;
+      padding: 8px 24px;
+      border-radius: 30px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .hero-headline {
+      font-family: 'Poppins', sans-serif;
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -1.5px;
+      color: var(--text-main);
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+    .hero-headline span {
+      color: var(--brand-primary);
+    }
+
+    .hero-arabic {
+      font-family: 'Cairo', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: #334155;
+      margin-top: 14px;
+      direction: rtl;
+    }
+
+    /* MAIN QR & CONVENIENCE SHOWCASE */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 36px;
+      align-items: center;
+      background: var(--surface-light);
+      border: 2.5px solid var(--border-light);
+      border-radius: 28px;
+      padding: 40px;
+      margin: 20px 0;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+    }
+
+    .features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-light);
+      border-radius: 16px;
+      padding: 18px 20px;
+    }
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(0, 134, 104, 0.1);
+      border: 1.5px solid var(--brand-primary);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: var(--brand-primary);
+      flex-shrink: 0;
+    }
+    .feature-content h4 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    .feature-content p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* QR CODE FRAME */
+    .qr-container {
+      background: #FFFFFF;
+      border: 2.5px solid var(--brand-primary);
+      border-radius: 24px;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(0, 134, 104, 0.15);
+    }
+    .qr-box {
+      width: 220px;
+      height: 220px;
+      margin: 0 auto 16px auto;
+      background: #FFFFFF;
+      border: 2px dashed var(--brand-aqua);
+      border-radius: 16px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .qr-box svg { width: 100%; height: 100%; }
+
+    .qr-label {
+      font-family: 'Poppins', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--brand-primary);
+      margin-bottom: 6px;
+    }
+    .qr-sub {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      direction: rtl;
+    }
+    .qr-url {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-top: 10px;
+      display: inline-block;
+      background: var(--surface-light);
+      padding: 6px 14px;
+      border-radius: 8px;
+    }
+
+    /* 3 SIMPLE STEPS */
+    .steps-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .step-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-light);
+      border-radius: 18px;
+      padding: 22px;
+      text-align: center;
+      position: relative;
+    }
+    .step-num {
+      width: 38px;
+      height: 38px;
+      background: var(--brand-primary);
+      color: #FFFFFF;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      font-weight: 800;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px auto;
+    }
+    .step-card h4 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .step-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* FOOTER */
+    .footer {
+      border-top: 2px solid var(--border-light);
+      padding-top: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .footer-left strong {
+      color: var(--brand-primary);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .store-badges {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .store-badge {
+      background: var(--surface-dark);
+      color: #FFFFFF;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-accent"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="brand-box">
+      <div class="logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+          <defs>
+            <linearGradient id="p3-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#008668"/>
+              <stop offset="100%" stop-color="#33CCCC"/>
+            </linearGradient>
+          </defs>
+          <rect width="1024" height="1024" rx="240" fill="#0B131E"/>
+          <rect x="16" y="16" width="992" height="992" rx="224" fill="none" stroke="#33CCCC" stroke-opacity="0.3" stroke-width="12"/>
+          <path d="M512 140C680 230 820 230 860 360C900 620 760 840 512 940C264 840 124 620 164 360C204 230 344 230 512 140Z" fill="url(#p3-grad)"/>
+          <path d="M260 550H370L430 420L510 680L570 460L630 600L690 550H780" fill="none" stroke="#FFFFFF" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="570" cy="460" r="32" fill="#FFFFFF"/>
+        </svg>
+      </div>
+      <div class="brand-title">
+        <h1>Wateen<span>Book</span></h1>
+        <p>Rendez-vous Médicaux & Santé</p>
+      </div>
+    </div>
+    <div class="badge-free">
+      ✓ 100% Gratuit pour les Patients · مجاني دائماً
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-pill">Service de Santé en Algérie</div>
+    <h2 class="hero-headline">
+      Pour votre prochain rendez-vous,<br/>
+      <span>évitez l'attente au téléphone.</span>
+    </h2>
+    <div class="hero-arabic">احجز موعدك الطبي القادم في ثوانٍ دون الحاجة للاتصال</div>
+  </section>
+
+  <!-- SHOWCASE & QR -->
+  <section class="showcase-grid">
+    <div class="features-list">
+      <div class="feature-item">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-content">
+          <h4>Réservation Instantanée 24h/24</h4>
+          <p>Consultez les créneaux réels disponibles et réservez l'heure exacte qui vous convient sans dépendre des heures d'ouverture.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">💬</div>
+        <div class="feature-content">
+          <h4>Rappel & Confirmation WhatsApp</h4>
+          <p>Recevez votre confirmation officielle directement sur WhatsApp et confirmez ou reportez en 1 clic.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">💳</div>
+        <div class="feature-content">
+          <h4>Prise en Charge Carte Chifa</h4>
+          <p>Visualisez immédiatement les praticiens et centres médicaux conventionnés avec la Sécurité Sociale (CNAS / CASNOS).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- QR CODE FRAME -->
+    <div class="qr-container">
+      <div class="qr-box">
+        <!-- High-fidelity QR code graphic -->
+        <svg viewBox="0 0 100 100" fill="#0B131E">
+          <!-- Position Detection Squares (Top-Left, Top-Right, Bottom-Left) -->
+          <rect x="5" y="5" width="28" height="28" rx="4" fill="#008668"/>
+          <rect x="9" y="9" width="20" height="20" rx="2" fill="#FFFFFF"/>
+          <rect x="13" y="13" width="12" height="12" rx="1" fill="#008668"/>
+
+          <rect x="67" y="5" width="28" height="28" rx="4" fill="#008668"/>
+          <rect x="71" y="9" width="20" height="20" rx="2" fill="#FFFFFF"/>
+          <rect x="75" y="13" width="12" height="12" rx="1" fill="#008668"/>
+
+          <rect x="5" y="67" width="28" height="28" rx="4" fill="#008668"/>
+          <rect x="9" y="71" width="20" height="20" rx="2" fill="#FFFFFF"/>
+          <rect x="13" y="75" width="12" height="12" rx="1" fill="#008668"/>
+
+          <!-- Decorative QR pattern modules -->
+          <rect x="38" y="10" width="8" height="8" rx="2"/>
+          <rect x="50" y="14" width="8" height="8" rx="2"/>
+          <rect x="38" y="24" width="6" height="6" rx="1"/>
+          <rect x="52" y="26" width="8" height="8" rx="2"/>
+
+          <rect x="10" y="38" width="6" height="6" rx="1"/>
+          <rect x="22" y="44" width="8" height="8" rx="2"/>
+          <rect x="38" y="40" width="12" height="12" rx="2" fill="#33CCCC"/>
+          <rect x="56" y="40" width="8" height="8" rx="2"/>
+          <rect x="70" y="42" width="6" height="6" rx="1"/>
+          <rect x="82" y="40" width="8" height="8" rx="2"/>
+
+          <rect x="38" y="60" width="8" height="8" rx="2"/>
+          <rect x="50" y="56" width="6" height="6" rx="1"/>
+          <rect x="62" y="62" width="10" height="10" rx="2"/>
+          <rect x="78" y="60" width="6" height="6" rx="1"/>
+
+          <rect x="38" y="76" width="10" height="10" rx="2"/>
+          <rect x="54" y="74" width="8" height="8" rx="2"/>
+          <rect x="68" y="78" width="8" height="8" rx="2"/>
+          <rect x="82" y="74" width="10" height="10" rx="2"/>
+        </svg>
+      </div>
+      <div class="qr-label">Scannez avec votre téléphone</div>
+      <div class="qr-sub">امسح الرمز بكاميرا هاتفك لحجز موعدك القادم</div>
+      <div class="qr-url">book.wateensoft.com</div>
+    </div>
+  </section>
+
+  <!-- 3 STEPS -->
+  <section class="steps-row">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <h4>Scannez le QR Code</h4>
+      <p>Ouvrez l'appareil photo de votre mobile et scannez le code ci-dessus.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <h4>Choisissez votre Praticien</h4>
+      <p>Sélectionnez la date, l'horaire et votre mode de consultation.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <h4>Confirmation WhatsApp</h4>
+      <p>Votre rendez-vous est immédiatement sécurisé sans appel téléphonique.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-left">
+      <strong>Wateen Book (وتين بوك)</strong> · Une innovation WateenSoft HealthTech Solutions<br/>
+      Disponible à Alger, Tébessa et dans toutes les wilayas d'Algérie.
+    </div>
+    <div class="store-badges">
+      <div class="store-badge">
+        <span>Google Play</span> · com.wateensoft.wateenbook
+      </div>
+      <div class="store-badge">
+        <span>App Store</span> · iOS
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

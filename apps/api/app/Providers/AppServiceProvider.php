@@ -2,6 +2,30 @@
 
 namespace App\Providers;
 
+use App\Models\Appointment;
+use App\Policies\AppointmentPolicy;
+use App\Repositories\Contracts\IAdminRepository;
+use App\Repositories\Contracts\IAppointmentRepository;
+use App\Repositories\Contracts\IClinicRepository;
+use App\Repositories\Contracts\IDoctorRepository;
+use App\Repositories\Contracts\IPatientRepository;
+use App\Repositories\Contracts\ISpecialtyRepository;
+use App\Repositories\Eloquent\EloquentAdminRepository;
+use App\Repositories\Eloquent\EloquentAppointmentRepository;
+use App\Repositories\Eloquent\EloquentClinicRepository;
+use App\Repositories\Eloquent\EloquentDoctorRepository;
+use App\Repositories\Eloquent\EloquentPatientRepository;
+use App\Repositories\Eloquent\EloquentSpecialtyRepository;
+use App\Services\ClinicGeolocationService;
+use App\Services\Contracts\IClinicGeolocationService;
+use App\Services\Contracts\ISmsGateway;
+use App\Services\Contracts\IWhatsAppGateway;
+use App\Services\Sms\LogSmsGateway;
+use App\Services\Sms\TwilioSmsGateway;
+use App\Services\TenantContext;
+use App\Services\WhatsApp\LogWhatsAppGateway;
+use App\Services\WhatsApp\TwilioWhatsAppGateway;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,34 +35,52 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->scoped(\App\Services\TenantContext::class, fn () => new \App\Services\TenantContext());
+        $this->app->scoped(TenantContext::class, fn () => new TenantContext);
 
         $this->app->bind(
-            \App\Repositories\Contracts\IAppointmentRepository::class,
-            \App\Repositories\Eloquent\EloquentAppointmentRepository::class
+            IAppointmentRepository::class,
+            EloquentAppointmentRepository::class
         );
         $this->app->bind(
-            \App\Repositories\Contracts\IDoctorRepository::class,
-            \App\Repositories\Eloquent\EloquentDoctorRepository::class
+            IDoctorRepository::class,
+            EloquentDoctorRepository::class
         );
         $this->app->bind(
-            \App\Repositories\Contracts\IPatientRepository::class,
-            \App\Repositories\Eloquent\EloquentPatientRepository::class
+            IPatientRepository::class,
+            EloquentPatientRepository::class
         );
         $this->app->bind(
-            \App\Repositories\Contracts\ISpecialtyRepository::class,
-            \App\Repositories\Eloquent\EloquentSpecialtyRepository::class
+            ISpecialtyRepository::class,
+            EloquentSpecialtyRepository::class
         );
         $this->app->bind(
-            \App\Repositories\Contracts\IAdminRepository::class,
-            \App\Repositories\Eloquent\EloquentAdminRepository::class
+            IAdminRepository::class,
+            EloquentAdminRepository::class
         );
-        $this->app->bind(\App\Services\Contracts\IWhatsAppGateway::class, function () {
+        $this->app->bind(
+            IClinicRepository::class,
+            EloquentClinicRepository::class
+        );
+        $this->app->bind(
+            IClinicGeolocationService::class,
+            ClinicGeolocationService::class
+        );
+        $this->app->bind(IWhatsAppGateway::class, function () {
             $driver = config('services.whatsapp.driver', 'log');
             if ($driver === 'twilio') {
-                return new \App\Services\WhatsApp\TwilioWhatsAppGateway();
+                return new TwilioWhatsAppGateway;
             }
-            return new \App\Services\WhatsApp\LogWhatsAppGateway();
+
+            return new LogWhatsAppGateway;
+        });
+
+        $this->app->bind(ISmsGateway::class, function () {
+            $driver = config('services.sms.driver', 'log');
+            if ($driver === 'twilio') {
+                return new TwilioSmsGateway;
+            }
+
+            return new LogSmsGateway;
         });
     }
 
@@ -47,6 +89,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Gate::policy(Appointment::class, AppointmentPolicy::class);
     }
 }

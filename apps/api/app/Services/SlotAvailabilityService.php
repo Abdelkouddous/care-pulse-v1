@@ -42,8 +42,8 @@ class SlotAvailabilityService
         $durationMinutes = $availability->slot_duration_minutes ?: 30;
 
         // Parse start and end times on this specific date
-        $startTime = Carbon::parse($date->format('Y-m-d') . ' ' . $availability->start_time);
-        $endTime = Carbon::parse($date->format('Y-m-d') . ' ' . $availability->end_time);
+        $startTime = Carbon::parse($date->format('Y-m-d').' '.$availability->start_time);
+        $endTime = Carbon::parse($date->format('Y-m-d').' '.$availability->end_time);
 
         // Fetch booked appointments on this day
         $bookedAppointments = $this->appointmentRepo->getActiveAppointmentsForDoctor($doctorId, $date);

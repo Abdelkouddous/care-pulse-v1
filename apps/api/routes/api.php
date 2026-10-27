@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ClinicController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\PatientController;
 use App\Http\Controllers\Api\SpecialtyController;
@@ -26,10 +27,13 @@ Route::prefix('v1')->group(function () {
     Route::post('/webhooks/whatsapp', [WhatsAppWebhookController::class, 'handle']);
 
     Route::get('/specialties', [SpecialtyController::class, 'index']);
+    Route::get('/clinics/cities', [ClinicController::class, 'cities']);
+    Route::get('/clinics/nearby', [ClinicController::class, 'nearby']);
+    Route::get('/clinics', [ClinicController::class, 'index']);
+    Route::get('/clinics/{id}', [ClinicController::class, 'show']);
     Route::get('/doctors', [DoctorController::class, 'index']);
     Route::get('/doctors/{id}', [DoctorController::class, 'show']);
     Route::get('/doctors/{id}/slots', [DoctorController::class, 'slots']);
-    Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
 
     // -------------------------------------------------------------
     // Authenticated Common Routes (Sanctum)
@@ -45,13 +49,15 @@ Route::prefix('v1')->group(function () {
             Route::get('/me/appointments', [PatientController::class, 'appointments']);
         });
 
-        Route::post('/appointments', [AppointmentController::class, 'store']);
+        Route::post('/appointments', [AppointmentController::class, 'store'])->middleware('throttle:10,1');
+        Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
         Route::get('/appointments/history/clinic', [AppointmentController::class, 'history']);
         Route::put('/appointments/{id}/cancel', [AppointmentController::class, 'cancel']);
 
         // Doctor Boundaries
         Route::prefix('doctor-portal')->group(function () {
             Route::get('/appointments', [DoctorController::class, 'myAppointments']);
+            Route::get('/activities', [DoctorController::class, 'activities']);
             Route::put('/appointments/{id}/status', [DoctorController::class, 'updateAppointmentStatus']);
         });
 
@@ -66,7 +72,7 @@ Route::prefix('v1')->group(function () {
             Route::post('/doctors', [AdminController::class, 'createDoctor']);
             Route::put('/doctors/{id}', [AdminController::class, 'updateDoctor']);
             Route::delete('/doctors/{id}', [AdminController::class, 'deleteDoctor']);
+            Route::put('/clinics/{id}/location', [ClinicController::class, 'updateLocation']);
         });
     });
 });
-

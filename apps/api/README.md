@@ -1,58 +1,63 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# VitalBook API — Core Domain & Services
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> **Laravel 11 RESTful Medical Engine** · PHP 8.4 · Laravel Sanctum · PostgreSQL (Supabase) · Twilio WhatsApp Gateway
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🏗️ Architecture & Core Principles
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+The VitalBook API acts as the central business logic, persistence, and notification authority for the entire ecosystem (Web & Mobile).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Service-Repository Pattern:** Controllers remain lean by delegating validation to Form Requests, domain rules to Domain Services (`AppointmentService`, `WhatsAppNotificationService`), and persistence to Eloquent Repositories.
+- **Strict Integer Money:** All consultation fees and ledger records are stored as integer centimes (`int consultation_fee_cents`) in Algerian Dinars (DZD).
+- **Anti-Double-Booking Guardrail:** Database-level compound unique constraint on `(doctor_id, scheduled_at)` with ACID transaction rollback.
+- **Two-Way WhatsApp Engine:** Integration with Twilio WhatsApp Business API for outbound booking prompts and inbound interactive triage webhooks (`1/CONFIRM` vs `2/CANCEL`).
+- **Multi-Tenant Isolation:** Requests require an `X-Clinic-ID` UUID header, resolved and verified via middleware against user tenancy and automated Eloquent Global Scopes.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 📡 Key Endpoints
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Method | URI | Description | Auth Guard |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/v1/auth/login` | Patient authentication & token issuance | Public |
+| `POST` | `/api/v1/auth/doctor/login` | Physician login | Public |
+| `POST` | `/api/v1/auth/admin/login` | Clinic Administrator login | Public |
+| `GET` | `/api/v1/specialties` | Medical domain catalog | Public / Tenant |
+| `GET` | `/api/v1/doctors` | Active physician directory | Public / Tenant |
+| `GET` | `/api/v1/doctors/{id}/slots` | 30-minute dynamic consultation slot generator | Public / Tenant |
+| `POST` | `/api/v1/appointments` | Patient consultation reservation | Sanctum (`patient`) |
+| `GET` | `/api/v1/patients/me/appointments` | Authenticated patient bookings ledger | Sanctum (`patient`) |
+| `GET` | `/api/v1/doctor-portal/appointments` | Physician consultation roster | Sanctum (`doctor`) |
+| `PUT` | `/api/v1/doctor-portal/appointments/{id}/status` | Doctor triage transition (`scheduled`, `completed`) | Sanctum (`doctor`) |
+| `GET` | `/api/v1/admin/dashboard` | Clinic operational KPIs & metrics | Sanctum (`admin`) |
+| `GET` | `/api/v1/admin/appointments` | Live triage queue | Sanctum (`admin`) |
+| `POST` | `/api/v1/admin/appointments/{id}/whatsapp-ping` | On-demand WhatsApp prompt dispatch | Sanctum (`admin`) |
+| `POST` | `/api/v1/webhooks/whatsapp` | Two-way incoming WhatsApp webhook triage | Webhook Public / Verified |
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## 🧪 Testing & Quality Assurance
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Run the automated Pest PHP test suite:
 
 ```bash
-composer require laravel/boost --dev
+# Run all backend feature & unit tests
+php artisan test
 
-php artisan boost:install
+# Run WhatsApp integration test specifically
+php artisan test --filter WhatsAppIntegrationTest
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 🚀 Production Deployment ($0/Month Zero-Cost Stack)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+The API is packaged as a multi-stage production container designed for Render Free Web Service or Koyeb Free Nano:
 
-## Code of Conduct
+- **Runtime:** `php:8.4-fpm-alpine` + Nginx reverse proxy managed by Supervisord.
+- **Queue Workers:** 2 background worker processes consuming the Supabase `database` queue (`notifications,default`).
+- **Database Pooling:** Supabase PostgreSQL Supavisor transaction pooler on port `6543`.
+- **Healthcheck:** Natively verified on `/up` (HTTP 200).
+- **Deployment Audit:** Detailed governance sign-off in [`docs/reports/production_deployment_gate_audit.md`](file:///Users/morsistoredz/Desktop/Aymen%20HML/Informatique/Projects/Full%20Stack%20Projects/care-pulse-v1/docs/reports/production_deployment_gate_audit.md).
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>VitalBook</string>
+	<string>Wateen Book</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>VitalBook</string>
+	<string>wateen_book</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -66,5 +66,28 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
+	<!-- Deep Linking: wateenbook:// -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.wateensoft.wateenbook</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wateenbook</string>
+			</array>
+		</dict>
+	</array>
+
+	<!-- App Store Usage Descriptions & Compliance -->
+	<key>NSCameraUsageDescription</key>
+	<string>Wateen Book requires camera access to scan clinic check-in QR codes and upload medical prescriptions.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Wateen Book requires photo library access to upload medical reports and profile documents.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Wateen Book requires microphone access for teleconsultation audio with your doctor.</string>
 </dict>
 </plist>

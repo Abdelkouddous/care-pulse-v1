@@ -28,18 +28,19 @@ class WhatsAppNotificationService
         if (! $phone) {
             Log::warning('[WhatsApp] Missing patient phone number', ['appointment_id' => $appointment->id]);
             $appointment->update(['whatsapp_status' => 'failed']);
+
             return false;
         }
 
         $patientName = $patient->name ?? 'Patient';
-        $doctorName = $doctor->name ?? ('Dr. ' . trim(($doctor->first_name ?? '') . ' ' . ($doctor->last_name ?? '')));
+        $doctorName = $doctor->name ?? ('Dr. '.trim(($doctor->first_name ?? '').' '.($doctor->last_name ?? '')));
         $scheduledTime = Carbon::parse($appointment->scheduled_at);
         $dateStr = $scheduledTime->format('d/m/Y');
         $timeStr = $scheduledTime->format('H:i');
 
-        $message = "Bonjour {$patientName}, votre consultation chez VitalBook avec {$doctorName} est prévue pour le {$dateStr} à {$timeStr}.\n\n"
-            . "👉 Répondez 1 (ou OUI) pour CONFIRMER votre présence.\n"
-            . "👉 Répondez 2 (ou NON) pour ANNULER la consultation.";
+        $message = "Bonjour {$patientName}, votre consultation chez Wateen Book avec {$doctorName} est prévue pour le {$dateStr} à {$timeStr}.\n\n"
+            ."👉 Répondez 1 (ou OUI) pour CONFIRMER votre présence.\n"
+            .'👉 Répondez 2 (ou NON) pour ANNULER la consultation.';
 
         $result = $this->gateway->sendMessage($phone, $message, [
             'appointment_id' => $appointment->id,
@@ -52,10 +53,12 @@ class WhatsAppNotificationService
                 'whatsapp_message_id' => $result['message_id'] ?? null,
                 'whatsapp_last_sent_at' => now(),
             ]);
+
             return true;
         }
 
         $appointment->update(['whatsapp_status' => 'failed']);
+
         return false;
     }
 
@@ -77,8 +80,13 @@ class WhatsAppNotificationService
 
         // Locate corresponding appointment
         $appointment = null;
+        $appointmentId = $payload['appointment_id'] ?? null;
 
-        if ($messageId) {
+        if ($appointmentId) {
+            $appointment = Appointment::find($appointmentId);
+        }
+
+        if (! $appointment && $messageId) {
             $appointment = Appointment::where('whatsapp_message_id', $messageId)->first();
         }
 
@@ -86,7 +94,7 @@ class WhatsAppNotificationService
             // Find patient by phone variant (matching digits without spaces)
             $cleanDigits = preg_replace('/[^0-9]/', '', $normalizedPhone);
             $cleanSuffix = substr($cleanDigits, -8);
-            $patient = User::whereRaw("REPLACE(REPLACE(phone, ' ', ''), '-', '') LIKE ?", ['%' . $cleanSuffix])->first();
+            $patient = User::whereRaw("REPLACE(REPLACE(phone, ' ', ''), '-', '') LIKE ?", ['%'.$cleanSuffix])->first();
 
             if ($patient) {
                 $appointment = Appointment::where('patient_id', $patient->id)
@@ -102,6 +110,7 @@ class WhatsAppNotificationService
                 'phone' => $normalizedPhone,
                 'body' => $normalizedBody,
             ]);
+
             return [
                 'handled' => false,
                 'error' => 'No active appointment found for phone',

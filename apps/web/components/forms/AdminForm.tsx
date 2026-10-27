@@ -75,7 +75,7 @@ export function AdminForm() {
           <span className="inline-block text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-3.5 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-800/60">
             Admin Portal
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="font-sans text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
             Admin Authentication
           </h1>
           <p className="text-sm text-slate-600 dark:text-slate-300">

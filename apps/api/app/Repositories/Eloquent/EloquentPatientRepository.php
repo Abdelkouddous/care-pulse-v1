@@ -23,8 +23,8 @@ class EloquentPatientRepository implements IPatientRepository
     public function findByPhone(string $phone): ?User
     {
         $clean = preg_replace('/[^0-9]/', '', $phone);
-        $intl = str_starts_with($clean, '213') ? '+' . $clean : '+213' . ltrim($clean, '0');
-        $local = str_starts_with($clean, '213') ? '0' . substr($clean, 3) : (str_starts_with($clean, '0') ? $clean : '0' . $clean);
+        $intl = str_starts_with($clean, '213') ? '+'.$clean : '+213'.ltrim($clean, '0');
+        $local = str_starts_with($clean, '213') ? '0'.substr($clean, 3) : (str_starts_with($clean, '0') ? $clean : '0'.$clean);
 
         return User::where('phone', $phone)
             ->orWhere('phone', $intl)

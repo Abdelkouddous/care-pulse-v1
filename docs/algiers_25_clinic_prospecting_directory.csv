@@ -1,0 +1,26 @@
+id,clinic_name,district,specialty,lead_doctor,est_fee_dzd,primary_bottleneck,recommended_channel,status
+1,"Cabinet de Cardiologie Sidi Yahia",Sidi Yahia,Cardiologie,"Dr. R. Benali",4500,"High no-show cost on Echo-Doppler","In-person walk-in (10h30)",Not Contacted
+2,"Centre Pédiatrique les Glycines",Hydra,Pédiatrie,"Dr. S. Mansouri",3000,"Overbooked morning triage queue","Assistant WhatsApp intro",Not Contacted
+3,"Cabinet d'Ophtalmologie El Biar",El Biar,Ophtalmologie,"Dr. A. Khelifi",3500,"Patients forgetting dilating drops appt","In-person walk-in (11h00)",Not Contacted
+4,"Clinique Médicale Chéraga Ouest",Chéraga,Médecine Interne,"Dr. Y. Meziani",3500,"5-6 daily absences without notice","In-person walk-in (14h00)",Not Contacted
+5,"Cabinet de Gynécologie & Échographie",Dely Ibrahim,Gynécologie,"Dr. F. Boumedienne",4000,"Last-minute cancellations on 4D echo","Assistant WhatsApp intro",Not Contacted
+6,"Cabinet Dermatologie & Laser Hydra",Hydra,Dermatologie,"Dr. L. Hamidi",4000,"30-min long consultations missed","In-person walk-in (10h00)",Not Contacted
+7,"Cabinet d'Orthopédie & Traumatologie",Sidi Yahia,Orthopédie,"Dr. K. Zerrouki",4500,"Follow-up post-op appointments missed","In-person walk-in (11h30)",Not Contacted
+8,"Centre de Rhumatologie Chéraga",Chéraga,Rhumatologie,"Dr. N. Amrani",3000,"Elderly patients missing reminders","Assistant WhatsApp intro",Not Contacted
+9,"Cabinet Dentaire & Implantologie",Hydra,"Dentisterie / Implants","Dr. M. Taleb",5000,"1-hour surgical slots left empty","In-person walk-in (14h30)",Not Contacted
+10,"Cabinet d'Allergologie & Pneumologie",El Biar,Pneumologie,"Dr. H. Saidi",3500,"Chronic patients missing seasonal check","Assistant WhatsApp intro",Not Contacted
+11,"Cabinet d'Endocrinologie Diabétologie",Dely Ibrahim,Endocrinologie,"Dr. M. Larbi",3000,"Lab test delays causing no-shows","In-person walk-in (10h30)",Not Contacted
+12,"Cabinet de Neurologie Alger Centre",Alger Centre,Neurologie,"Dr. B. Chaouch",4000,"3-week waiting list blocked by ghosts","In-person walk-in (11h00)",Not Contacted
+13,"Polyclinique Privée Val d'Hydra",Val d'Hydra,Multi-spécialités,"Dr. C. Medjdoub",3500,"Receptionist spending 3h on phone","Executive briefing (Flyer)",Not Contacted
+14,"Cabinet de Pédiatrie & Néonatalogie",Sidi Yahia,Pédiatrie,"Dr. S. Djebbar",3500,"Vaccine schedule coordination","In-person walk-in (09h30)",Not Contacted
+15,"Cabinet d'Urologie Chéraga",Chéraga,Urologie,"Dr. O. Belkacem",4000,"Biopsy appointments not confirmed","In-person walk-in (15h00)",Not Contacted
+16,"Cabinet ORL & Chirurgie Cervicale",El Biar,ORL,"Dr. T. Yahiaoui",3500,"Audiogram slots left unfulfilled","Assistant WhatsApp intro",Not Contacted
+17,"Centre d'Échographie & Radiologie",Chéraga,Radiologie,"Dr. I. Merabet",4500,"Echo abdominale preparation missed","In-person walk-in (10h00)",Not Contacted
+18,"Cabinet de Cardiologie Kouba",Kouba,Cardiologie,"Dr. Z. Boudiaf",3500,"Holter ECG installation no-shows","In-person walk-in (11h00)",Not Contacted
+19,"Cabinet de Gastro-Entérologie",Dely Ibrahim,Gastro-Entérologie,"Dr. M. Ould-Kaci",4000,"Endoscopy prep check required","Assistant WhatsApp intro",Not Contacted
+20,"Cabinet de Psychiatrie & Psychothérapie",Hydra,Psychiatrie,"Dr. S. Berrada",4500,"Stigma causing cancellations","Assistant WhatsApp intro",Not Contacted
+21,"Cabinet d'Ophtalmologie Chéraga",Chéraga,Ophtalmologie,"Dr. A. Rezig",3000,"Laser treatment empty slots","In-person walk-in (14h00)",Not Contacted
+22,"Cabinet de Dermatologie Sidi Yahia",Sidi Yahia,Dermatologie,"Dr. Y. Khellil",4500,"Esthetic consultation no-shows","In-person walk-in (10h30)",Not Contacted
+23,"Cabinet de Pédiatrie El Biar",El Biar,Pédiatrie,"Dr. N. Touati",3000,"Receptionist overwhelmed with calls","Assistant WhatsApp intro",Not Contacted
+24,"Cabinet de Médecine du Sport",Hydra,"Médecine Sportive","Dr. R. Gherbi",3500,"Athletes missing physiotherapy checks","In-person walk-in (11h30)",Not Contacted
+25,"Centre Médical Ibn Sina",Alger Centre,Multi-spécialités,"Dr. A. Mokhtar",3000,"Multi-doctor schedule collisions","Executive briefing (Flyer)",Not Contacted

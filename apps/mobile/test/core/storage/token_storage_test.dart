@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vitalbook_mobile/core/storage/token_storage.dart';
+import 'package:wateen_book/core/storage/token_storage.dart';
 
 class MockSecureStorage extends Fake implements FlutterSecureStorage {
   final Map<String, String> _data = {};

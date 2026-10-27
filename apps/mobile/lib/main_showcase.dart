@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/theme/app_theme.dart';
-import 'core/widgets/vitalbook_logo.dart';
+import 'core/widgets/wateen_logo.dart';
 import 'features/appointments/domain/appointment_models.dart';
 import 'features/appointments/presentation/appointment_list_screen.dart';
 import 'features/appointments/presentation/booking_controller.dart';
@@ -26,7 +26,7 @@ class MockAuthController extends AuthController {
         name: 'Sarah Benali',
         firstName: 'Sarah',
         lastName: 'Benali',
-        email: 'sarah.benali@vitalbook.com',
+        email: 'sarah.benali@wateensoft.com',
         phone: '+213555998877',
         bloodType: 'O+',
         gender: 'female',
@@ -146,7 +146,7 @@ class _ShowcaseAppState extends State<ShowcaseApp> {
     }
 
     return MaterialApp(
-      title: 'VitalBook Showcase',
+      title: 'Wateen Book Showcase',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
@@ -164,7 +164,7 @@ class TypewriterSplashPreview extends StatefulWidget {
 }
 
 class _TypewriterSplashPreviewState extends State<TypewriterSplashPreview> {
-  final String _typed = 'VitalBo';
+  final String _typed = 'Wateen Bo';
   final bool _cursor = true;
   Timer? _anim;
 
@@ -181,13 +181,13 @@ class _TypewriterSplashPreviewState extends State<TypewriterSplashPreview> {
 
   @override
   Widget build(BuildContext context) {
-    String vitalPart = '';
+    String wateenPart = '';
     String bookPart = '';
-    if (_typed.length <= 5) {
-      vitalPart = _typed;
+    if (_typed.length <= 6) {
+      wateenPart = _typed;
     } else {
-      vitalPart = 'Vital';
-      bookPart = _typed.substring(5);
+      wateenPart = 'Wateen ';
+      bookPart = _typed.startsWith('Wateen ') ? _typed.substring(7) : _typed.substring(6);
     }
 
     return Scaffold(
@@ -198,7 +198,7 @@ class _TypewriterSplashPreviewState extends State<TypewriterSplashPreview> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              const VitalBookLogoWidget(size: 96),
+              const WateenBookLogoWidget(size: 96),
               const SizedBox(height: 28),
               RichText(
                 text: TextSpan(
@@ -209,7 +209,7 @@ class _TypewriterSplashPreviewState extends State<TypewriterSplashPreview> {
                   ),
                   children: [
                     TextSpan(
-                      text: vitalPart,
+                      text: wateenPart,
                       style: const TextStyle(
                         fontWeight: FontWeight.w800,
                         color: Color(0xFF0F172A),
@@ -219,14 +219,14 @@ class _TypewriterSplashPreviewState extends State<TypewriterSplashPreview> {
                       text: bookPart,
                       style: const TextStyle(
                         fontWeight: FontWeight.w300,
-                        color: Color(0xFF0D9488),
+                        color: Color(0xFF008668),
                       ),
                     ),
                     if (_cursor)
                       const TextSpan(
                         text: '▎',
                         style: TextStyle(
-                          color: Color(0xFF0D9488),
+                          color: Color(0xFF008668),
                           fontSize: 34,
                         ),
                       ),

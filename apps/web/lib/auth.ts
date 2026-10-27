@@ -1,18 +1,18 @@
 export class TokenManager {
-  private static readonly PRIMARY_TOKEN_KEY = "vitalbook_token";
+  private static readonly PRIMARY_TOKEN_KEY = "wateenbook_token";
   private static readonly FALLBACK_TOKEN_KEY = "vitalbook_token";
   private static readonly LEGACY_TOKEN_KEY = "user_token";
 
-  private static readonly PRIMARY_ROLE_KEY = "vitalbook_role";
+  private static readonly PRIMARY_ROLE_KEY = "wateenbook_role";
   private static readonly FALLBACK_ROLE_KEY = "vitalbook_role";
 
-  private static readonly PRIMARY_USER_KEY = "vitalbook_user";
+  private static readonly PRIMARY_USER_KEY = "wateenbook_user";
   private static readonly FALLBACK_USER_KEY = "vitalbook_user";
 
-  private static readonly PRIMARY_DEMO_KEY = "vitalbook_demo";
+  private static readonly PRIMARY_DEMO_KEY = "wateenbook_demo";
   private static readonly FALLBACK_DEMO_KEY = "vitalbook_demo";
 
-  private static readonly PRIMARY_CLINIC_KEY = "vitalbook_clinic_id";
+  private static readonly PRIMARY_CLINIC_KEY = "wateenbook_clinic_id";
   private static readonly FALLBACK_CLINIC_KEY = "vitalbook_clinic_id";
 
   private static readonly EXPIRY_KEY = "token_expiry";

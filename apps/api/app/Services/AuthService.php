@@ -8,9 +8,9 @@ use App\Models\User;
 use App\Repositories\Contracts\IAdminRepository;
 use App\Repositories\Contracts\IDoctorRepository;
 use App\Repositories\Contracts\IPatientRepository;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -29,7 +29,7 @@ class AuthService
      */
     protected function throttleKey(string $email, string $ip): string
     {
-        return 'login_strike:' . hash('sha256', $ip . '|' . strtolower(trim($email)));
+        return 'login_strike:'.hash('sha256', $ip.'|'.strtolower(trim($email)));
     }
 
     /**
@@ -130,7 +130,7 @@ class AuthService
         }
 
         $this->clearThrottle($email, $ip);
-        $token = $admin->createToken('admin-token', ['role:' . $admin->role])->plainTextToken;
+        $token = $admin->createToken('admin-token', ['role:'.$admin->role])->plainTextToken;
 
         return [
             'token' => $token,
@@ -172,7 +172,7 @@ class AuthService
                     $verifiedPhone = $fallbackPhone;
                 } else {
                     throw ValidationException::withMessages([
-                        'id_token' => ['Cryptographic verification failed: ' . $e->getMessage()],
+                        'id_token' => ['Cryptographic verification failed: '.$e->getMessage()],
                     ]);
                 }
             }
@@ -193,7 +193,7 @@ class AuthService
 
         // Clean and normalize Algerian phone format
         $cleanPhone = preg_replace('/[^0-9]/', '', $verifiedPhone);
-        $e164Phone = str_starts_with($cleanPhone, '213') ? '+' . $cleanPhone : '+213' . ltrim($cleanPhone, '0');
+        $e164Phone = str_starts_with($cleanPhone, '213') ? '+'.$cleanPhone : '+213'.ltrim($cleanPhone, '0');
 
         $user = $this->patientRepo->findByPhone($e164Phone);
 
@@ -225,7 +225,7 @@ class AuthService
     public function phoneExists(string $phone): bool
     {
         $cleanPhone = preg_replace('/[^0-9]/', '', $phone);
-        $e164Phone = str_starts_with($cleanPhone, '213') ? '+' . $cleanPhone : '+213' . ltrim($cleanPhone, '0');
+        $e164Phone = str_starts_with($cleanPhone, '213') ? '+'.$cleanPhone : '+213'.ltrim($cleanPhone, '0');
 
         return $this->patientRepo->findByPhone($e164Phone) !== null;
     }
@@ -259,7 +259,7 @@ class AuthService
             ]);
         }
 
-        $email = $data['email'] ?? ('patient_' . substr(preg_replace('/[^0-9]/', '', $verifiedPhone), -8) . '@vitalbook.dz');
+        $email = $data['email'] ?? ('patient_'.substr(preg_replace('/[^0-9]/', '', $verifiedPhone), -8).'@wateensoft.com');
 
         $userData = [
             'id' => (string) Str::uuid(),
@@ -277,7 +277,7 @@ class AuthService
             'emergency_contact_name' => $data['emergency_contact_name'],
             'emergency_contact_phone' => $data['emergency_contact_phone'],
             'insurance_provider' => 'CNAS Algérie',
-            'insurance_policy_number' => 'DZ-CNAS-' . ($data['carte_chifa_number'] ?? rand(10000000, 99999999)),
+            'insurance_policy_number' => 'DZ-CNAS-'.($data['carte_chifa_number'] ?? rand(10000000, 99999999)),
             'password' => Hash::make($data['password'] ?? Str::random(16)),
         ];
 

@@ -137,7 +137,7 @@ export default function AdminDashboardPage() {
         subtitle="Real-time multi-tenant clinical overview, appointment triage, and capacity governance."
         badge={
           <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-900 text-white dark:bg-white dark:text-slate-950">
-            Tenant: VitalBook Medical Center
+            Tenant: Wateen Medical Center
           </span>
         }
       >

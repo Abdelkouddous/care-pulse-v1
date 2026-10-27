@@ -10,7 +10,7 @@ class LogWhatsAppGateway implements IWhatsAppGateway
 {
     public function sendMessage(string $to, string $message, array $metadata = []): array
     {
-        $messageId = 'wam_' . (string) Str::uuid();
+        $messageId = 'wam_'.(string) Str::uuid();
 
         Log::info('[WhatsApp Gateway Dispatch]', [
             'to' => $to,

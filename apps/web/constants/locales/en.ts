@@ -1,93 +1,155 @@
 /**
  * Canonical English Localization Dictionary
- * Serves as reference token tree for future Arabic (ar-DZ) and French (fr-DZ) modules.
+ * Calibrated for honest pilot framing (Algiers & Tébessa), patient trust, and professional Algerian HealthTech standards.
  */
 export const DICTIONARY_EN = {
   common: {
-    appName: "VitalBook",
-    brandSubtitle: "VitalBook",
-    tagline: "Your Health, Our Priority",
+    appName: "Wateen Book",
+    brandSubtitle: "Medical Appointments",
+    tagline: "Your Health, Simply Organized",
     currency: "DZD",
-    loading: "Processing...",
+    loading: "Loading...",
+    freeForPatients: "100% Free for Patients",
+    carteChifaAccepted: "Carte Chifa & CNAS Accepted",
+    instantConfirmation: "Instant SMS & WhatsApp Confirmation",
+    bookAppointment: "Book an Appointment",
   },
   nav: {
     home: "Home",
-    about: "About",
-    doctors: "Our Doctors",
-    services: "Services",
-    testimonials: "Testimonials",
-    pricing: "Plans",
+    howItWorks: "How It Works",
+    doctors: "Doctors",
+    clinics: "Clinics",
+    forClinics: "For Clinics",
+    pricing: "Pricing",
     contact: "Contact",
     signIn: "Sign In",
-    adminPortal: "Admin Portal",
+    register: "Register",
+    patientDashboard: "Patient Dashboard",
     doctorPortal: "Doctor Portal",
   },
   hero: {
-    badge: "NATIONAL HEALTHCARE NETWORK",
-    titlePrimary: "Your Health,",
-    titleSecondary: "Our Priority",
+    badge: "PILOT PHASE • ALGIERS (16) & TÉBESSA (12)",
+    titlePrimary: "Book Certified Doctors in Algeria,",
+    titleSecondary: "Effortlessly.",
     subtitle:
-      "Algeria's trusted digital healthcare network — connect with certified medical specialists in minutes.",
-    trustBar:
-      "✓ +12,500 Patients Registered · ✓ +340 Verified Doctors · ✓ 28 Wilayas Covered",
-    form: {
-      title: "Book Your Appointment",
-      subtitle: "Enter your phone number to get started",
-      phoneLabel: "Phone number",
-      phonePlaceholder: "+213550123456",
-      submitButton: "Schedule Now",
-    },
-    portals: {
-      adminTitle: "Admin Portal",
-      adminAction: "Login as Admin",
-      doctorTitle: "Healthcare Providers",
-      doctorAction: "Login as Doctor",
-    },
-    testAccounts: {
-      title: "Test Accounts",
-      subtitle: "Use these credentials to test the platform.",
-      patient: {
-        role: "Patient",
-        phone: "+213550123456",
-        code: "Any 6 digits",
-      },
-      doctor: {
-        role: "Doctor",
-        passkey: "654321",
-      },
-      admin: {
-        role: "Admin",
-        passkey: "123456",
-      },
-    },
+      "Find partner clinics and trusted specialists in Algiers and Tébessa. Free booking for patients, transparent consultation fees in DZD, and Carte Chifa accepted.",
+    primaryCta: "Book an Appointment",
+    searchPill: "Search Specialists & Clinics",
   },
-  metrics: {
-    badge: "NATIONAL NETWORK",
-    title: "VitalBook by the Numbers",
-    patients: {
-      title: "Patients Treated",
-      change: "↑ 7.2% this month — Algiers, Oran, Constantine",
-    },
-    doctors: {
-      title: "Partner Doctors",
-      change: "↑ Across all medical specialties",
-    },
-    wilayas: {
-      title: "Wilayas Covered",
-      change: "From Tamanrasset to Annaba",
-    },
+  stats: {
+    doctorsTitle: "Verified Specialists",
+    clinicsTitle: "Partner Health Centers",
+    wilayasTitle: "Pilot Wilayas",
+    wilayasSub: "Algiers (16) & Tébessa (12)",
+    feesTitle: "Patient Booking Fee",
+    feesSub: "Always 100% Free",
   },
-  about: {
-    badge: "OUR MISSION",
-    title: "About VitalBook",
-    p1: "VitalBook is a modern healthcare appointment booking network engineered to bridge patients with qualified and verified medical practitioners across Algeria.",
-    p2: "Our platform removes long hospital queues and scheduling friction. Patients can easily search practitioners by specialty, review credentials, and secure verified consultation slots instantly.",
-    p3: "VitalBook prioritizes patient privacy, rapid triage, and streamlined healthcare management, ensuring quality care is accessible with a single click.",
+  search: {
+    specialtyLabel: "Specialty",
+    wilayaLabel: "Wilaya / City",
+    dateLabel: "Preferred Date",
+    modeLabel: "Consultation Mode",
+    inClinic: "In-Clinic",
+    video: "Video",
+    searchButton: "Search",
+    allSpecialties: "All Specialties",
+  },
+  auth: {
+    fastTrackBadge: "Patient Access",
+    fastTrackTitle: "Sign In or Register with Phone",
+    fastTrackSubtitle: "Enter your Algerian mobile number to manage your appointments.",
+    phoneLabel: "Mobile Phone Number",
+    phonePlaceholder: "549 88 24 56",
+    continueButton: "Continue to Booking",
+    practitionerPrompt: "Practicing Healthcare Professional?",
+    practitionerLink: "Doctor Portal",
+  },
+  clinics: {
+    badge: "LOCAL HEALTHCARE HUBS",
+    title: "Partner Clinics in Your Wilaya",
+    subtitle:
+      "Explore polyclinics and specialized medical centers currently live in our pilot wilayas.",
+    radius: "Search Radius",
+    doctorsAvailable: "Doctors Available",
+    bookAtClinic: "Book at this clinic",
+    directions: "View on Map",
   },
   doctors: {
-    badge: "HEALTHCARE EXPERTS",
-    title: "Meet Our Medical Specialists",
-    subtitle: "Board-certified professionals dedicated to your health and wellness across Algeria",
+    badge: "VERIFIED PRACTITIONERS",
+    title: "Our Medical Specialists",
+    subtitle: "Board-certified doctors available for in-clinic and video consultations.",
+    consultationFee: "Consultation Fee",
+    nextAvailable: "Next Available Slot",
+    bookDoctor: "Book Appointment",
+  },
+  howItWorks: {
+    badge: "SIMPLE PROCESS",
+    title: "How Wateen Book Works",
+    subtitle: "Book your medical appointment in 3 easy steps.",
+    step1Title: "1. Search Specialist",
+    step1Desc: "Filter by medical specialty, wilaya (Algiers or Tébessa), and preferred date.",
+    step2Title: "2. Choose a Slot",
+    step2Desc: "Pick an available consultation slot that fits your personal schedule.",
+    step3Title: "3. Confirmed via WhatsApp",
+    step3Desc: "Receive instant appointment confirmation and clinic reminders on your phone.",
+  },
+  forDoctors: {
+    badge: "FOR CLINICS & PRACTITIONERS",
+    title: "Modernize Your Clinic's Front Desk",
+    subtitle: "Reduce patient no-shows by up to 40% with automated two-way WhatsApp triage.",
+    benefit1: "Automated WhatsApp appointment confirmations and reminders.",
+    benefit2: "Real-time calendar synchronization for your medical reception team.",
+    benefit3: "3 months free trial for all Algerian clinics during pilot phase.",
+    cta: "Join as Partner Clinic",
+  },
+  faq: {
+    badge: "QUESTIONS & ANSWERS",
+    title: "Frequently Asked Questions",
+    q1: "Is booking an appointment on Wateen Book free for patients?",
+    a1: "Yes, booking an appointment on Wateen Book is 100% free of charge for patients. Consultation fees are paid directly at the clinic according to official medical rates.",
+    q2: "Are Carte Chifa and CNAS coverage accepted?",
+    a2: "Yes, our partner clinics and doctors accept Carte Chifa and provide official CNAS medical reimbursement slips.",
+    q3: "How is my medical and personal data protected?",
+    a3: "Your data is strictly processed in accordance with Algerian Law n° 18-07 on personal data protection, with end-to-end encrypted storage.",
+    q4: "How can I cancel or reschedule my appointment?",
+    a4: "You can easily reschedule or cancel by replying to our automated WhatsApp reminder or logging in to your patient dashboard.",
+    q5: "How do I pay for my consultation?",
+    a5: "Booking through Wateen Book is completely free (0 DA). Consultation fees are paid on-site at the clinic via cash, BaridiMob, or Dahabia card, with official CNAS reimbursement slips provided.",
+  },
+  pricing: {
+    badge: "CLINIC PLANS",
+    title: "Plans for Medical Clinics & Practices",
+    subtitle:
+      "Patients always book free of charge (0 DA). Subscription plans are designed for clinic reception and practitioner management.",
+    freeTrialBanner: "🎉 Special Pilot Offer: 3 Months Free Trial for All New Partner Clinics",
+    monthly: "DZD / month",
+    starterClinic: "Solo Practice",
+    starterDesc: "For independent medical cabinets and private practitioners.",
+    proClinic: "Polyclinic Hub",
+    proDesc: "For multi-specialty clinics with multiple consultation rooms.",
+    featuresTitle: "Included Services:",
+    ctaStartTrial: "Start 3 Months Free Trial",
+    acceptedPaymentTitle: "Supported Algerian Payment Channels",
+    gateways: ["BaridiMob", "Dahabia / CIB", "CCP", "Bank Transfer"],
+  },
+  contact: {
+    badge: "CONTACT US",
+    title: "We Are Here to Help",
+    subtitle: "Have questions about our pilot clinics or need booking assistance? Reach out to our team.",
+    nameLabel: "Full Name",
+    namePlaceholder: "Amina Belarbi",
+    phoneLabel: "Phone Number",
+    phonePlaceholder: "+213 5XX XX XX XX",
+    messageLabel: "Your Message",
+    messagePlaceholder: "How can we assist you today?",
+    submitButton: "Send Message",
+    whatsappButton: "WhatsApp Direct",
+    successMessage: "Thank you! Our support team will respond to your inquiry shortly.",
+  },
+  testimonials: {
+    badge: "PATIENT FEEDBACK",
+    title: "What Our Patients Say",
+    subtitle: "Verified experiences from patients and doctors across Algerian wilayas",
   },
   services: {
     badge: "COMPREHENSIVE CARE",
@@ -126,90 +188,6 @@ export const DICTIONARY_EN = {
       },
     ],
   },
-  testimonials: {
-    badge: "PATIENT FEEDBACK",
-    title: "What Our Patients Say",
-    subtitle: "Verified experiences from patients and doctors across Algerian wilayas",
-    list: [
-      {
-        name: "Amina Belarbi",
-        role: "Regular Patient, Algiers",
-        initials: "AB",
-        color: "bg-emerald-500",
-        quote:
-          "VitalBook completely transformed how I manage my family's healthcare. Booking a specialist in seconds saves hours of waiting.",
-        rating: 5,
-      },
-      {
-        name: "Karim Touati",
-        role: "Patient, Oran",
-        initials: "KT",
-        color: "bg-sky-500",
-        quote:
-          "Finally a platform tailored specifically for Algeria. Verified doctors, clear appointments, and SMS reminders keep everything on track.",
-        rating: 5,
-      },
-      {
-        name: "Dr. Fatima Mansouri",
-        role: "General Practitioner, Constantine",
-        initials: "FM",
-        color: "bg-teal-500",
-        quote:
-          "Since adopting VitalBook in my clinic, patient scheduling is organized and no-shows have dropped significantly. A must-have tool.",
-        rating: 5,
-      },
-      {
-        name: "Yasmine Boudaoud",
-        role: "Patient, Annaba",
-        initials: "YB",
-        color: "bg-violet-500",
-        quote:
-          "Extremely intuitive and fast. I found a pediatric specialist for my son within 5 minutes. Outstanding service for all Algerians.",
-        rating: 5,
-      },
-      {
-        name: "Mohamed Hamidi",
-        role: "Patient, Tizi Ouzou",
-        initials: "MH",
-        color: "bg-orange-500",
-        quote:
-          "VitalBook gives me quick access to verified medical records and appointment histories in one place. Reliable and secure.",
-        rating: 4,
-      },
-    ],
-  },
-  pricing: {
-    badge: "PRICING PLANS",
-    title: "Transparent Memberships",
-    subtitle: "Select the plan tailored to your healthcare needs and budget.",
-    forever: "Free Forever",
-    perMonth: "DZD / month",
-    popularBadge: "MOST POPULAR",
-    paymentMethodsTitle: "Accepted Payment Gateways",
-    gateways: ["BaridiMob", "Dahabia / CIB", "CCP", "Bank Transfer"],
-  },
-  newsletter: {
-    badge: "NEWSLETTER",
-    title: "Stay Informed on Your Health",
-    subtitle:
-      "Medical insights, new specialist availability, and public health advisories — delivered directly to your inbox.",
-    placeholder: "your.email@example.dz",
-    action: "Subscribe",
-    disclaimer: "No spam. Unsubscribe anytime. 🇩🇿",
-  },
-  contact: {
-    badge: "CONTACT US",
-    title: "We Are Here to Help",
-    nameLabel: "Full Name",
-    namePlaceholder: "e.g. Amina Belarbi",
-    phoneLabel: "Phone Number",
-    phonePlaceholder: "+213 5XX XX XX XX",
-    messageLabel: "Your Message",
-    messagePlaceholder: "Type your message or inquiry here...",
-    submitButton: "Send Message",
-    whatsappButton: "WhatsApp Direct",
-    alertSuccess: "Thank you for reaching out! Our team will contact you shortly.",
-  },
   modals: {
     admin: {
       title: "Admin Access Verification",
@@ -224,6 +202,23 @@ export const DICTIONARY_EN = {
       error: "Invalid Passkey. Please try again.",
     },
   },
+  footer: {
+    about:
+      "Wateen Book is Algeria's modern digital appointment platform connecting patients with verified healthcare specialists in Algiers and Tébessa.",
+    pilotNotice: "Currently serving Alger (16) and Tébessa (12). National expansion underway.",
+    dataProtection: "Personal Data Protection (Law 18-07)",
+    privacyPolicy: "Privacy Policy",
+    termsOfService: "Terms of Service",
+    legalNotice: "Legal Notice",
+    medicalDisclaimer:
+      "Wateen Book facilitates appointment scheduling and is not a medical emergency service. In case of emergency, call SAMU (14) or Protection Civile (1021).",
+  },
 } as const;
 
-export type TranslationDictionary = typeof DICTIONARY_EN;
+type DeepString<T> = T extends string
+  ? string
+  : T extends readonly (infer U)[]
+  ? readonly (U extends string ? string : DeepString<U>)[]
+  : { readonly [K in keyof T]: DeepString<T[K]> };
+
+export type TranslationDictionary = DeepString<typeof DICTIONARY_EN>;

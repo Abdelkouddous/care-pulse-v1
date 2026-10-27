@@ -20,8 +20,12 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 abstract class TestCase extends BaseTestCase
 {
     public ?Clinic $clinic = null;
+
     public ?Specialty $specialty = null;
+
     public ?Doctor $doctor = null;
+
     public ?User $patient = null;
+
     public ?Admin $admin = null;
 }

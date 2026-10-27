@@ -1,62 +1,50 @@
-# VitalBook — Portfolio Screenshots
+# VitalBook — Upwork & Professional Portfolio Showcase
 
-> Healthcare Management System · Next.js 14 · Mock-Data Architecture · Algerian Locale
-
----
-
-## 🏠 Landing Page
-
-````carousel
-![Landing — Hero Section](/Users/morsistoredz/.gemini/antigravity-ide/brain/2fbe5f28-0505-45e4-917b-7b885ffd442c/landing_hero_1784065600171.png)
-<!-- slide -->
-![Landing — Features Section](/Users/morsistoredz/.gemini/antigravity-ide/brain/2fbe5f28-0505-45e4-917b-7b885ffd442c/landing_features_1784065604532.png)
-<!-- slide -->
-![Landing — Doctors Section](/Users/morsistoredz/.gemini/antigravity-ide/brain/2fbe5f28-0505-45e4-917b-7b885ffd442c/landing_doctors_1784065609568.png)
-````
+> **Full-Stack Healthcare Ecosystem** · Next.js 14 · Laravel 11 · Flutter 3.x · Supabase PostgreSQL · Algerian Locale & Twilio WhatsApp
 
 ---
 
-## 🔐 Authentication Pages
+## 🌟 Upwork Showcase Hero (4:3 Verified Thumbnail)
 
-````carousel
-![Sign In — Phone + OTP Verification](/Users/morsistoredz/.gemini/antigravity-ide/brain/2fbe5f28-0505-45e4-917b-7b885ffd442c/signin_page_1784065620229.png)
-<!-- slide -->
-![Register — Patient Registration Form](/Users/morsistoredz/.gemini/antigravity-ide/brain/2fbe5f28-0505-45e4-917b-7b885ffd442c/register_page_1784065628432.png)
-<!-- slide -->
-![Admin Login](/Users/morsistoredz/.gemini/antigravity-ide/brain/2fbe5f28-0505-45e4-917b-7b885ffd442c/admin_login_1784065635755.png)
-<!-- slide -->
-![Doctor Login](/Users/morsistoredz/.gemini/antigravity-ide/brain/2fbe5f28-0505-45e4-917b-7b885ffd442c/doctor_login_1784065643638.png)
-````
+[![VitalBook 4:3 3D Upwork Cover](../docs/VitalBook_Upwork_3D_Thumbnail.png)](../docs/VitalBook_Upwork_3D_Thumbnail.png)
+
+*High-impact 4:3 3D perspective mockup featuring the MacBook Pro Clinic Control Center alongside the Flutter Mobile Patient App.*
 
 ---
 
-## 🏥 Patient Dashboard (Authenticated)
+## 📱 Cross-Platform Experience (Web + Mobile)
 
-````carousel
-![Patient Dashboard — New Appointment](/Users/morsistoredz/.gemini/antigravity-ide/brain/2fbe5f28-0505-45e4-917b-7b885ffd442c/patient_dashboard_1784065712229.png)
-<!-- slide -->
-![My Appointments](/Users/morsistoredz/.gemini/antigravity-ide/brain/2fbe5f28-0505-45e4-917b-7b885ffd442c/my_appointments_1784065719706.png)
-<!-- slide -->
-![Patient Profile](/Users/morsistoredz/.gemini/antigravity-ide/brain/2fbe5f28-0505-45e4-917b-7b885ffd442c/patient_profile_1784065727093.png)
-````
+### 1. Web Portals (Next.js 14 App Router)
+- **Patient Portal:** 3-step registration wizard with CNAS policy verification, 4-step real-time doctor booking wizard.
+- **Doctor Portal:** Clinical consultation schedule, patient history inspection, triage queues.
+- **Admin Console:** Real-time appointment triage, doctor directory management, interactive WhatsApp pings.
+- **Interactive Demo Sandbox:** 1-click persona switcher (Patient, Doctor, Super Admin) for risk-free client evaluation.
 
----
-
-## 🎥 Full Session Recording
-
-![Browser Session Recording](/Users/morsistoredz/.gemini/antigravity-ide/brain/2fbe5f28-0505-45e4-917b-7b885ffd442c/vitalbook_portfolio_screenshots_1784065588098.webp)
+### 2. Native Mobile Client (Flutter 3.x)
+- **Authentication:** Algerian SMS OTP verification (`+213` phone parsing).
+- **Directory & Search:** 58 Algerian Wilayas mapping, medical specialties (Cardiology, Dermatology, Pediatrics, etc.).
+- **Live Booking:** Interactive calendar and 30-minute consultation slot reservations.
 
 ---
 
-## 📋 Technical Summary
+## 🛠️ Technical Specification
 
-| Attribute | Detail |
-|---|---|
-| **Framework** | Next.js 14.2 (App Router) |
-| **Architecture** | Monorepo — Frontend / Old-Backend / Laravel-Backend |
-| **Auth** | Mock OTP Flow → Token stored in Cookies + localStorage |
-| **Data** | 100% mock-data, zero backend dependency |
-| **Routing** | Dynamic `[userId]` nested routes + Next.js Middleware redirects |
-| **Locale** | Algerianized — Algerian names, phone formats, CNAS insurance |
-| **State** | `TokenManager` for session lifecycle management |
+| Dimension | Specification |
+| :--- | :--- |
+| **Frontend Web** | Next.js 14.2 (App Router), TypeScript, Tailwind CSS, Lucide Icons |
+| **Mobile Client** | Flutter 3.x, Dart 3, Riverpod 3 (StateNotifier/AsyncNotifier), GoRouter, Dio |
+| **Backend API** | Laravel 11, PHP 8.4, Service-Repository Pattern, Sanctum Token Auth |
+| **Notifications** | Twilio WhatsApp Gateway (Two-way interactive confirmation webhooks) |
+| **Database** | PostgreSQL via Supabase (UUIDv4 PKs, integer cent financial guardrails) |
+| **Localization** | Algerian Dinars (DZD), Carte Chifa & CNAS insurance, 58 Wilayas mapping |
+| **Architecture** | Decoupled Monorepo (`apps/web`, `apps/api`, `apps/mobile`) |
 
+---
+
+## 🖼️ High-Resolution Production Gallery
+
+- **Upwork 3D Showcase Thumbnail:** [`docs/VitalBook_Upwork_3D_Thumbnail.png`](file:///Users/morsistoredz/Desktop/Aymen%20HML/Informatique/Projects/Full%20Stack%20Projects/care-pulse-v1/docs/VitalBook_Upwork_3D_Thumbnail.png)
+- **Mobile 3D Showcase Cover:** [`docs/screens/mobile/00_mobile_3d_showcase_cover.png`](file:///Users/morsistoredz/Desktop/Aymen%20HML/Informatique/Projects/Full%20Stack%20Projects/care-pulse-v1/docs/screens/mobile/00_mobile_3d_showcase_cover.png)
+- **Admin Control Center:** [`tools/screens/07_admin_dashboard_overview.png`](file:///Users/morsistoredz/Desktop/Aymen%20HML/Informatique/Projects/Full%20Stack%20Projects/care-pulse-v1/tools/screens/07_admin_dashboard_overview.png)
+- **Patient Dashboard:** [`tools/screens/03_patient_dashboard.png`](file:///Users/morsistoredz/Desktop/Aymen%20HML/Informatique/Projects/Full%20Stack%20Projects/care-pulse-v1/tools/screens/03_patient_dashboard.png)
+- **Mobile Patient Home:** [`docs/screens/mobile/02_patient_home.png`](file:///Users/morsistoredz/Desktop/Aymen%20HML/Informatique/Projects/Full%20Stack%20Projects/care-pulse-v1/docs/screens/mobile/02_patient_home.png)

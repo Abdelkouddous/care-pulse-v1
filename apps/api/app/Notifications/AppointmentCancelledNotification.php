@@ -26,11 +26,11 @@ class AppointmentCancelledNotification extends Notification implements ShouldQue
         $timeStr = $this->appointment->scheduled_at->format('F j, Y - H:i');
 
         return (new MailMessage)
-            ->subject('VitalBook: Appointment Cancellation Notice')
+            ->subject('Wateen Book: Appointment Cancellation Notice')
             ->greeting("Hello {$notifiable->name},")
             ->line("Your appointment scheduled for {$timeStr} has been cancelled.")
             ->line("Reason: {$this->appointment->cancellation_reason}")
-            ->action('Schedule Another Slot', url(config('app.url') . '/doctors'))
+            ->action('Schedule Another Slot', url(config('app.url').'/doctors'))
             ->line('If this was an error, please reach out to our clinic administration.');
     }
 }

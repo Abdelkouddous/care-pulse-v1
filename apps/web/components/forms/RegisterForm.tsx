@@ -185,20 +185,20 @@ export default function RegisterForm({ user }: { user?: any }) {
       if (result) {
         if (result.token) {
           TokenManager.setSession(result.token, "patient", result.user);
+          localStorage.setItem("wateenbook_token", result.token);
           localStorage.setItem("vitalbook_token", result.token);
-          localStorage.setItem("vitalbook_token", result.token);
-          localStorage.setItem("vitalbook_role", "patient");
+          localStorage.setItem("wateenbook_role", "patient");
           localStorage.setItem("vitalbook_role", "patient");
         }
         if (result.user || result.$id) {
           const userStr = JSON.stringify(result.user || { name: payload.name, email: payload.email, role: "patient" });
-          localStorage.setItem("vitalbook_user", userStr);
+          localStorage.setItem("wateenbook_user", userStr);
           localStorage.setItem("vitalbook_user", userStr);
         }
 
         toast({
           title: "Registration Successful! 🎉",
-          description: `Welcome to VitalBook, ${formData.firstName}!`,
+          description: `Welcome to Wateen Book, ${formData.firstName}!`,
         });
 
         setCurrentStep(4); // Success step
@@ -681,7 +681,7 @@ export default function RegisterForm({ user }: { user?: any }) {
                   className="mt-1 size-4 rounded text-emerald-600 focus:ring-emerald-500 border-border"
                 />
                 <span className="text-xs text-muted-foreground leading-relaxed">
-                  I consent to receive healthcare consultations and clinical triage through the VitalBook medical network.
+                  I consent to receive healthcare consultations and clinical triage through the Wateen Book medical network.
                 </span>
               </label>
 
@@ -737,7 +737,7 @@ export default function RegisterForm({ user }: { user?: any }) {
             Registration Completed
           </span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground mb-3">
-            Welcome to VitalBook, {formData.firstName}!
+            Welcome to Wateen Book, {formData.firstName}!
           </h2>
           <p className="text-sm text-muted-foreground max-w-md mx-auto mb-8">
             Your patient record and CNAS policy ({formData.insurancePolicyNumber}) have been securely registered. Your session is active.

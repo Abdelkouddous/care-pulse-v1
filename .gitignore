@@ -57,6 +57,11 @@ Thumbs.db
 .roo/
 .trae/
 
+# Hidden local archives & internal documentation (excluded from git)
+.archive/
+.archive_docs/
+.archive.md
+
 # Flutter / Dart fallbacks
 .dart_tool/
 .flutter-plugins

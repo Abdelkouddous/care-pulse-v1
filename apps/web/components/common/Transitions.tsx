@@ -2,18 +2,22 @@
 
 import React, { useEffect, useRef } from "react";
 import About from "@/components/About";
-import MetricsSection from "@/components/landing/MetricsSection";
-import ContactAdmin from "@/components/ContactAdmin";
-import NewsLetter from "@/components/newsletter/NewsLetter";
-import Plans from "@/components/payment/Plans";
 import Services from "@/components/Ressources";
+import Plans from "@/components/payment/Plans";
+import ContactAdmin from "@/components/ContactAdmin";
+import { ForDoctorsSection } from "@/components/landing/ForDoctorsSection";
+import { FaqSection } from "@/components/landing/FaqSection";
 import { Testimonials } from "@/components/testimonials/Testimonials";
+
+interface TransitionsProps {
+  onSelectSpecialty?: (specialty: string) => void;
+}
 
 /**
  * Layout Orchestrator: Transition & Rhythm Engine
  * Controls inter-section vertical rhythm strictly through calibrated CSS Gap tokens.
  */
-export const Transitions = () => {
+export const Transitions: React.FC<TransitionsProps> = ({ onSelectSpecialty }) => {
   const sectionsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -28,8 +32,8 @@ export const Transitions = () => {
         });
       },
       {
-        threshold: 0.1,
-        rootMargin: "0px 0px -60px 0px",
+        threshold: 0.08,
+        rootMargin: "0px 0px -40px 0px",
       }
     );
 
@@ -49,18 +53,21 @@ export const Transitions = () => {
     sectionsRef.current[index] = el;
   };
 
+  // Testimonials is kept ready but hidden until real testimonials exist
+  const showTestimonials = process.env.NEXT_PUBLIC_SHOW_TESTIMONIALS === "true";
+
   const sectionComponents = [
-    { component: <About />, key: "about" },
-    { component: <MetricsSection />, key: "metrics" },
-    { component: <Services />, key: "services" },
-    { component: <Testimonials />, key: "testimonials" },
+    { component: <Services onSelectSpecialty={onSelectSpecialty} />, key: "services" },
     { component: <Plans />, key: "plans" },
-    { component: <NewsLetter />, key: "newsletter" },
+    { component: <ForDoctorsSection />, key: "for-doctors" },
+    { component: <About />, key: "about" },
+    ...(showTestimonials ? [{ component: <Testimonials />, key: "testimonials" }] : []),
+    { component: <FaqSection />, key: "faq" },
     { component: <ContactAdmin />, key: "contact" },
   ];
 
   return (
-    <div className="relative z-0 flex flex-col gap-y-20 md:gap-y-28 py-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+    <div className="relative z-0 flex flex-col gap-y-16 md:gap-y-24 py-8 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
       {sectionComponents.map(({ component, key }, index) => (
         <div
           key={key}

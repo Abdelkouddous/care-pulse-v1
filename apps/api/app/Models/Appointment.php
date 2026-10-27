@@ -13,6 +13,7 @@ class Appointment extends Model
     use BelongsToTenant, HasFactory, HasUuids, SoftDeletes;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $fillable = [

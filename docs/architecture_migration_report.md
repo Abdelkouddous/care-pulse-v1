@@ -21,37 +21,32 @@ The application now operates on a physically isolated presentation layer (**Next
 /vitalbook-v1
 ├── package.json                         # Monorepo Workspace Configuration
 │
-├── frontend/                            # 100% Isolated Next.js 14 Presentation Tier (Port 3000)
-│   ├── app/                             # App Router (Patients, Doctors, Admin Dashboards)
-│   │   ├── admin/dashboard/page.tsx     # Real-time multi-tenant clinic administration
-│   │   ├── appointments/                # Booking and triage flows
-│   │   └── signin/                      # Unified authentication gateway
-│   ├── components/                      # Design system (Shadcn/UI, TailwindCSS, Radix)
-│   ├── lib/api/                         # Axios client, interceptors, and typed domain services
-│   │   ├── admin.service.ts             # Admin dashboard & analytics
-│   │   ├── appointment.service.ts       # Booking & status mutations
-│   │   ├── auth.service.ts              # Sanctum token management
-│   │   └── client.ts                    # Tenant header (X-Clinic-ID) injection & 401 unwrap
-│   └── package.json                     # Isolated frontend dependencies
-│
-├── laravel-backend/                     # Decoupled RESTful Core API (Port 8000)
-│   ├── app/
-│   │   ├── Http/Controllers/Api/        # Domain controllers (Admin, Doctor, Patient, Appointment)
-│   │   ├── Http/Middleware/             # ResolveTenantFromHeader (Tenant isolation & UUID check)
-│   │   ├── Models/                      # Eloquent models with UUIDv4 traits & scopes
-│   │   └── Services/                    # Domain business services (SRP / DIP)
-│   ├── database/
-│   │   ├── migrations/                  # Strict PostgreSQL DDL (UUIDv4 keys, integer cent money)
-│   │   └── seeders/DatabaseSeeder.php   # Pre-seeded clinics, specialties, doctors, test users
-│   ├── Dockerfile                       # Multi-stage production container
-│   └── docker-compose.yml               # Multi-container orchestration (Postgres 18, Redis 7, API)
+├── apps/
+│   ├── web/                             # 100% Isolated Next.js 14 Presentation Tier (Port 3000)
+│   │   ├── app/                         # App Router (Patients, Doctors, Admin Dashboards)
+│   │   │   ├── admin/dashboard/page.tsx # Real-time multi-tenant clinic administration
+│   │   │   ├── appointments/            # Booking and triage flows
+│   │   │   └── signin/                  # Unified authentication gateway
+│   │   ├── components/                  # Design system (Shadcn/UI, TailwindCSS, Radix)
+│   │   ├── lib/api/                     # Axios client, interceptors, and typed domain services
+│   │   └── package.json                 # Isolated frontend dependencies
+│   │
+│   ├── api/                             # Decoupled RESTful Core API (Port 8000)
+│   │   ├── app/
+│   │   │   ├── Http/Controllers/Api/    # Domain controllers (Admin, Doctor, Patient, Appointment)
+│   │   │   ├── Http/Middleware/         # ResolveTenantFromHeader (Tenant isolation & UUID check)
+│   │   │   ├── Models/                  # Eloquent models with UUIDv4 traits & scopes
+│   │   │   └── Services/                # Domain business services (SRP / DIP)
+│   │   ├── database/                    # Strict PostgreSQL DDL & Seeders
+│   │   ├── Dockerfile                   # Multi-stage production container
+│   │   └── docker-compose.yml           # Multi-container orchestration (Postgres 18, Redis 7, API)
+│   │
+│   └── mobile/                          # Cross-Platform Flutter Mobile Client (Riverpod 2.x)
+│       ├── lib/                         # Features, Domain models, and Riverpod providers
+│       └── pubspec.yaml                 # Mobile application dependencies
 │
 ├── docs/                                # Enterprise Architectural Documentation
-│   ├── architecture_system_concepts.md  # Core CS paradigms, diagrams, and state machines
-│   ├── architecture_migration_report.md # Migration execution report (This document)
-│   └── vitalbook_portfolio.md           # Visual artifact captures & gallery
-│
-└── old-backend/                         # Quarantined legacy BaaS logic (Preserved for historical audit)
+└── archive/                             # Quarantined legacy BaaS logic (Preserved for historical audit)
 ```
 
 ---
@@ -81,7 +76,7 @@ During the initial deployment and testing cycle of the MVP on macOS / Docker Des
 ### 4.2 Host Port Collision on TCP 5432
 * **Anomaly:** `php artisan migrate` failed with `FATAL: role "vitalbook_user" does not exist`.
 * **Root Cause:** A preexisting macOS PostgreSQL instance was already listening on local port `5432`, intercepting Docker port forwarding.
-* **Resolution:** Re-mapped container port in `docker-compose.yml` to `5433:5432` and synchronized `laravel-backend/.env` with `DB_PORT=5433`.
+* **Resolution:** Re-mapped container port in `docker-compose.yml` to `5433:5432` and synchronized `apps/api/.env` with `DB_PORT=5433`.
 
 ### 4.3 Constraint Naming Collision on Chained Migrations
 * **Anomaly:** Migration `2026_09_30_000004_create_doctors_table.php` threw `SQLSTATE[42710]: Duplicate object: 7 ERROR: constraint "1" for relation "doctors" already exists`.
@@ -90,7 +85,7 @@ During the initial deployment and testing cycle of the MVP on macOS / Docker Des
 
 ### 4.4 Multi-Tenant Header Synchronization
 * **Anomaly:** The API middleware requires a valid UUIDv4 `X-Clinic-ID` header to resolve the clinic tenant, otherwise rejecting with `404` or `422`.
-* **Resolution:** Extracted the seeded clinic UUID (`58b759e3-41f6-47d2-aa1d-35e004849e52`) and injected `NEXT_PUBLIC_DEFAULT_CLINIC_ID` into `frontend/.env.local`, which is automatically dispatched by the Axios request interceptor.
+* **Resolution:** Extracted the seeded clinic UUID (`58b759e3-41f6-47d2-aa1d-35e004849e52`) and injected `NEXT_PUBLIC_DEFAULT_CLINIC_ID` into `apps/web/.env.local`, which is automatically dispatched by the Axios request interceptor.
 
 ---
 

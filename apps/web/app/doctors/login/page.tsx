@@ -38,20 +38,20 @@ export default function DoctorLoginPage() {
         TokenManager.setSession(res.token, "doctor", res.user, false);
 
         if (typeof window !== "undefined") {
+          localStorage.setItem("wateenbook_token", res.token);
           localStorage.setItem("vitalbook_token", res.token);
-          localStorage.setItem("vitalbook_token", res.token);
+          localStorage.setItem("wateenbook_role", "doctor");
           localStorage.setItem("vitalbook_role", "doctor");
-          localStorage.setItem("vitalbook_role", "doctor");
-          localStorage.removeItem("vitalbook_demo");
+          localStorage.removeItem("wateenbook_demo");
           localStorage.removeItem("vitalbook_demo");
           const userStr = JSON.stringify(res.user);
+          localStorage.setItem("wateenbook_user", userStr);
           localStorage.setItem("vitalbook_user", userStr);
-          localStorage.setItem("vitalbook_user", userStr);
+          document.cookie = `wateenbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
           document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
-          document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
+          document.cookie = `wateenbook_role=doctor; path=/; max-age=86400; samesite=lax`;
           document.cookie = `vitalbook_role=doctor; path=/; max-age=86400; samesite=lax`;
-          document.cookie = `vitalbook_role=doctor; path=/; max-age=86400; samesite=lax`;
-          document.cookie = `vitalbook_demo=; path=/; max-age=0; samesite=lax`;
+          document.cookie = `wateenbook_demo=; path=/; max-age=0; samesite=lax`;
           document.cookie = `vitalbook_demo=; path=/; max-age=0; samesite=lax`;
         }
 
@@ -120,7 +120,7 @@ export default function DoctorLoginPage() {
 
           <div className="flex items-center gap-2 text-xs text-sky-300 pt-4 border-t border-white/10">
             <CheckCircle2 className="size-4 text-sky-400" />
-            <span>Active Clinic: VitalBook Medical Center (Cardiology / Pediatrics / General)</span>
+            <span>Active Clinic: Wateen Medical Center (Cardiology / Pediatrics / General)</span>
           </div>
         </div>
 

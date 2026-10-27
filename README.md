@@ -1,5 +1,6 @@
 <div align="center">
-  <img src="frontend/public/assets/icons/vitalsoft-logo.svg" alt="VitalSoft HealthTech Solutions" width="340" />
+  <h1>Wateen Book (وتين بوك)</h1>
+  <p><strong>Flagship Healthcare Booking & Practice Management Platform by WateenSoft (وتين سوفت)</strong></p>
 
 ---
 
@@ -9,8 +10,10 @@
 2. 🛠️ [Tech Stack &amp; Architecture](#️-tech-stack--architecture)
 3. 💡 [Core Features](#-core-features)
 4. 🚦 [Quick Start &amp; Setup](#-quick-start--setup)
-   - [Frontend (Next.js 14)](#1-frontend-setup)
-   - [Backend (Laravel 11 + Supabase)](#2-backend-setup)
+   - [Fast Track (dev.sh)](#fast-track-full-stack-dev-runner)
+   - [Frontend (Next.js 14)](#1-frontend-setup-nextjs-14-web)
+   - [Backend (Laravel API)](#2-backend-setup-laravel--supabase)
+   - [Mobile (Flutter)](#3-mobile-setup-flutter-client)
 5. 📁 [Monorepo Structure](#-monorepo-structure)
 6. 🔒 [Security &amp; Compliance](#-security--compliance)
 7. 📞 [Contact &amp; Leadership](#-contact--leadership)
@@ -19,19 +22,20 @@
 
 ## 🏥 System Overview
 
-**VitalBook V1** is a full-stack, enterprise-grade healthcare management system developed by **[Vital Soft](https://vitalsoft.aymenhamel.com)** to modernize clinical appointments and practice operations. Built with Algerian locale integration (CNAS/Chifa insurance, phone validations, and Wilaya mapping), the platform seamlessly connects patients, attending physicians, and clinic administrators.
+**Wateen Book (وتين بوك)** is an enterprise-grade healthcare management and patient booking platform engineered by **[WateenSoft](https://wateensoft.com)** to modernize clinical appointments and operations across Algeria (Alger & Tébessa clusters). Built with native Algerian standards (CNAS/Chifa insurance, phone validations, and Wilaya mapping), the platform seamlessly connects patients, attending physicians, and clinic administrators across Mobile (iOS / Android) and Web.
 
 --- 
 
 ## 🛠️ Tech Stack & Architecture
 
-| Layer                     | Technologies                                                                                | Key Responsibilities                                                                    |
-| ------------------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| **Frontend**        | Next.js 14.2 (App Router), React 18, TypeScript, Tailwind CSS, Lucide Icons                 | Responsive UI, client-side triage, 3-step registration wizard, 4-step booking wizard    |
-| **Backend API**     | Laravel 11, PHP 8.4, Service-Repository Pattern, Laravel Sanctum                            | Token-based auth, slot generation, appointment state machines, integer money guardrails |
-| **Database**        | PostgreSQL 18 via**Supabase** (Session Pooler & Direct Connection)                    | Relational schema, UUIDv4 primary keys, stored generated columns, automated migrations  |
-| **Session & Auth**  | `TokenManager` (dual tokens: `vitalbook_token` + `user_token`), Cookies, LocalStorage | Cross-route session lifecycle, SSR route protection, role-based boundaries              |
-| **Testing & CI/CD** | Pest PHP (PHP 8.4), TypeScript`tsc --noEmit`, GitHub Actions                              | Automated backend tests, frontend build checks, Dockerized production build             |
+| Layer | Technologies | Key Responsibilities |
+| :--- | :--- | :--- |
+| **Frontend Web** | Next.js 14.2 (App Router), React 18, TypeScript, Tailwind CSS, Lucide Icons | Responsive UI, client-side triage, 3-step registration wizard, 4-step booking wizard, interactive demo tour |
+| **Mobile Client** | Flutter 3.x, Dart 3, Riverpod 3, GoRouter, Dio Client | Native iOS/Android app, SMS OTP auth, Algerian Wilayas doctor search, real-time booking |
+| **Backend API** | Laravel 11, PHP 8.4, Service-Repository Pattern, Laravel Sanctum | Token-based auth, slot generation, appointment state machines, integer money guardrails |
+| **Notifications** | Twilio WhatsApp Business API | Two-way automated appointment confirmation and cancellation webhooks |
+| **Database** | PostgreSQL via **Supabase** (Session Pooler & Direct Connection) | Relational schema, UUIDv4 primary keys, stored generated columns, automated migrations |
+| **Testing & CI/CD** | Pest PHP (PHP 8.4), Flutter Test, TypeScript `tsc --noEmit`, GitHub Actions | Automated backend tests, mobile test suites, frontend build checks, Dockerized build |
 
 ---
 
@@ -57,7 +61,7 @@
 
 ### 🧪 MVP Interactive Demo Sandbox
 
-- 1-click credential-free simulator embedded in navigation ([`DemoTourModal.tsx`](file:///frontend/components/DemoTourModal.tsx)) for test-driving Patient, Doctor, or Super Admin personas without mutating production database tables.
+- 1-click credential-free simulator embedded in navigation ([`DemoTourModal.tsx`](file:///Users/morsistoredz/Desktop/Aymen%20HML/Informatique/Projects/Full%20Stack%20Projects/care-pulse-v1/apps/web/components/DemoTourModal.tsx)) for test-driving Patient, Doctor, or Super Admin personas without mutating production database tables.
 
 ---
 
@@ -67,22 +71,34 @@
 
 - **Node.js**: `v20+` & `npm`
 - **PHP**: `8.4+` & **Composer** `2.8+`
+- **Flutter**: `3.47+` & **Dart** `3.13+` (for mobile)
 - **Database**: Active Supabase PostgreSQL instance (or local PostgreSQL 18)
 
 ---
 
-### 1. Frontend Setup
+### Fast Track (Full-Stack Dev Runner)
+
+Run both Backend API and Web UI concurrently with automated migration and environment initialization:
 
 ```bash
-# Navigate to frontend directory
-cd frontend
+chmod +x dev.sh
+./dev.sh
+```
+
+---
+
+### 1. Frontend Setup (Next.js 14 Web)
+
+```bash
+# Navigate to web application directory
+cd apps/web
 
 # Install dependencies
 npm install
 
 # Configure environment
 cp .env.example .env.local
-# Set NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1 (or production API)
+# Verify NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1 (or production API)
 
 # Run development server
 npm run dev
@@ -118,6 +134,27 @@ php artisan migrate:fresh --seed
 # Start Laravel development server
 php artisan serve
 # API active at http://localhost:8000/api/v1
+```
+
+---
+
+### 3. Mobile Setup (Flutter Client)
+
+```bash
+# Navigate to mobile directory
+cd apps/mobile
+
+# Get Flutter dependencies
+flutter pub get
+
+# Configure environment
+cp .env.example .env
+
+# Run unit and widget test suite
+flutter test
+
+# Launch mobile application on connected device/simulator
+flutter run
 ```
 
 ---

@@ -1,9 +1,16 @@
+import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { authService } from "@/lib/api/auth.service";
 import { AuthSession } from "@/types/api.types";
 import { TokenManager } from "@/lib/auth";
 
 export function useAuth() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const queryClient = useQueryClient();
 
   const userQuery = useQuery({
@@ -16,12 +23,12 @@ export function useAuth() {
   const persistSession = (data: AuthSession) => {
     TokenManager.setSession(data.token, data.role, data.user);
     if (typeof window !== "undefined") {
-      localStorage.setItem("vitalbook_token", data.token);
+      localStorage.setItem("wateenbook_token", data.token);
       localStorage.setItem("vitalbook_token", data.token);
       const userStr = JSON.stringify(data.user);
+      localStorage.setItem("wateenbook_user", userStr);
       localStorage.setItem("vitalbook_user", userStr);
-      localStorage.setItem("vitalbook_user", userStr);
-      localStorage.setItem("vitalbook_role", data.role);
+      localStorage.setItem("wateenbook_role", data.role);
       localStorage.setItem("vitalbook_role", data.role);
     }
   };
@@ -73,13 +80,12 @@ export function useAuth() {
   });
 
   const localUser =
-    typeof window !== "undefined"
+    mounted && typeof window !== "undefined"
       ? (() => {
           try {
             return (
               TokenManager.getUser() ||
               JSON.parse(
-                localStorage.getItem("vitalbook_user") ||
                 localStorage.getItem("vitalbook_user") ||
                 "null"
               )
@@ -91,7 +97,7 @@ export function useAuth() {
       : null;
 
   const localRole =
-    typeof window !== "undefined" ? TokenManager.getRole() : null;
+    mounted && typeof window !== "undefined" ? TokenManager.getRole() : null;
 
   return {
     user: userQuery.data?.user || localUser,

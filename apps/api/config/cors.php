@@ -16,12 +16,13 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [
+    'allowed_origins' => array_values(array_filter(array_merge([
         'http://localhost:3000',
         'http://127.0.0.1:3000',
         'http://localhost:8080',
         'http://127.0.0.1:8080',
-    ],
+        env('FRONTEND_URL'),
+    ], explode(',', env('CORS_ALLOWED_ORIGINS', ''))))),
 
     'allowed_origins_patterns' => [
         '#^http://localhost:\d+$#',

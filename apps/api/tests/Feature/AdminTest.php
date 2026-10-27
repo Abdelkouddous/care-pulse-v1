@@ -9,14 +9,15 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
+use Tests\TestCase;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    /** @var \Tests\TestCase $this */
+    /** @var TestCase $this */
     $this->clinic = Clinic::create([
         'id' => (string) Str::uuid(),
-        'name' => 'VitalBook Algiers',
+        'name' => 'Wateen Book Algiers',
         'email' => 'algiers@vitalbook.com',
     ]);
 

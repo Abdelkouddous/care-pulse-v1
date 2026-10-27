@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wateen Book — Carrousel Réseaux Sociaux B2B (LinkedIn & Instagram 1:1)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@700;800&family=Poppins:wght@600;700;800;900&display=swap');
+
+    :root {
+      --brand-primary: #008668;
+      --brand-aqua: #33CCCC;
+      --brand-accent: #FF9B33;
+      --surface-dark: #0B131E;
+      --surface-card: #111C2D;
+      --surface-light: #F8FAFC;
+      --card-white: #FFFFFF;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --border-light: #E2E8F0;
+      --border-dark: #1E293B;
+      --success: #10B981;
+      --alert-red: #EF4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #05090F;
+      color: #F8FAFC;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* TOP CONTROLS BAR */
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      background: var(--surface-card);
+      border: 1.5px solid var(--border-dark);
+      padding: 12px 24px;
+      border-radius: 9999px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    .ctrl-btn {
+      background: rgba(0, 134, 104, 0.2);
+      border: 1.5px solid var(--brand-primary);
+      color: var(--brand-aqua);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .ctrl-btn:hover {
+      background: var(--brand-primary);
+      color: #FFFFFF;
+    }
+    .slide-indicator {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 800;
+      color: #E2E8F0;
+    }
+
+    /* CAROUSEL CONTAINER (1080x1080 SQUARE) */
+    .carousel-stage {
+      width: 1080px;
+      height: 1080px;
+      background: var(--surface-dark);
+      border: 3px solid var(--border-dark);
+      border-radius: 32px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 64px;
+    }
+
+    /* AMBIENT GLOW */
+    .stage-glow {
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(0, 134, 104, 0.3) 0%, rgba(51, 204, 204, 0.1) 60%, transparent 80%);
+      filter: blur(50px);
+      pointer-events: none;
+    }
+
+    /* SLIDE HEADER */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-dark);
+      padding-bottom: 24px;
+      position: relative;
+      z-index: 2;
+    }
+    .slide-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .slide-logo {
+      width: 52px;
+      height: 52px;
+    }
+    .slide-logo svg { width: 100%; height: 100%; }
+    .slide-brand-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 26px;
+      font-weight: 900;
+      color: #FFFFFF;
+    }
+    .slide-brand-title span { color: var(--brand-aqua); }
+    .slide-page-badge {
+      background: rgba(0, 134, 104, 0.2);
+      border: 1.5px solid var(--brand-primary);
+      color: var(--brand-aqua);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 800;
+      padding: 6px 16px;
+      border-radius: 20px;
+    }
+
+    /* SLIDE CONTENT AREA */
+    .slide-body {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .slide-body.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SLIDE 1: THE HOOK */
+    .s1-tag {
+      color: var(--brand-accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .s1-headline {
+      font-family: 'Poppins', sans-serif;
+      font-size: 54px;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -1.5px;
+      color: #FFFFFF;
+      margin-bottom: 24px;
+    }
+    .s1-headline span {
+      color: var(--brand-aqua);
+      background: linear-gradient(120deg, rgba(0, 134, 104, 0.2) 0%, rgba(51, 204, 204, 0.25) 100%);
+      padding: 0 10px;
+      border-radius: 8px;
+    }
+    .s1-arabic {
+      font-family: 'Cairo', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: #CBD5E1;
+      margin-bottom: 24px;
+      direction: rtl;
+    }
+    .s1-metric-box {
+      background: rgba(17, 28, 45, 0.8);
+      border: 2px solid var(--alert-red);
+      border-radius: 20px;
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .s1-metric-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--alert-red);
+    }
+    .s1-metric-desc {
+      font-size: 18px;
+      color: #E2E8F0;
+      line-height: 1.4;
+    }
+
+    /* SLIDE 2: THE PROBLEM */
+    .s2-headline {
+      font-family: 'Poppins', sans-serif;
+      font-size: 46px;
+      font-weight: 900;
+      line-height: 1.2;
+      color: #FFFFFF;
+      margin-bottom: 28px;
+    }
+    .s2-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .s2-card {
+      background: var(--surface-card);
+      border: 1.5px solid var(--border-dark);
+      border-radius: 20px;
+      padding: 28px;
+    }
+    .s2-card.alert {
+      border-color: rgba(239, 68, 68, 0.5);
+      background: rgba(239, 68, 68, 0.08);
+    }
+    .s2-icon { font-size: 32px; margin-bottom: 12px; }
+    .s2-card h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+    }
+    .s2-card p {
+      font-size: 15px;
+      color: #94A3B8;
+      line-height: 1.45;
+    }
+
+    /* SLIDE 3: THE WHATSAPP SOLUTION */
+    .s3-headline {
+      font-family: 'Poppins', sans-serif;
+      font-size: 44px;
+      font-weight: 900;
+      line-height: 1.2;
+      color: #FFFFFF;
+      margin-bottom: 24px;
+    }
+    .s3-preview {
+      background: #064E3B;
+      border: 2px solid var(--brand-primary);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 12px 36px rgba(0, 134, 104, 0.25);
+    }
+    .s3-badge {
+      background: #25D366;
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .s3-msg {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 24px;
+      color: #0F172A;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+    .s3-msg strong { color: var(--brand-primary); }
+
+    /* SLIDE 4: THE LIVE DASHBOARD SYNC */
+    .s4-headline {
+      font-family: 'Poppins', sans-serif;
+      font-size: 44px;
+      font-weight: 900;
+      line-height: 1.2;
+      color: #FFFFFF;
+      margin-bottom: 28px;
+    }
+    .s4-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .s4-step {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface-card);
+      border: 1.5px solid var(--border-dark);
+      border-radius: 18px;
+      padding: 20px 24px;
+    }
+    .s4-step.green {
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.1);
+    }
+    .s4-num {
+      width: 44px;
+      height: 44px;
+      background: var(--brand-primary);
+      color: #FFFFFF;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      font-weight: 800;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .s4-step.green .s4-num { background: var(--success); }
+    .s4-text h4 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 4px;
+    }
+    .s4-text p {
+      font-size: 14px;
+      color: #94A3B8;
+    }
+
+    /* SLIDE 5: PILOT OFFER & CTA */
+    .s5-center {
+      text-align: center;
+    }
+    .s5-badge {
+      display: inline-block;
+      background: rgba(255, 155, 51, 0.18);
+      border: 2px solid var(--brand-accent);
+      color: var(--brand-accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      font-weight: 800;
+      padding: 8px 24px;
+      border-radius: 30px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .s5-headline {
+      font-family: 'Poppins', sans-serif;
+      font-size: 50px;
+      font-weight: 900;
+      color: #FFFFFF;
+      line-height: 1.15;
+      margin-bottom: 18px;
+    }
+    .s5-arabic {
+      font-family: 'Cairo', sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: #E2E8F0;
+      margin-bottom: 24px;
+      direction: rtl;
+    }
+    .s5-box {
+      background: var(--surface-card);
+      border: 2px solid var(--brand-primary);
+      border-radius: 24px;
+      padding: 32px;
+      max-width: 720px;
+      margin: 0 auto 28px auto;
+    }
+    .s5-box p {
+      font-size: 17px;
+      color: #CBD5E1;
+      line-height: 1.5;
+    }
+    .s5-cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--brand-primary) 0%, #006650 100%);
+      border: 2px solid var(--brand-aqua);
+      color: #FFFFFF;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px;
+      font-weight: 800;
+      padding: 16px 40px;
+      border-radius: 16px;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(0, 134, 104, 0.4);
+    }
+
+    /* SLIDE FOOTER */
+    .slide-footer {
+      border-top: 2px solid var(--border-dark);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    .footer-note {
+      font-size: 13.5px;
+      color: #94A3B8;
+    }
+    .footer-note strong { color: #FFFFFF; }
+    .footer-contact {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--brand-aqua);
+      font-size: 14px;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CONTROLS -->
+  <div class="controls-bar">
+    <button class="ctrl-btn" onclick="prevSlide()">◀ Précédent</button>
+    <div class="slide-indicator" id="slideIndicator">Slide 1 sur 5</div>
+    <button class="ctrl-btn" onclick="nextSlide()">Suivant ▶</button>
+  </div>
+
+  <!-- 1080x1080 STAGE -->
+  <div class="carousel-stage">
+    <div class="stage-glow"></div>
+
+    <!-- HEADER -->
+    <div class="slide-header">
+      <div class="slide-brand">
+        <div class="slide-logo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+            <defs>
+              <linearGradient id="sc-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#008668"/>
+                <stop offset="100%" stop-color="#33CCCC"/>
+              </linearGradient>
+            </defs>
+            <rect width="1024" height="1024" rx="240" fill="#0B131E"/>
+            <rect x="16" y="16" width="992" height="992" rx="224" fill="none" stroke="#33CCCC" stroke-opacity="0.3" stroke-width="12"/>
+            <path d="M512 140C680 230 820 230 860 360C900 620 760 840 512 940C264 840 124 620 164 360C204 230 344 230 512 140Z" fill="url(#sc-grad)"/>
+            <path d="M260 550H370L430 420L510 680L570 460L630 600L690 550H780" fill="none" stroke="#FFFFFF" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="570" cy="460" r="32" fill="#FFFFFF"/>
+          </svg>
+        </div>
+        <div class="slide-brand-title">Wateen<span>Book</span></div>
+      </div>
+      <div class="slide-page-badge" id="badgePage">1 / 5</div>
+    </div>
+
+    <!-- SLIDE 1: THE HOOK -->
+    <div class="slide-body active" id="slide1">
+      <div class="s1-tag">Secteur Médical Privé Algérien</div>
+      <h2 class="s1-headline">
+        Pourquoi les cabinets médicaux perdent <span>360 000 DA</span> chaque mois ?
+      </h2>
+      <div class="s1-arabic">لماذا تخسر العيادات الطبية مئات الآلاف شهرياً بسبب الغياب؟</div>
+      <div class="s1-metric-box">
+        <div class="s1-metric-val">35%</div>
+        <div class="s1-metric-desc">
+          Taux moyen de rendez-vous non honorés sans prévenir le secrétariat à Alger et dans les grandes villes.
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: THE ROOT CAUSE -->
+    <div class="slide-body" id="slide2">
+      <h2 class="s2-headline">Le piège des appels téléphoniques du matin</h2>
+      <div class="s2-grid">
+        <div class="s2-card alert">
+          <div class="s2-icon">⏳</div>
+          <h3>2 Heures Perdues</h3>
+          <p>L'assistante passe chaque matinée à téléphoner sans réponse aux patients pour savoir qui vient.</p>
+        </div>
+        <div class="s2-card alert">
+          <div class="s2-icon">📉</div>
+          <h3>Créneaux Bloqués</h3>
+          <p>Un patient qui ne prévient pas empêche un patient souffrant d'obtenir un créneau d'urgence.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: THE WHATSAPP SOLUTION -->
+    <div class="slide-body" id="slide3">
+      <h2 class="s3-headline">La solution : La confirmation WhatsApp automatique</h2>
+      <div class="s3-preview">
+        <span class="s3-badge">📱 Notification Interactive Officielle</span>
+        <div class="s3-msg">
+          "Bonjour Karim, votre RDV avec le <strong>Dr. Zerrouki</strong> est prévu <strong>Demain à 11h00</strong>.<br/><br/>
+          👉 Tapez <strong>1</strong> pour <strong>CONFIRMER</strong> votre présence.<br/>
+          👉 Tapez <strong>2</strong> pour <strong>ANNULER</strong> et libérer la place."
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: THE LIVE DASHBOARD SYNC -->
+    <div class="slide-body" id="slide4">
+      <h2 class="s4-headline">Un planning synchronisé en temps réel</h2>
+      <div class="s4-flow">
+        <div class="s4-step">
+          <div class="s4-num">1</div>
+          <div class="s4-text">
+            <h4>Envoi Automatique la Veille</h4>
+            <p>Le système prévient le patient sans aucune intervention manuelle de l'assistante.</p>
+          </div>
+        </div>
+        <div class="s4-step green">
+          <div class="s4-num">✓</div>
+          <div class="s4-text">
+            <h4>Votre Écran devient VERT</h4>
+            <p>Le patient tape 1 : le statut passe immédiatement en "Confirmé" sur le tableau de bord.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: PILOT OFFER & CTA -->
+    <div class="slide-body" id="slide5">
+      <div class="s5-center">
+        <div class="s5-badge">Offre Exclusive Alger 2026</div>
+        <h2 class="s5-headline">Testez Wateen Book gratuitement pendant 30 jours</h2>
+        <div class="s5-arabic">جرّب النظام مجاناً لمدة 30 يوماً دون أي التزام</div>
+        <div class="s5-box">
+          <p>
+            Zéro engagement · Installation en 15 minutes · Compatible avec votre ordinateur ou tablette existante.
+          </p>
+        </div>
+        <a href="https://book.wateensoft.com" class="s5-cta-btn">Activer mon Cabinet</a>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="slide-footer">
+      <div class="footer-note">
+        <strong>Wateen Book (وتين بوك)</strong> · WateenSoft HealthTech Solutions
+      </div>
+      <div class="footer-contact">WhatsApp : +213 549 88 24 56</div>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 5;
+
+    function updateSlide() {
+      for (let i = 1; i <= totalSlides; i++) {
+        const slide = document.getElementById('slide' + i);
+        if (slide) slide.classList.remove('active');
+      }
+      const activeSlide = document.getElementById('slide' + currentSlide);
+      if (activeSlide) activeSlide.classList.add('active');
+
+      document.getElementById('slideIndicator').innerText = `Slide ${currentSlide} sur ${totalSlides}`;
+      document.getElementById('badgePage').innerText = `${currentSlide} / ${totalSlides}`;
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+      } else {
+        currentSlide = 1;
+      }
+      updateSlide();
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+      } else {
+        currentSlide = totalSlides;
+      }
+      updateSlide();
+    }
+  </script>
+</body>
+</html>

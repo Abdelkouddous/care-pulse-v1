@@ -5,7 +5,7 @@ import RegisterForm from "@/components/forms/RegisterForm";
 import { PageHeader } from "@/components/ui/PageHeader";
 
 export const metadata = {
-  title: "Patient Registration | VitalBook",
+  title: "Patient Registration | Wateen Book",
   description: "Register as a patient with CNAS integration and book appointments seamlessly.",
 };
 
@@ -18,7 +18,7 @@ export default function RegisterPage() {
             href="/"
             className="inline-flex items-center text-xs font-semibold text-muted-foreground hover:text-emerald-500 transition-colors"
           >
-            <ArrowLeft className="mr-1.5 size-3.5" /> Back to VitalBook Home
+            <ArrowLeft className="me-1.5 size-3.5" /> Back to Wateen Book Home
           </Link>
         </div>
 

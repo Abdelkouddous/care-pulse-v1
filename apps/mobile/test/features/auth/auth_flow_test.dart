@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vitalbook_mobile/core/storage/token_storage.dart';
-import 'package:vitalbook_mobile/features/auth/data/auth_repository.dart';
-import 'package:vitalbook_mobile/features/auth/domain/auth_models.dart';
-import 'package:vitalbook_mobile/features/auth/presentation/auth_controller.dart';
+import 'package:wateen_book/core/storage/token_storage.dart';
+import 'package:wateen_book/features/auth/data/auth_repository.dart';
+import 'package:wateen_book/features/auth/domain/auth_models.dart';
+import 'package:wateen_book/features/auth/presentation/auth_controller.dart';
 
 // In-memory mock storage
 class MockTokenStorage extends Fake implements TokenStorage {

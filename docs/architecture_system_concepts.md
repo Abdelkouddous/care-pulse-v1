@@ -1,382 +1,291 @@
-# Project VitalWork / VitalBook: System Architecture & Engineering Concepts
+# VitalBook: Full-Stack System Architecture & Engineering Specifications
 
-> **Status:** Production Architecture Blueprint
-> **Audience:** Principal Architects, Staff Software Engineers, Security & Infrastructure Leads
-> **Stack:** Next.js 14 (App Router) · Laravel 13 (REST API) · PostgreSQL 18 · Redis 7 · Docker
-
----
-
-## 1. Computer Science Foundations & Architectural Philosophy
-
-### 1.1 The "Concept First" Paradigm
-
-Enterprise healthcare systems require extreme data guarantees: zero tolerance for financial rounding drift, deterministic multi-tenant isolation, cryptographic audit trails, and mathematically sound concurrency control.
-
-Building VitalBook upon modern software design principles requires understanding four fundamental computer science pillars:
-
-1. **State Isolation & Memory Footprint:**
-   State must never leak across concurrent execution threads. In a multi-tenant medical environment, request context must be strictly scoped to the tenant's execution lifecycle. Global singleton state in long-running processes (e.g., Octane, Swoole, or worker pools) causes cross-tenant data corruption if not bound to ephemeral container instances.
-2. **Deterministic Financial Arithmetic (IEEE 754 Avoidance):**
-   Standard double-precision floating-point numbers (`IEEE 754`) cannot accurately represent base-10 fractions (e.g., `0.1 + 0.2 !== 0.3`). In healthcare billing, floating-point arithmetic introduces silent penny-shaving errors and reconciliation divergence. Currency is fundamentally a discrete quantity: all balances, prices, and line items must strictly exist as integer cents (`int consultation_fee_cents`).
-3. **Distributed Sharding & Entity Identity:**
-   Centralized auto-incrementing serial IDs (`BIGSERIAL`) create synchronization bottlenecks, facilitate enumeration attacks, and prevent zero-collision database partitioning. Universally Unique Identifiers (UUIDv4, 128-bit pseudorandom numbers) allow client or service nodes to generate collision-free primary keys asynchronously without cross-node locks.
-4. **Concurrency & Linearizability:**
-   Doctor appointment calendars represent finite shared resources. Concurrent attempts to reserve the identical time slice constitute a race condition. VitalBook enforces concurrency control at both the application tier (Redis distributed locks) and the database engine tier (PostgreSQL transactional row-level isolation and compound unique index constraints).
+> **Status:** Production Architecture Blueprint (MVP Verified)  
+> **Audience:** Principal Architects, Full-Stack Engineers, Security & DevOps Leads  
+> **Stack:** Next.js 14.2 (App Router) · Flutter 3.x (Mobile) · Laravel 11 (REST API) · PostgreSQL (Supabase) · Twilio WhatsApp Gateway
 
 ---
 
-## 2. Comparative Framework
+## 1. Architectural Foundations & Invariants
 
-The following matrix contrasts common junior engineering anti-patterns against the senior architectural implementations enforced within Project VitalWork / VitalBook:
+VitalBook enforces four non-negotiable computer science foundations across web, mobile, and backend tiers:
 
-| Dimension                        | Junior / Fragile Approach                                                              | Senior / Elite Engineering Architecture                                                                                                 | Architectural Rationale                                                                                                      |
-| :------------------------------- | :------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------- |
-| **Multi-Tenancy**                | Manual`where('clinic_id', $id)` appended in individual controller queries.             | Automated Eloquent Global Scopes registered in tenant-aware abstract models, resolved via immutable middleware context.                 | Eliminates human oversight; a missed`where` clause in junior code leaks private medical records to neighboring clinics.      |
-| **Financial Representation**     | Storing fees as`DECIMAL(10,2)` or `FLOAT` in models, with manual formatting in UI.     | Strict integer centimes (`int consultation_fee_cents`), normalized via value objects and formatted solely at the presentation boundary. | Eliminates IEEE 754 precision drift, rounding discrepancies across processors, and currency mismatch bugs.                   |
-| **Entity Identity**              | Auto-incrementing sequential integers (`id: 1, 2, 3...`).                              | Universally Unique Identifiers (UUIDv4:`85bc27d0-30e9-4743-88f9-1c799602c3b7`).                                                         | Prevents competitive enumeration scraping; enables database sharding, offline synchronization, and multi-region replication. |
-| **Layer Coupling**               | Controllers call ORM directly:`Appointment::create($request->all())`.                  | Decoupled Service-Repository pattern with Data Transfer Objects (DTOs) and Form Request validation.                                     | Adheres to Single Responsibility (SRP) and Dependency Inversion (DIP). Insulates business domains from persistence drivers.  |
-| **Concurrency & Double-Booking** | "Check-then-act" (`if (!Appointment::where(...)->exists()) Appointment::create(...)`). | Database compound unique constraint`(doctor_id, scheduled_at)` wrapped in an atomic database transaction.                               | Eliminates Time-of-Check to Time-of-Use (TOCTOU) race conditions during high-volume appointment traffic.                     |
-| **Client-Server State**          | Shared state or direct database calls inside Next.js Server Components.                | Decoupled HTTP API with Sanctum Bearer tokens and strict OpenAPI contracts.                                                             | Preserves clear physical and network boundaries between presentation and business logic.                                     |
+1. **Deterministic Financial Arithmetic (Zero IEEE 754 Drift):**
+   Standard floating-point representation (`FLOAT` / `DOUBLE`) introduces silent rounding errors. In healthcare billing, all consultation fees and balances are strictly stored and computed as integer centimes (`int consultation_fee_cents` in Algerian Dinars DZD). Presentation layers format currency strictly at the display boundary.
+2. **Deterministic Multi-Tenant Scoping:**
+   Clinic tenant isolation is enforced at the persistence layer using Eloquent Global Scopes. Middleware validates the `X-Clinic-ID` UUID header against the authenticated user's assigned tenant, completely preventing cross-tenant medical record leaks.
+3. **Universally Unique Entity Identity (UUIDv4):**
+   Auto-incrementing serial IDs (`BIGSERIAL`) introduce enumeration vulnerabilities and sharding bottlenecks. All core entities (`clinics`, `doctors`, `patients`, `appointments`) utilize pseudorandom UUIDv4 identifiers.
+4. **Strict Concurrency Control (Anti-Double-Booking):**
+   Consultation slots represent shared finite inventory. VitalBook prevents double-booking via database transactions combined with a composite unique database index: `(doctor_id, scheduled_at)`.
 
 ---
 
-## 3. High-Level System Architecture & Topography
+## 2. Decoupled Monorepo Topography
 
-The system uses a completely decoupled Monorepo topography. The presentation layer (Next.js 14) and business persistence layer (Laravel 13 API) communicate over JSON REST interfaces authenticated via Laravel Sanctum.
+The platform is architected as an encapsulated multi-client ecosystem sharing a centralized Laravel 11 REST API:
 
 ```mermaid
 graph TD
-    subgraph Client_Presentation_Layer ["Next.js 14 Client Layer (Port 3000)"]
-        UI[React 18 Presentation Components]
-        RQ[TanStack React Query Cache]
-        ClientAPI[Axios API Client & Interceptors]
-        UI --> RQ
-        RQ --> ClientAPI
+    subgraph Clients ["Client Applications"]
+        Web["Next.js 14 Web Portal (Port 3000)<br/>• Patient Portal<br/>• Doctor Portal<br/>• Admin Console<br/>• Demo Sandbox"]
+        Mobile["Flutter 3.x Mobile App<br/>• Riverpod 3 & GoRouter<br/>• SMS OTP Patient Auth<br/>• Doctor Booking & Directory<br/>• Carte Chifa Verification"]
     end
 
-    subgraph Gateway_Proxy ["Edge & Routing Layer"]
-        Nginx[Nginx Reverse Proxy / Port 8000]
+    subgraph API_Gateway ["Backend Application (Laravel 11 / PHP 8.4)"]
+        Sanctum["Sanctum Token Guard & RBAC"]
+        TenantMW["TenantContext Middleware (X-Clinic-ID)"]
+        Services["Domain Services (Appointment, Doctor, Auth)"]
+        Repo["Repository Layer & Eloquent Scopes"]
+        WAGateway["Twilio WhatsApp Notification Service"]
     end
 
-    subgraph Laravel_Domain_Core ["Laravel 13 Core Domain Layer"]
-        Middleware[Tenant Context Resolver Middleware]
-        Sanctum[Sanctum Auth & Token Guard]
-        Controller[Domain API Controllers]
-        Service[Domain Services - SRP/DIP]
-        Repo[Repository Layer]
-        GlobalScope[Multi-Tenant Global Scopes]
-
-        Middleware --> Sanctum
-        Sanctum --> Controller
-        Controller --> Service
-        Service --> Repo
-        Repo --> GlobalScope
+    subgraph External_Services ["External Infrastructure"]
+        Supabase[("PostgreSQL via Supabase<br/>UUIDv4, Generated Columns, Strict FKs")]
+        Twilio["Twilio WhatsApp Business API<br/>Two-Way Triage Webhook"]
     end
 
-    subgraph Persistence_Cache ["Infrastructure Layer"]
-        Postgres[("PostgreSQL 18 DB (Port 5433)\nUUIDv4 PKs & Strict Constraints")]
-        Redis[("Redis 7 Cache & Queue (Port 6379)\nSession & Token Driver")]
-    end
-
-    ClientAPI -->|HTTP Bearer + X-Clinic-ID| Nginx
-    Nginx --> Middleware
-    GlobalScope -->|Scoped Queries| Postgres
-    Service -->|Atomic Locks & Cache| Redis
+    Web -->|HTTP REST / Sanctum Bearer| TenantMW
+    Mobile -->|Dio Client / Bearer Token| TenantMW
+    TenantMW --> Sanctum
+    Sanctum --> Services
+    Services --> Repo
+    Repo --> Supabase
+    Services --> WAGateway
+    WAGateway <-->|Two-Way Webhooks & Outbound Prompts| Twilio
 ```
 
 ---
 
-## 4. Multi-Tenant Context Resolution & Global Scope Enforcement
+## 3. Multi-Tenant Request Isolation Flow
 
-Each request entering the API passes through tenant boundary validation. The clinic context is resolved, verified for active status, and bound to a scoped execution singleton:
+Every API transaction resolves and locks tenant context before executing queries:
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Client as Next.js Frontend
-    participant Proxy as Nginx Proxy (:8000)
-    participant MW as ResolveTenantFromHeader Middleware
-    participant Ctx as TenantContext (Container Singleton)
+    actor Client as Web / Mobile Client
+    participant MW as ResolveTenantContext Middleware
+    participant Ctx as TenantContext Container Singleton
     participant Auth as Sanctum Guard
     participant Scope as ClinicScope (Eloquent Global)
-    participant DB as PostgreSQL 18 Engine
+    participant DB as PostgreSQL Database
 
-    Client->>Proxy: HTTP Request + [X-Clinic-ID Header] + [Bearer Token]
-    Proxy->>MW: Ingest Request
+    Client->>MW: HTTP Request + [X-Clinic-ID] + [Bearer Token]
     MW->>MW: Validate UUIDv4 format of X-Clinic-ID
-    alt Invalid UUID format
+    alt Invalid Format
         MW-->>Client: 422 Unprocessable Entity
     end
 
-    MW->>DB: Query Clinic by UUID (SELECT * FROM clinics WHERE id = ?)
-    alt Clinic Not Found or Inactive
-        MW-->>Client: 404 Not Found / Inactive
+    MW->>DB: Query Clinic by UUID (active check)
+    alt Inactive or Missing Clinic
+        MW-->>Client: 404 Not Found / Inactive Clinic
     end
 
-    MW->>Ctx: Set Active Tenant (Clinic Model)
-    MW->>Auth: Validate Bearer Token
-    alt User Clinic != Header Clinic
-        Auth-->>Client: 403 Forbidden (Cross-Tenant Breach Attempt)
+    MW->>Ctx: Bind Active Tenant
+    MW->>Auth: Authenticate Token & User Context
+    alt Tenant Mismatch
+        Auth-->>Client: 403 Forbidden (Cross-Tenant Boundary Breach)
     end
 
-    Auth->>Scope: Apply Global Scope: WHERE clinic_id = tenant.id
-    Scope->>DB: Execute Query with Automated Isolation
-    DB-->>Client: Return Filtered Tenant Domain Data
+    Auth->>Scope: Apply WHERE clinic_id = tenant.id
+    Scope->>DB: Execute Filtered Query
+    DB-->>Client: Return Isolated Tenant Records
 ```
 
 ---
 
-## 5. End-to-End Appointment Booking & Anti-Double-Booking Guardrail
-
-To prevent overbooking, the system combines database transactions with a unique compound database index: `idx_unique_doctor_scheduled_slot (doctor_id, scheduled_at)`.
+## 4. Anti-Double-Booking Concurrency State Machine
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Patient as Patient Client
-    participant API as AppointmentController
+    actor Patient as Patient (Web / Mobile)
+    participant Controller as AppointmentController
     participant Service as AppointmentService
-    participant DB as PostgreSQL Engine
-    participant Queue as Redis Queue Worker
+    participant DB as PostgreSQL Database
+    participant WA as WhatsAppNotificationService
 
-    Patient->>API: POST /api/v1/appointments {doctor_id, scheduled_at, reason}
-    API->>API: BookAppointmentRequest (Validate UUID, Date, String limits)
-    API->>Service: bookAppointment(payload)
+    Patient->>Controller: POST /api/v1/appointments {doctor_id, scheduled_at, reason}
+    Controller->>Service: bookAppointment(payload)
 
-    Service->>DB: BEGIN TRANSACTION (SERIALIZABLE / READ COMMITTED)
-    Service->>DB: SELECT FOR UPDATE / Check Existing Slot
-
-    alt Slot is already occupied
-        DB-->>Service: Conflict Detected (Unique constraint violation)
-        Service->>DB: ROLLBACK TRANSACTION
-        Service-->>API: ConflictException
-        API-->>Patient: 422 Unprocessable Entity ("This slot has already been booked")
-    else Slot is available
-        Service->>DB: INSERT INTO appointments (id, patient_id, doctor_id, clinic_id, fee_cents, status)
-        DB-->>Service: Appointment Record Created
+    Service->>DB: BEGIN TRANSACTION (READ COMMITTED)
+    Service->>DB: Check (doctor_id, scheduled_at) availability
+    alt Slot Already Occupied
+        DB-->>Service: Unique index violation / Conflict
+        Service->>DB: ROLLBACK
+        Service-->>Controller: ConflictException
+        Controller-->>Patient: 422 Unprocessable Entity ("Slot already reserved")
+    else Slot Available
+        Service->>DB: INSERT INTO appointments (status = 'pending')
         Service->>DB: COMMIT TRANSACTION
-        Service->>Queue: Dispatch AppointmentBookedNotification Event
-        Service-->>API: Hydrated Appointment Entity
-        API-->>Patient: 201 Created + Appointment Resource JSON
+        Service->>WA: sendAppointmentConfirmationRequest(appointment)
+        WA-->>Service: Dispatched to Twilio
+        Service-->>Controller: Hydrated Appointment Model
+        Controller-->>Patient: 201 Created
     end
 ```
 
 ---
 
-## 6. Role-Based Access Control (RBAC) & Actor Lifecycle
+## 5. Automated Two-Way WhatsApp Triage Engine
 
-The VitalBook ecosystem supports three distinct primary actors with explicit boundaries:
+VitalBook incorporates an interactive WhatsApp booking confirmation and triage system:
 
 ```mermaid
-stateDiagram-v2
-    [*] --> Unauthenticated
+sequenceDiagram
+    autonumber
+    participant App as Appointment Created
+    participant WA as WhatsAppNotificationService
+    participant Twilio as Twilio WhatsApp API
+    actor Patient as Patient Phone
+    participant Hook as POST /api/v1/webhooks/whatsapp
 
-    Unauthenticated --> PatientRole: POST /api/v1/auth/login or /register
-    Unauthenticated --> DoctorRole: POST /api/v1/auth/doctor/login
-    Unauthenticated --> AdminRole: POST /api/v1/auth/admin/login
+    App->>WA: sendAppointmentConfirmationRequest(appointment)
+    WA->>Twilio: Send bilingual prompt (French/Arabic):<br/>"1 / OUI to CONFIRM" or "2 / NON to CANCEL"
+    Twilio->>Patient: Deliver WhatsApp message
 
-    state PatientRole {
-        [*] --> PatientSession
-        PatientSession --> BrowseDoctors: GET /api/v1/doctors
-        PatientSession --> BookAppointment: POST /api/v1/appointments
-        PatientSession --> ViewHistory: GET /api/v1/patients/me/appointments
-        PatientSession --> CancelOwnAppointment: PUT /api/v1/appointments/{id}/cancel
-    }
-
-    state DoctorRole {
-        [*] --> DoctorSession
-        DoctorSession --> ViewAssignedSchedule: GET /api/v1/doctor-portal/appointments
-        DoctorSession --> TriageAppointmentStatus: PUT /api/v1/doctor-portal/appointments/{id}/status
-        DoctorSession --> RecordDiagnosis: POST /api/v1/medical-records
-    }
-
-    state AdminRole {
-        [*] --> AdminSession
-        AdminSession --> ViewClinicKPIs: GET /api/v1/admin/dashboard
-        AdminSession --> OverseeAllAppointments: GET /api/v1/admin/appointments
-        AdminSession --> ManageStaffRoster: POST/PUT/DELETE /api/v1/admin/doctors
-        AdminSession --> AuditClinicTenancy: GET /api/v1/admin/patients
-    }
-
-    PatientRole --> [*]: POST /api/v1/auth/logout (Revoke Token)
-    DoctorRole --> [*]: POST /api/v1/auth/logout (Revoke Token)
-    AdminRole --> [*]: POST /api/v1/auth/logout (Revoke Token)
+    Patient-->>Twilio: Reply "1" (or "OUI")
+    Twilio->>Hook: Inbound Webhook Payload (From, Body, MessageSid)
+    Hook->>WA: handleInboundWebhook(payload)
+    WA->>WA: Resolve active appointment by phone & timeframe
+    WA->>WA: Update appointment (status = 'scheduled', whatsapp_status = 'confirmed')
+    WA-->>Hook: Return {handled: true, action: 'confirmed'}
+    Hook-->>Twilio: 200 OK
 ```
 
 ---
 
-## 7. Database Entity-Relationship Architecture (UUIDv4 & Integer Cents)
+## 6. Cross-Platform Mobile Client Architecture (Flutter)
 
-All foreign keys use UUIDv4 identifiers. Financial transactions explicitly store integer cents.
+The Flutter application (`apps/mobile`) adheres to Feature-Driven Clean Architecture:
+
+- **State Management:** Riverpod 3 with code-generation (`@riverpod`, `AsyncNotifier`, `Notifier`).
+- **Routing:** Declarative `GoRouter` with auth guard redirection (`/login`, `/home`, `/doctors`, `/booking`).
+- **HTTP Transport:** Dio client configured with authentication interceptors and token refreshing.
+- **Algerian Localization:** Validation rules for 10-digit Algerian phone numbers (`05/06/07`), Wilaya selector (58 Wilayas), and Carte Chifa insurance validation.
+
+```
+apps/mobile/lib/
+├── core/
+│   ├── network/          # Dio client, API interceptors
+│   ├── router/           # GoRouter route declarations & guards
+│   ├── theme/            # VitalSoft brand design tokens
+│   └── widgets/          # Shared atomic widgets & brand logos
+└── features/
+    ├── auth/             # OTP authentication, Login, Register, StateNotifiers
+    ├── doctors/          # Specialties, Doctor listings, Profile reviews
+    └── appointments/     # Dynamic slot selection, Booking flow, My Appointments
+```
+
+---
+
+## 7. Role-Based Access Control (RBAC) Matrix
+
+| Domain Endpoint | Patient Portal | Doctor Workspace | Clinic Admin | Unauthenticated |
+| :--- | :---: | :---: | :---: | :---: |
+| `POST /api/v1/auth/login` | ✅ | ❌ | ❌ | ✅ |
+| `POST /api/v1/appointments` | ✅ (Own) | ❌ | ✅ (All) | ❌ |
+| `GET /api/v1/doctor-portal/schedule` | ❌ | ✅ (Assigned) | ✅ (All) | ❌ |
+| `PUT /api/v1/doctor-portal/appointments/{id}/status` | ❌ | ✅ | ✅ | ❌ |
+| `GET /api/v1/admin/dashboard` | ❌ | ❌ | ✅ | ❌ |
+| `POST /api/v1/admin/appointments/{id}/ping-whatsapp` | ❌ | ❌ | ✅ | ❌ |
+
+---
+
+## 8. Database Entity Relationship Model (UUIDv4)
 
 ```mermaid
 erDiagram
-    CLINICS ||--o{ ADMINS : "employs"
     CLINICS ||--o{ DOCTORS : "contracts"
     CLINICS ||--o{ APPOINTMENTS : "hosts"
-    SPECIALTIES ||--o{ DOCTORS : "classifies"
+    CLINICS ||--o{ USERS : "registers"
+    SPECIALTIES ||--o{ DOCTORS : "categorizes"
     DOCTORS ||--o{ DOCTOR_AVAILABILITIES : "defines"
     USERS ||--o{ APPOINTMENTS : "books"
     DOCTORS ||--o{ APPOINTMENTS : "attends"
-    APPOINTMENTS ||--o| MEDICAL_RECORDS : "documents"
 
     CLINICS {
         uuid id PK "UUIDv4"
-        string name "Clinic Name"
-        string address "Physical Address"
-        string phone "Contact Number"
-        string timezone "IANA Timezone"
-        boolean is_active "Tenant Status"
-        timestamp created_at
+        string name
+        string address
+        string phone
+        string timezone
+        boolean is_active
     }
 
     SPECIALTIES {
         uuid id PK "UUIDv4"
-        string name "Medical Domain"
+        string name
         text description
-    }
-
-    ADMINS {
-        uuid id PK "UUIDv4"
-        uuid clinic_id FK "UUIDv4"
-        string name "Admin Full Name"
-        string email "Unique Login Email"
-        string password "Bcrypt Hash"
-        string role "super_admin | clinic_admin"
     }
 
     DOCTORS {
         uuid id PK "UUIDv4"
-        uuid clinic_id FK "UUIDv4"
-        uuid specialty_id FK "UUIDv4"
-        string first_name
-        string last_name
-        string email "Unique Login Email"
-        string license_number "Unique Medical ID"
-        int consultation_fee_cents "Strict Integer Cents"
-        boolean is_active "Operational Status"
+        uuid clinic_id FK
+        uuid specialty_id FK
+        string name
+        string email
+        string license_number
+        int consultation_fee_cents "Strict Integer DZD"
+        boolean is_active
     }
 
     DOCTOR_AVAILABILITIES {
         uuid id PK "UUIDv4"
-        uuid doctor_id FK "UUIDv4"
-        tinyint day_of_week "0-6 ISO Weekday"
-        time start_time "Slot Window Start"
-        time end_time "Slot Window End"
-        smallint slot_duration_minutes "Default: 30"
+        uuid doctor_id FK
+        tinyint day_of_week
+        time start_time
+        time end_time
+        smallint slot_duration_minutes "30 min default"
     }
 
     USERS {
         uuid id PK "UUIDv4"
-        string first_name
-        string last_name
-        string email "Unique Patient Email"
-        string phone "Phone with Country Code"
-        string insurance_provider "CNAS / Private"
+        uuid clinic_id FK
+        string name
+        string email
+        string phone "Algerian format"
+        string role "patient | doctor | admin"
+        string insurance_provider "CNAS / Chifa"
         string insurance_policy_number
     }
 
     APPOINTMENTS {
         uuid id PK "UUIDv4"
-        uuid patient_id FK "UUIDv4 (Users)"
-        uuid doctor_id FK "UUIDv4"
-        uuid clinic_id FK "UUIDv4"
-        timestamptz scheduled_at "Slot Timestamp"
+        uuid patient_id FK
+        uuid doctor_id FK
+        uuid clinic_id FK
+        timestamptz scheduled_at
         string status "pending | scheduled | completed | cancelled"
-        int consultation_fee_cents "Strict Integer Cents"
-        string cancelled_by "patient | doctor | admin"
-    }
-
-    MEDICAL_RECORDS {
-        uuid id PK "UUIDv4"
-        uuid appointment_id FK "Unique UUIDv4"
-        uuid patient_id FK "UUIDv4"
-        uuid doctor_id FK "UUIDv4"
-        uuid clinic_id FK "UUIDv4"
-        text diagnosis "Clinical Diagnosis"
-        text prescription "Medication Schedule"
-        date follow_up_date
+        int consultation_fee_cents
+        string whatsapp_status "pending | sent | confirmed | cancelled_by_patient | failed"
+        string whatsapp_message_id
+        timestamptz whatsapp_confirmed_at
     }
 ```
 
 ---
 
-## 8. Low-Code Architectural Pseudo-Logic & State Machines
+## 7. Asynchronous Queue Architecture & Notifications Engine
 
-In compliance with the Low-Code Pattern, core invariants are specified via structural state machines and architectural pseudo-logic.
+Outbound patient communications (WhatsApp interactive prompts and SMS fallback alerts) are decoupled from the HTTP request-response lifecycle using a Redis-backed queue system managed by Supervisor:
 
-### 8.1 Multi-Tenant Middleware Execution Flow
-
-```text
-FUNCTION ResolveTenantFromHeader(Request req, Next next):
-    headerClinicId := req.GetHeader("X-Clinic-ID")
-    authenticatedUser := req.GetUser()
-
-    IF authenticatedUser != NULL AND authenticatedUser.HasAttribute("clinic_id"):
-        IF headerClinicId != NULL AND headerClinicId != authenticatedUser.clinic_id:
-            ABORT WITH 403 Forbidden ("Cross-tenant boundary breach detected.")
-        headerClinicId = authenticatedUser.clinic_id
-
-    IF headerClinicId != NULL:
-        IF NOT IsValidUUIDv4(headerClinicId):
-            ABORT WITH 422 Unprocessable ("Invalid tenant UUID format.")
-
-        clinicRecord := QueryDatabase("SELECT * FROM clinics WHERE id = ? AND is_active = true", headerClinicId)
-        IF clinicRecord == NULL:
-            ABORT WITH 404 Not Found ("Clinic tenant not found or deactivated.")
-
-        TenantContext.BindActiveTenant(clinicRecord)
-
-    RETURN next(req)
+```mermaid
+flowchart LR
+    Booking["AppointmentService<br/>bookAppointment()"] -->|Dispatch Job| RedisQueue[("Redis Queue<br/>queue: notifications")]
+    RedisQueue --> Worker["Supervisor Queue Worker<br/>queue:work redis --queue=notifications,default"]
+    Worker -->|Execute| WAGateway["WhatsAppNotificationService<br/>SendWhatsAppAppointmentReminderJob"]
+    Worker -->|Execute| SMSGateway["SmsNotificationService<br/>SendSmsNotificationJob"]
+    WAGateway --> TwilioWA["Twilio WhatsApp API"]
+    SMSGateway --> TwilioSMS["Twilio SMS API"]
+    Worker -.->|Retries [10s, 30s, 90s]| RedisQueue
+    Worker -.->|3x Exhausted| FailedHook["failed() Hook<br/>Mark status: failed"]
 ```
 
-### 8.2 Appointment Booking Concurrency State Machine
+### Queue Operational Invariants
+1. **Dedicated Queue Segregation:** Notification workloads run on the isolated `notifications` queue to prevent background notifications from blocking mission-critical transactions.
+2. **Exponential Backoff:** Jobs implement progressive delay intervals (`[10, 30, 90]` seconds) across 3 attempts to absorb transient upstream telecom gateway rate limits or downtime.
+3. **Graceful Failure Propagation:** Upon exhausting all 3 retries, the `failed(?\Throwable $exception)` lifecycle hook updates the appointment `whatsapp_status` to `failed` and writes telemetry to Laravel error logs without unhandled crashes.
+4. **Abstracted Gateway Drivers:** Both `IWhatsAppGateway` and `ISmsGateway` support hot-swappable implementations via service provider bindings (`TwilioWhatsAppGateway` / `LogWhatsAppGateway` and `TwilioSmsGateway` / `LogSmsGateway`).
 
-```text
-FUNCTION BookAppointment(PatientId, DoctorId, ScheduledSlot, Reason):
-    ASSERT ScheduledSlot > CurrentTimestamp() + MinimumLeadTime
-    ASSERT DoctorIsActive(DoctorId)
-
-    BEGIN SERIALIZED DATABASE TRANSACTION:
-        // Pessimistic or Constraint Lock
-        existingSlot := QueryDatabase(
-            "SELECT id FROM appointments WHERE doctor_id = ? AND scheduled_at = ? AND status != 'cancelled'",
-            DoctorId, ScheduledSlot
-        )
-
-        IF existingSlot != NULL:
-            ROLLBACK TRANSACTION
-            RAISE ConcurrencyConflictException("Slot collision: Double booking prevented.")
-
-        doctorFee := QueryDatabase("SELECT consultation_fee_cents FROM doctors WHERE id = ?", DoctorId)
-
-        appointmentRecord := InsertDatabase("appointments", {
-            id: GenerateUUIDv4(),
-            patient_id: PatientId,
-            doctor_id: DoctorId,
-            clinic_id: TenantContext.GetActiveTenantId(),
-            scheduled_at: ScheduledSlot,
-            status: "pending",
-            consultation_fee_cents: doctorFee.consultation_fee_cents,
-            reason: Sanitize(Reason)
-        })
-
-    COMMIT TRANSACTION
-
-    EmitEvent("AppointmentCreated", appointmentRecord)
-    RETURN appointmentRecord
-```
-
----
-
-## 9. Socratic Guard & System Robustness Checkpoints
-
-Before moving to continuous multi-region deployment, the engineering team must resolve the following architectural boundaries:
-
-1. **Data Isolation Under Worker Concurrency:**
-   _Question:_ When background workers (`supervisord` / `queue:work`) process queued appointment reminders across multiple clinics, does the worker leak tenant context between jobs?_Mitigation:_ Queue jobs must explicitly serialize the `clinic_id` onto the job payload, and the worker must re-hydrate and flush `TenantContext` upon every individual job invocation (`TenantContext::flush()`).
-2. **Network Partitioning & Distributed Locks:**
-   _Question:_ If the Redis cluster encounters a failover split-brain scenario during appointment booking, can two patients book the same slot simultaneously?_Mitigation:_ The primary source of truth remains the PostgreSQL composite unique constraint `(doctor_id, scheduled_at)`. Redis acts as an optimistic rate limiter; PostgreSQL acts as the ACID invariant boundary.
-3. **Client-Side Auth Token Invalidation:**
-   _Question:_ If an admin revokes a doctor's credential in the backend, what guarantees exist that the Next.js client does not continue rendering cached patient records?
-   _Mitigation:_ Next.js uses TanStack React Query with strict cache TTLs and an Axios response interceptor that purges `localStorage` and redirects to `/signin` upon receiving any `401 Unauthorized` response.

@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Events\AppointmentCreated;
+use App\Events\AppointmentStatusUpdated;
 use App\Jobs\SendWhatsAppAppointmentReminderJob;
 use App\Models\Appointment;
 use App\Repositories\Contracts\IAppointmentRepository;
@@ -68,6 +70,10 @@ class AppointmentService
             // Asynchronously dispatch interactive WhatsApp confirmation reminder
             SendWhatsAppAppointmentReminderJob::dispatch($appointment->id);
 
+            // Eager-load relations and dispatch event to the doctor's private channel
+            $appointment->loadMissing(['patient', 'doctor']);
+            AppointmentCreated::dispatch($appointment);
+
             return $appointment;
         } finally {
             $lock->release();
@@ -85,20 +91,49 @@ class AppointmentService
         }
 
         SendWhatsAppAppointmentReminderJob::dispatch($appointment->id);
+
         return true;
     }
 
     public function cancelAppointment(string $appointmentId, string $reason, string $cancelledBy): bool
     {
-        return $this->appointmentRepo->updateStatus($appointmentId, 'cancelled', $reason, $cancelledBy);
+        $appointment = $this->appointmentRepo->findById($appointmentId);
+        if (! $appointment) {
+            return false;
+        }
+
+        $previousStatus = $appointment->status;
+        $updated = $this->appointmentRepo->updateStatus($appointmentId, 'cancelled', $reason, $cancelledBy);
+
+        if ($updated) {
+            $appointment->refresh();
+            $appointment->loadMissing(['patient', 'doctor']);
+            AppointmentStatusUpdated::dispatch($appointment, $previousStatus, $cancelledBy, $reason);
+        }
+
+        return $updated;
     }
 
     public function updateStatus(string $appointmentId, string $status, ?string $reason = null, ?string $actor = null): bool
     {
-        $updated = $this->appointmentRepo->updateStatus($appointmentId, $status, $reason, $actor);
-        if ($updated && in_array($status, ['scheduled', 'confirmed'])) {
-            $this->dispatchWhatsAppReminder($appointmentId);
+        $appointment = $this->appointmentRepo->findById($appointmentId);
+        if (! $appointment) {
+            return false;
         }
+
+        $previousStatus = $appointment->status;
+        $updated = $this->appointmentRepo->updateStatus($appointmentId, $status, $reason, $actor);
+
+        if ($updated) {
+            if (in_array($status, ['scheduled', 'confirmed'])) {
+                $this->dispatchWhatsAppReminder($appointmentId);
+            }
+
+            $appointment->refresh();
+            $appointment->loadMissing(['patient', 'doctor']);
+            AppointmentStatusUpdated::dispatch($appointment, $previousStatus, $actor, $reason);
+        }
+
         return $updated;
     }
 

@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateAppointmentStatusRequest;
-use App\Models\Appointment;
 use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\DoctorResource;
+use App\Models\Appointment;
 use App\Services\AppointmentService;
+use App\Services\DoctorActivityFeedService;
 use App\Services\DoctorService;
 use App\Services\SlotAvailabilityService;
 use Carbon\Carbon;
@@ -20,7 +21,8 @@ class DoctorController extends Controller
     public function __construct(
         protected DoctorService $doctorService,
         protected SlotAvailabilityService $slotService,
-        protected AppointmentService $appointmentService
+        protected AppointmentService $appointmentService,
+        protected DoctorActivityFeedService $activityFeedService
     ) {}
 
     public function index(Request $request): JsonResponse
@@ -92,21 +94,20 @@ class DoctorController extends Controller
         $status = $request->validated('status');
         $reason = $request->validated('reason');
 
-        $doctor = $request->user();
-        if ($doctor instanceof \App\Models\Doctor) {
-            $appointment = Appointment::where('id', $id)->first();
-            if (! $appointment || $appointment->doctor_id !== $doctor->id) {
-                return response()->json([
-                    'errors' => [
-                        [
-                            'status' => '404',
-                            'title' => 'Not Found',
-                            'detail' => 'Appointment not found or does not belong to this doctor.',
-                        ],
+        $appointment = Appointment::find($id);
+        if (! $appointment) {
+            return response()->json([
+                'errors' => [
+                    [
+                        'status' => '404',
+                        'title' => 'Not Found',
+                        'detail' => 'Appointment not found.',
                     ],
-                ], Response::HTTP_NOT_FOUND);
-            }
+                ],
+            ], Response::HTTP_NOT_FOUND);
         }
+
+        $this->authorize('updateStatus', $appointment);
 
         $updated = $this->appointmentService->updateStatus(
             $id,
@@ -134,6 +135,25 @@ class DoctorController extends Controller
             ],
             'meta' => [
                 'message' => 'Appointment status updated.',
+            ],
+        ]);
+    }
+
+    /**
+     * Retrieve the chronological clinical activity audit timeline for the authenticated doctor.
+     */
+    public function activities(Request $request): JsonResponse
+    {
+        $doctor = $request->user();
+        $limit = (int) $request->input('limit', 50);
+
+        $activities = $this->activityFeedService->getFeedForDoctor($doctor, $limit);
+
+        return response()->json([
+            'data' => $activities,
+            'meta' => [
+                'total' => count($activities),
+                'doctor_id' => $doctor->id,
             ],
         ]);
     }

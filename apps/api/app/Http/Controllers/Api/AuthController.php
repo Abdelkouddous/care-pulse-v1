@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterPatientRequest;
 use App\Http\Resources\UserResource;
+use App\Models\Doctor;
+use App\Models\User;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -111,8 +113,8 @@ class AuthController extends Controller
 
         return response()->json([
             'data' => [
-                'user' => $user instanceof \App\Models\User ? new UserResource($user) : $user,
-                'role' => $user instanceof \App\Models\User ? 'patient' : ($user instanceof \App\Models\Doctor ? 'doctor' : 'admin'),
+                'user' => $user instanceof User ? new UserResource($user) : $user,
+                'role' => $user instanceof User ? 'patient' : ($user instanceof Doctor ? 'doctor' : 'admin'),
             ],
         ]);
     }
@@ -198,7 +200,7 @@ class AuthController extends Controller
                 'role' => $result['role'],
             ],
             'meta' => [
-                'message' => 'Profile setup complete. Welcome to VitalBook.',
+                'message' => 'Profile setup complete. Welcome to Wateen Book.',
             ],
         ], Response::HTTP_CREATED);
     }

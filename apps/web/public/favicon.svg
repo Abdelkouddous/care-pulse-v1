@@ -1,28 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
-  <title>VitalBook</title>
+  <title>Wateen Book — WateenSoft</title>
   <defs>
-    <linearGradient id="vb-bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#14B8A6"/>
-      <stop offset="0.45" stop-color="#0D9488"/>
-      <stop offset="1" stop-color="#006666"/>
+    <linearGradient id="wateen-gradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#008668"/>
+      <stop offset="100%" stop-color="#33CCCC"/>
     </linearGradient>
+    <filter id="wateen-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#008668" flood-opacity="0.35"/>
+    </filter>
   </defs>
 
-  <!-- Tile -->
-  <rect width="1024" height="1024" rx="232" fill="url(#vb-bg)"/>
-  <rect x="20" y="20" width="984" height="984" rx="214" fill="none" stroke="#33CCCC" stroke-opacity="0.55" stroke-width="16"/>
+  <!-- Base Rounded Container -->
+  <rect width="1024" height="1024" rx="240" fill="#0B131E"/>
+  <rect x="16" y="16" width="992" height="992" rx="224" fill="none" stroke="#33CCCC" stroke-opacity="0.3" stroke-width="12"/>
 
-  <!-- Calendar page -->
-  <rect x="232" y="276" width="560" height="512" rx="76" fill="#FFFFFF"/>
+  <!-- WateenSoft Shield Emblem -->
+  <path d="M512 140C680 230 820 230 860 360C900 620 760 840 512 940C264 840 124 620 164 360C204 230 344 230 512 140Z" fill="url(#wateen-gradient)" filter="url(#wateen-shadow)"/>
 
-  <!-- Binder rings -->
-  <rect x="340" y="200" width="64" height="148" rx="32" fill="#FF9833"/>
-  <rect x="620" y="200" width="64" height="148" rx="32" fill="#FF9833"/>
+  <!-- Inner Highlight Contour -->
+  <path d="M512 190C660 270 780 270 815 385C850 610 730 800 512 890C294 800 174 610 209 385C244 270 364 270 512 190Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.3" stroke-width="16"/>
 
-  <!-- Medical cross -->
-  <path fill="#0D9488" d="M412 404h80a16 16 0 0 1 16 16v76h76a16 16 0 0 1 16 16v80a16 16 0 0 1-16 16h-76v76a16 16 0 0 1-16 16h-80a16 16 0 0 1-16-16v-76h-76a16 16 0 0 1-16-16v-80a16 16 0 0 1 16-16h76v-76a16 16 0 0 1 16-16z"/>
+  <!-- Dynamic ECG Heart Pulse Line -->
+  <path d="M260 550H370L430 420L510 680L570 460L630 600L690 550H780" fill="none" stroke="#FFFFFF" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
 
-  <!-- Confirmation check (white halo separates it from the cross) -->
-  <path d="M528 596l84 84 168-196" fill="none" stroke="#FFFFFF" stroke-width="128" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M528 596l84 84 168-196" fill="none" stroke="#006666" stroke-width="64" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Glowing Pulse Node -->
+  <circle cx="570" cy="460" r="32" fill="#FFFFFF"/>
 </svg>

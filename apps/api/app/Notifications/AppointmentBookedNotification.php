@@ -27,13 +27,13 @@ class AppointmentBookedNotification extends Notification implements ShouldQueue
         $feeDzd = number_format($this->appointment->consultation_fee_cents / 100, 2);
 
         return (new MailMessage)
-            ->subject('VitalBook: Appointment Confirmed')
+            ->subject('Wateen Book: Appointment Confirmed')
             ->greeting("Hello {$notifiable->name},")
             ->line("Your medical appointment with Dr. {$this->appointment->doctor->last_name} is successfully scheduled.")
             ->line("Date & Time: {$timeStr}")
             ->line("Reason: {$this->appointment->reason}")
             ->line("Consultation Fee: {$feeDzd} DZD")
-            ->action('View My Appointments', url(config('app.url') . '/dashboard'))
-            ->line('Thank you for choosing VitalBook healthcare network.');
+            ->action('View My Appointments', url(config('app.url').'/dashboard'))
+            ->line('Thank you for choosing Wateen Book healthcare network.');
     }
 }

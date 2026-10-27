@@ -43,7 +43,7 @@ Flagship products include **Pulse Pro / VitalBook V1**.
 - **Emblem:** Curved shield symbolizing data protection, clinical security, and trust.
 - **Pulse/ECG Line:** White dynamic cardiac rhythm crossing the shield, representing vitality, real-time monitoring, and health tech.
 - **Sparkle Stars:** Two quad-point stars at the upper-right corner denoting premium quality and innovation.
-- **Vector Assets:** Available at `frontend/public/assets/icons/vitalsoft-logo.svg` and `docs/brand/vitalsoft-logo.svg`.
+- **Vector Assets:** Available at `apps/web/public/assets/icons/vitalsoft-logo.svg` and `docs/brand/vitalsoft-logo.svg`.
 
 ---
 

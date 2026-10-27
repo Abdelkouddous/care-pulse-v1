@@ -88,7 +88,7 @@ export function DoctorForm() {
           <span className="inline-block text-xs font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/40 px-3.5 py-1.5 rounded-full border border-sky-200 dark:border-sky-800/60">
             Doctor Portal
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="font-sans text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
             Doctor Authentication
           </h1>
           <p className="text-sm text-slate-600 dark:text-slate-300">

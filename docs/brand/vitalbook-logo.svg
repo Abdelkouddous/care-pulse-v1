@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" width="520" height="120">
+  <title>VitalBook</title>
+  <defs>
+    <linearGradient id="vbl-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#14B8A6"/>
+      <stop offset="0.45" stop-color="#0D9488"/>
+      <stop offset="1" stop-color="#006666"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Mark (favicon.svg scaled to 104px) -->
+  <g transform="translate(8 8) scale(0.1015625)">
+    <rect width="1024" height="1024" rx="232" fill="url(#vbl-bg)"/>
+    <rect x="232" y="276" width="560" height="512" rx="76" fill="#FFFFFF"/>
+    <rect x="340" y="200" width="64" height="148" rx="32" fill="#FF9833"/>
+    <rect x="620" y="200" width="64" height="148" rx="32" fill="#FF9833"/>
+    <path fill="#0D9488" d="M412 404h80a16 16 0 0 1 16 16v76h76a16 16 0 0 1 16 16v80a16 16 0 0 1-16 16h-76v76a16 16 0 0 1-16 16h-80a16 16 0 0 1-16-16v-76h-76a16 16 0 0 1-16-16v-80a16 16 0 0 1 16-16h76v-76a16 16 0 0 1 16-16z"/>
+    <path d="M528 596l84 84 168-196" fill="none" stroke="#FFFFFF" stroke-width="128" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M528 596l84 84 168-196" fill="none" stroke="#006666" stroke-width="64" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="136" y="82" font-family="Outfit, 'Plus Jakarta Sans', Inter, 'Segoe UI', system-ui, sans-serif" font-size="64" font-weight="800" letter-spacing="-1.5" fill="#0F172A">Vital<tspan fill="#0D9488" font-weight="500">Book</tspan></text>
+</svg>

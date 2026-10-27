@@ -6,13 +6,13 @@ import { Doctor } from "@/types/api.types";
  * Strict adherence to Integer Money Guard (consultation_fee_cents) & UUIDv4.
  */
 export const MOCK_DOCTOR: Doctor = {
-  id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
-  clinic_id: "e4eaaaf2-d142-11e1-b3e4-080027620cdd",
-  specialty_id: "s1eebc99-9c0b-4ef8-bb6d-6bb9bd380a01",
+  id: "01a155f0-6ee6-737f-9f0c-5971894a6849",
+  clinic_id: "58b759e3-41f6-47d2-aa1d-35e004849e52",
+  specialty_id: "10270a43-f156-4506-87e4-7c6f0e99529a",
   first_name: "Amine",
   last_name: "Mansouri",
   name: "Dr. Amine Mansouri",
-  email: "dr.mansouri@vitalbook.com",
+  email: "dr.mansouri@wateensoft.com",
   phone: "+213 550 11 22 33",
   avatar_url: "/assets/images/dr-remirez.png",
   bio: "Senior Consulting Cardiologist specializing in preventive cardiovascular diagnostics, non-invasive imaging, and hypertension management.",
@@ -27,7 +27,7 @@ export const MOCK_DOCTOR: Doctor = {
   availabilities: [
     {
       id: "v1eebc99-9c0b-4ef8-bb6d-6bb9bd380a01",
-      doctor_id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+      doctor_id: "01a155f0-6ee6-737f-9f0c-5971894a6849",
       day_of_week: 1, // Monday
       start_time: "09:00:00",
       end_time: "17:00:00",
@@ -36,7 +36,7 @@ export const MOCK_DOCTOR: Doctor = {
     },
     {
       id: "v1eebc99-9c0b-4ef8-bb6d-6bb9bd380a02",
-      doctor_id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+      doctor_id: "01a155f0-6ee6-737f-9f0c-5971894a6849",
       day_of_week: 2, // Tuesday
       start_time: "09:00:00",
       end_time: "17:00:00",
@@ -45,7 +45,7 @@ export const MOCK_DOCTOR: Doctor = {
     },
     {
       id: "v1eebc99-9c0b-4ef8-bb6d-6bb9bd380a03",
-      doctor_id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+      doctor_id: "01a155f0-6ee6-737f-9f0c-5971894a6849",
       day_of_week: 3, // Wednesday
       start_time: "09:00:00",
       end_time: "17:00:00",
@@ -54,7 +54,7 @@ export const MOCK_DOCTOR: Doctor = {
     },
     {
       id: "v1eebc99-9c0b-4ef8-bb6d-6bb9bd380a04",
-      doctor_id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+      doctor_id: "01a155f0-6ee6-737f-9f0c-5971894a6849",
       day_of_week: 4, // Thursday
       start_time: "09:00:00",
       end_time: "17:00:00",
@@ -63,7 +63,7 @@ export const MOCK_DOCTOR: Doctor = {
     },
     {
       id: "v1eebc99-9c0b-4ef8-bb6d-6bb9bd380a05",
-      doctor_id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+      doctor_id: "01a155f0-6ee6-737f-9f0c-5971894a6849",
       day_of_week: 5, // Friday
       start_time: "09:00:00",
       end_time: "13:00:00",

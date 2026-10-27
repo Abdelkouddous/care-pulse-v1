@@ -9,31 +9,28 @@ RUN composer install \
     --no-interaction \
     --prefer-dist \
     --optimize-autoloader \
+    --no-scripts \
     --ignore-platform-reqs
 
 # Stage 2: Production PHP 8.4-FPM + Nginx runtime
 FROM php:8.4-fpm-alpine
 
-# Install system dependencies & PostgreSQL / Redis extensions
+# Install system dependencies & PHP extensions
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
 RUN apk add --no-cache \
     nginx \
     supervisor \
-    postgresql-dev \
-    libzip-dev \
-    icu-dev \
-    libpng-dev \
-    oniguruma-dev \
     curl \
     git \
-    && docker-php-ext-install \
+    && install-php-extensions \
     pdo_pgsql \
     pgsql \
     bcmath \
     intl \
     opcache \
     zip \
-    && pecl install redis \
-    && docker-php-ext-enable redis
+    redis
 
 # Set working directory
 WORKDIR /var/www/html

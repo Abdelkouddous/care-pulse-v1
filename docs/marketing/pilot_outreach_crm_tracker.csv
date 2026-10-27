@@ -1,0 +1,13 @@
+id,clinic_name,district,specialty,phone,status,date_sent,follow_up_due,notes
+C01,"Cabinet Cardiologie Sidi Yahia",Sidi Yahia,Cardiologie,"+213 5XX XX XX 01",Sent,2026-10-20,2026-10-22,"WhatsApp intro dispatched with flyer PDF"
+C02,"Centre Pédiatrique les Glycines",Hydra,Pédiatrie,"+213 5XX XX XX 02",Pending,,,Batch 2 queue
+C03,"Cabinet Ophtalmologie El Biar",El Biar,Ophtalmologie,"+213 5XX XX XX 03",Pending,,,Morning walk-in planned
+C04,"Clinique Médicale Chéraga Ouest",Chéraga,"Médecine Interne","+213 5XX XX XX 04",Pending,,,Afternoon walk-in planned
+C05,"Cabinet Gynécologie & Échographie",Dely Ibrahim,Gynécologie,"+213 5XX XX XX 05",Pending,,,Batch 2 queue
+C06,"Cabinet Dermatologie & Laser Hydra",Hydra,Dermatologie,"+213 5XX XX XX 06",Sent,2026-10-20,2026-10-22,"Dispatched via assistant WhatsApp"
+C07,"Cabinet Orthopédie & Traumatologie",Sidi Yahia,Orthopédie,"+213 5XX XX XX 07",Sent,2026-10-20,2026-10-22,"Focused on post-op reminder value"
+C08,"Centre Rhumatologie Chéraga",Chéraga,Rhumatologie,"+213 5XX XX XX 08",Pending,,,Batch 2 queue
+C09,"Cabinet Dentaire & Implantologie",Hydra,Dentisterie,"+213 5XX XX XX 09",Pending,,,High surgery fee target
+C10,"Cabinet Allergologie Pneumologie",El Biar,Pneumologie,"+213 5XX XX XX 10",Pending,,,Batch 3 queue
+C14,"Cabinet Pédiatrie & Néonatalogie",Sidi Yahia,Pédiatrie,"+213 5XX XX XX 14",Sent,2026-10-20,2026-10-22,"Stressed morning phone call relief"
+C22,"Cabinet Dermatologie Sidi Yahia",Sidi Yahia,Dermatologie,"+213 5XX XX XX 22",Sent,2026-10-20,2026-10-22,"Esthetic consultation reminder focus"

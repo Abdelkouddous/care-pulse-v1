@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wateen Book — Affiche B2B Cabinets & Cliniques (Light Mode)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@700;800&family=Poppins:wght@600;700;800;900&display=swap');
+
+    :root {
+      --brand-primary: #008668;
+      --brand-aqua: #33CCCC;
+      --brand-accent: #FF9B33;
+      --surface-dark: #0B131E;
+      --surface-card: #FFFFFF;
+      --surface-bg: #F8FAFC;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --border-light: #E2E8F0;
+      --alert-bg: #FFF5F5;
+      --alert-border: #FECDD3;
+      --alert-text: #BE123C;
+      --success: #10B981;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #FFFFFF;
+      color: var(--text-main);
+      width: 1200px;
+      min-height: 1700px;
+      margin: 0 auto;
+      padding: 56px 68px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid var(--border-light);
+      padding-bottom: 22px;
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .logo-icon {
+      width: 72px;
+      height: 72px;
+      filter: drop-shadow(0 4px 12px rgba(0, 134, 104, 0.25));
+    }
+    .logo-icon svg { width: 100%; height: 100%; }
+
+    .brand-title h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1;
+      color: var(--text-main);
+    }
+    .brand-title h1 span { color: var(--brand-primary); }
+    .brand-title p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .badge-algeria {
+      background: #F0FDFA;
+      border: 2px solid var(--brand-primary);
+      color: var(--brand-primary);
+      font-family: 'Poppins', 'Cairo', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      padding: 10px 24px;
+      border-radius: 30px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      box-shadow: 0 2px 10px rgba(0, 134, 104, 0.12);
+    }
+
+    /* HERO */
+    .hero {
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .hero-pill {
+      display: inline-block;
+      background: #FFF1F2;
+      border: 1.5px solid var(--alert-border);
+      color: #E11D48;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      font-weight: 800;
+      padding: 8px 22px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
+
+    .hero-headline {
+      font-family: 'Poppins', sans-serif;
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -1.2px;
+      color: var(--text-main);
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+    .hero-headline span {
+      color: var(--brand-primary);
+      background: linear-gradient(120deg, rgba(0, 134, 104, 0.08) 0%, rgba(51, 204, 204, 0.15) 100%);
+      padding: 0 10px;
+      border-radius: 6px;
+    }
+
+    .hero-sub {
+      font-size: 20px;
+      color: #475569;
+      margin-top: 14px;
+      font-weight: 500;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.45;
+    }
+
+    /* STATS ROW */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin: 28px 0;
+    }
+
+    .stat-card {
+      background: var(--surface-bg);
+      border: 2px solid var(--border-light);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+    }
+    .stat-card.alert {
+      border-color: var(--alert-border);
+      background: var(--alert-bg);
+    }
+    .stat-card .val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .stat-card.alert .val { color: var(--alert-text); }
+    .stat-card .desc {
+      font-size: 14.5px;
+      color: #475569;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    /* WORKFLOW BOX */
+    .workflow-box {
+      background: #FFFFFF;
+      border: 2.5px solid var(--brand-primary);
+      border-radius: 24px;
+      padding: 30px 36px;
+      box-shadow: 0 8px 24px rgba(0, 134, 104, 0.08);
+    }
+
+    .workflow-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--brand-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .step-item {
+      background: var(--surface-bg);
+      border: 1.5px solid var(--border-light);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .step-badge {
+      width: 36px;
+      height: 36px;
+      background: var(--brand-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      color: #FFFFFF;
+      margin-bottom: 12px;
+    }
+
+    .step-item h4 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .step-item p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* WHATSAPP DUAL PREVIEW */
+    .wa-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      margin: 28px 0;
+    }
+
+    .wa-card {
+      background: #F0FDF4;
+      border: 2px solid #86EFAC;
+      border-radius: 18px;
+      padding: 20px 24px;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08);
+    }
+    .wa-card.ar {
+      direction: rtl;
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+    }
+    .wa-card .wa-tag {
+      display: inline-block;
+      background: #25D366;
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 8px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+    .wa-card .wa-msg {
+      background: #FFFFFF;
+      border: 1px solid #DCFCE7;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: 14.5px;
+      line-height: 1.5;
+      color: #064E3B;
+    }
+    .wa-card .wa-msg strong { color: var(--brand-primary); }
+
+    /* TRUST BADGES ROW */
+    .trust-strip {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: var(--surface-bg);
+      border: 1.5px solid var(--border-light);
+      border-radius: 16px;
+      padding: 16px 24px;
+      margin-bottom: 24px;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .trust-item .icon { font-size: 20px; }
+
+    /* FOOTER */
+    .footer {
+      border-top: 3px solid var(--border-light);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .footer-left strong {
+      color: var(--brand-primary);
+      font-size: 15px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .contact-pill {
+      background: var(--brand-primary);
+      border: 2px solid var(--brand-primary);
+      color: #FFFFFF;
+      padding: 12px 26px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      box-shadow: 0 4px 14px rgba(0, 134, 104, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="brand-box">
+      <div class="logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+          <defs>
+            <linearGradient id="p2-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#008668"/>
+              <stop offset="100%" stop-color="#33CCCC"/>
+            </linearGradient>
+          </defs>
+          <rect width="1024" height="1024" rx="240" fill="#0B131E"/>
+          <rect x="16" y="16" width="992" height="992" rx="224" fill="none" stroke="#33CCCC" stroke-opacity="0.3" stroke-width="12"/>
+          <path d="M512 140C680 230 820 230 860 360C900 620 760 840 512 940C264 840 124 620 164 360C204 230 344 230 512 140Z" fill="url(#p2-grad)"/>
+          <path d="M260 550H370L430 420L510 680L570 460L630 600L690 550H780" fill="none" stroke="#FFFFFF" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="570" cy="460" r="32" fill="#FFFFFF"/>
+        </svg>
+      </div>
+      <div class="brand-title">
+        <h1>Wateen<span>Book</span></h1>
+        <p>Confirmation Médicale & Triage de Cabinet</p>
+      </div>
+    </div>
+    <div class="badge-algeria">Programme Pilote 2026 · Alger & Tébessa</div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-pill">Secteur Médical Privé Algérien</div>
+    <h2 class="hero-headline">
+      Éliminez les <span>Rendez-vous Perdus</span> en Cabinet Médical.
+    </h2>
+    <p class="hero-sub">
+      La première solution clinique intégrée qui confirme et trie automatiquement vos consultations par WhatsApp sans changer votre logiciel habituel.
+    </p>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-container">
+    <div class="stat-card alert">
+      <div class="val">4 à 6</div>
+      <div class="desc">Patients absents chaque jour sans prévenir votre assistante</div>
+    </div>
+    <div class="stat-card alert">
+      <div class="val">360 000 DA</div>
+      <div class="desc">Perte sèche moyenne estimée par mois pour un praticien</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">85%</div>
+      <div class="desc">Taux de réponse moyen des patients algériens par WhatsApp</div>
+    </div>
+  </section>
+
+  <!-- WORKFLOW -->
+  <section class="workflow-box">
+    <div class="workflow-title">Comment Fonctionne Wateen Book en 3 Étapes</div>
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-badge">1</div>
+        <h4>Enregistrement</h4>
+        <p>L'assistante note le RDV sur son tableau de bord en 15 secondes chrono (Nom & Téléphone).</p>
+      </div>
+      <div class="step-item">
+        <div class="step-badge">2</div>
+        <h4>Rappel WhatsApp</h4>
+        <p>Le patient reçoit le rappel officiel. Il tape <strong>1 pour Confirmer</strong> ou <strong>2 pour Annuler</strong>.</p>
+      </div>
+      <div class="step-item">
+        <div class="step-badge">3</div>
+        <h4>Planning Synchronisé</h4>
+        <p>L'écran devient VERT. Si annulé, la place est libérée immédiatement pour une urgence.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DUAL WHATSAPP PREVIEWS -->
+  <section class="wa-strip">
+    <div class="wa-card">
+      <span class="wa-tag">Notification WhatsApp (Français)</span>
+      <div class="wa-msg">
+        "Bonjour <strong>Amina</strong>, votre consultation avec le <strong>Dr. Benali</strong> est prévue le <strong>Mardi à 10h30</strong>.<br/><br/>
+        👉 Tapez <strong>1</strong> pour <strong>CONFIRMER</strong> votre venue.<br/>
+        👉 Tapez <strong>2</strong> pour <strong>ANNULER</strong> et libérer la place."
+      </div>
+    </div>
+    <div class="wa-card ar">
+      <span class="wa-tag">إشعار واتساب (العربية)</span>
+      <div class="wa-msg">
+        "مرحباً <strong>أمينة</strong>، موعدك مع <strong>الدكتور بن علي</strong> مبرمج يوم <strong>الثلاثاء على الساعة 10:30</strong>.<br/><br/>
+        👉 اضغط <strong>1</strong> لـ <strong>تأكيد</strong> الحضور.<br/>
+        👉 اضغط <strong>2</strong> لـ <strong>إلغاء</strong> الموعد وإفساح المجال لحالة مستعجلة."
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST STRIP -->
+  <section class="trust-strip">
+    <div class="trust-item"><span class="icon">🔒</span> Conforme Loi 18-07 Secret Médical</div>
+    <div class="trust-item"><span class="icon">💳</span> Prise en charge Carte Chifa & CNAS</div>
+    <div class="trust-item"><span class="icon">⚡</span> Prise en main assistante en 15 minutes</div>
+    <div class="trust-item"><span class="icon">🎁</span> Essai Pilote 30 Jours Offert</div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-left">
+      <strong>WateenSoft HealthTech Solutions</strong> · Wateen Book V2.0<br/>
+      Tableau de bord praticien : book.wateensoft.com
+    </div>
+    <div class="contact-pill">WhatsApp Démo : +213 549 88 24 56</div>
+  </footer>
+
+</body>
+</html>

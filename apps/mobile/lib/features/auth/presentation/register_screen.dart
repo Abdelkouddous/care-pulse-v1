@@ -92,7 +92,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   'Complete Your Profile',
                   style: theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.vitalTeal,
+                    color: AppColors.brandPrimary,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xs),
@@ -240,7 +240,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           height: 20,
                           child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                         )
-                      : const Text('Complete & Enter VitalBook'),
+                      : const Text('Complete & Enter Wateen Book'),
                 ),
               ],
             ),

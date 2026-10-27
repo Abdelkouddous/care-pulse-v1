@@ -14,11 +14,11 @@ export const MOCK_PATIENT: PatientUser & {
   blood_type: string;
   member_since: string;
 } = {
-  id: "b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a22",
+  id: "01a155f0-94e0-70db-8b75-e47f9085a54a",
   first_name: "Sarah",
   last_name: "Benali",
   name: "Sarah Benali",
-  email: "patient@vitalbook.com",
+  email: "patient@wateensoft.com",
   phone: "+213 549 88 24 56", // Test OTP verification number
   date_of_birth: "1995-04-12",
   gender: "female",

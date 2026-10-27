@@ -1,11 +1,11 @@
 {
-    "name": "VitalBook",
-    "short_name": "VitalBook",
+    "name": "Wateen Book — by WateenSoft",
+    "short_name": "Wateen Book",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0D9488",
-    "theme_color": "#0D9488",
-    "description": "Book doctor appointments in seconds.",
+    "background_color": "#0B131E",
+    "theme_color": "#008668",
+    "description": "Wateen Book by WateenSoft — Medical Appointment & Clinical Operations Platform.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

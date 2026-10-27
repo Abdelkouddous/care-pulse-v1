@@ -193,7 +193,7 @@ function SignInContent() {
         toast({
           title: "Firebase Configuration Needed",
           description:
-            "Please add NEXT_PUBLIC_FIREBASE_API_KEY to frontend/.env.local from your Firebase Console to enable live carrier SMS.",
+            "Please add NEXT_PUBLIC_FIREBASE_API_KEY to apps/web/.env.local from your Firebase Console to enable live carrier SMS.",
           variant: "destructive",
         });
         return;
@@ -387,7 +387,7 @@ function SignInContent() {
         </div>
 
         <div className="z-10 text-xs text-slate-400 flex items-center justify-between pt-6 border-t border-slate-800/80">
-          <span>&copy; {new Date().getFullYear()} VitalBook DZ</span>
+          <span>&copy; {new Date().getFullYear()} Wateen Book DZ</span>
           <span className="flex items-center gap-1.5">
             <ShieldCheck className="size-3.5 text-emerald-400" />
             256-bit Healthcare Encryption
@@ -610,7 +610,7 @@ function SignInContent() {
 
           {/* Registration Prompt */}
           <div className="text-center text-xs text-muted-foreground pt-1">
-            New to VitalBook?{" "}
+            New to Wateen Book?{" "}
             <Link href="/register" className="font-bold text-emerald-500 hover:text-emerald-400 hover:underline">
               Create a Patient Account
             </Link>

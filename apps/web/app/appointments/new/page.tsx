@@ -57,7 +57,7 @@ function NewAppointmentContent() {
   );
   const { bookAppointment } = useAppointments();
 
-  const doctorsList = doctorsData?.doctors || [];
+  const doctorsList = useMemo(() => doctorsData?.doctors || [], [doctorsData?.doctors]);
 
   // Filtered doctors list
   const filteredDoctors = useMemo(() => {
@@ -550,7 +550,7 @@ function NewAppointmentContent() {
                     Clinic Center
                   </span>
                   <span className="font-semibold text-foreground block">
-                    VitalBook Medical Center
+                    Wateen Medical Center
                   </span>
                   <span className="text-xs text-muted-foreground">
                     12 Rue Didouche Mourad, Algiers
@@ -637,11 +637,11 @@ function NewAppointmentContent() {
               <Button
                 roleVariant="outline"
                 onClick={() => {
-                  const icsData = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:Medical Consultation with ${selectedDoctor?.name}\nDESCRIPTION:${reason}\nLOCATION:VitalBook Medical Center\nSTATUS:CONFIRMED\nEND:VEVENT\nEND:VCALENDAR`;
+                  const icsData = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:Medical Consultation with ${selectedDoctor?.name}\nDESCRIPTION:${reason}\nLOCATION:Wateen Medical Center\nSTATUS:CONFIRMED\nEND:VEVENT\nEND:VCALENDAR`;
                   const blob = new Blob([icsData], { type: "text/calendar;charset=utf-8" });
                   const link = document.createElement("a");
                   link.href = window.URL.createObjectURL(blob);
-                  link.setAttribute("download", `vitalbook_appointment_${selectedDate}.ics`);
+                  link.setAttribute("download", `wateen_appointment_${selectedDate}.ics`);
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);

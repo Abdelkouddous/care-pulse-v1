@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Doctor Clinical Workspace | VitalBook",
+  title: "Doctor Clinical Workspace | Wateen Book",
   description: "Physician triage workspace, patient queue management, and consultation schedule.",
 };
 

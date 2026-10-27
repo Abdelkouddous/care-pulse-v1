@@ -4,7 +4,7 @@ import { ShieldAlert, ArrowLeft, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "403 - Unauthorized Access | VitalBook",
+  title: "403 - Unauthorized Access | Wateen Book",
   robots: {
     index: false,
     follow: false,

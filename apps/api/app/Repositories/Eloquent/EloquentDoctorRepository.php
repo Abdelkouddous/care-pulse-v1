@@ -17,9 +17,19 @@ class EloquentDoctorRepository implements IDoctorRepository
     public function findByEmail(string $email): ?Doctor
     {
         $doctor = Doctor::where('email', $email)->first();
-        if (! $doctor && in_array(strtolower($email), ['dr.benali@vitalbook.com', 'dr.yasmine@vitalbook.com', 'yasmine.benali@vitalbook.com'])) {
-            $doctor = Doctor::where('email', 'dr.lee@vitalbook.com')->first();
+        if (! $doctor && in_array(strtolower($email), [
+            'dr.benali@wateensoft.com',
+            'dr.yasmine@wateensoft.com',
+            'yasmine.benali@wateensoft.com',
+            'dr.benali@vitalbook.com',
+            'dr.yasmine@vitalbook.com',
+            'yasmine.benali@vitalbook.com',
+        ])) {
+            $doctor = Doctor::where('email', 'dr.lee@wateensoft.com')
+                ->orWhere('email', 'dr.lee@vitalbook.com')
+                ->first();
         }
+
         return $doctor;
     }
 
@@ -32,7 +42,7 @@ class EloquentDoctorRepository implements IDoctorRepository
         }
 
         if (! empty($filters['search'])) {
-            $term = '%' . $filters['search'] . '%';
+            $term = '%'.$filters['search'].'%';
             $query->where(function ($q) use ($term) {
                 $q->where('first_name', 'like', $term)
                     ->orWhere('last_name', 'like', $term)

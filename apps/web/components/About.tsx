@@ -1,16 +1,19 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { CheckCircle2, ShieldCheck, HeartHandshake } from "lucide-react";
 import React from "react";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { DICTIONARY_EN } from "@/constants/locales/en";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface AboutProps {
   className?: string;
 }
 
-const About: React.FC<AboutProps> = ({ className = "" }): JSX.Element => {
+export const About: React.FC<AboutProps> = ({ className = "" }): JSX.Element => {
+  const { t, locale } = useLanguage();
+
   const fadeInVariants = {
     hidden: { opacity: 0, y: 24 },
     visible: {
@@ -20,8 +23,44 @@ const About: React.FC<AboutProps> = ({ className = "" }): JSX.Element => {
     },
   };
 
+  const points = [
+    {
+      icon: CheckCircle2,
+      title:
+        locale === "ar"
+          ? "حجز فوري ومؤكد بدون طوابير انتظار"
+          : "Réservation instantanée sans attente au cabinet",
+      desc:
+        locale === "ar"
+          ? "اختر موعدك وتخصصك الطبي بكل دقة واحصل على تأكيد وتذكير مباشر على تطبيق واتساب."
+          : "Choisissez l'horaire qui vous convient et recevez une confirmation instantanée sur votre téléphone.",
+    },
+    {
+      icon: HeartHandshake,
+      title:
+        locale === "ar"
+          ? "مجاني للمرضى وقبول بطاقة الشفاء"
+          : "100% Gratuit pour les patients et compatible Chifa",
+      desc:
+        locale === "ar"
+          ? "لا تدفع أي رسوم للمنصة. تدفع فقط كشف الطبيب بالعيادة مع إمكانية استرجاع مصاريف الضمان الاجتماعي."
+          : "Aucun frais de réservation. Vos consultations sont prises en charge avec délivrance des feuilles CNAS.",
+    },
+    {
+      icon: ShieldCheck,
+      title:
+        locale === "ar"
+          ? "بيانات صحية مشفرة ومحمية قانونياً"
+          : "Protection légale des données (Loi 18-07)",
+      desc:
+        locale === "ar"
+          ? "معالجة سرية وآمنة للمعلومات الصحية الشخصية بما يتطابق تماماً مع التشريع الجزائري الساري."
+          : "Plateforme rigoureusement conforme à la législation algérienne sur la protection des données personnelles.",
+    },
+  ];
+
   return (
-    <section id="about" className={`w-full ${className}`}>
+    <section id="about" className={`w-full scroll-mt-20 ${className}`}>
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -33,19 +72,32 @@ const About: React.FC<AboutProps> = ({ className = "" }): JSX.Element => {
           <CardHeader className="border-b border-slate-100 pb-6 pt-8 text-center dark:border-slate-800">
             <CardTitle className="flex flex-col items-center justify-center space-y-2">
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-3.5 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-800/60">
-                {DICTIONARY_EN.about.badge}
+                {locale === "ar" ? "رؤيتنا" : "Notre Mission"}
               </span>
               <h2 className="font-sans text-3xl font-bold text-slate-900 dark:text-white md:text-4xl">
-                {DICTIONARY_EN.about.title}
+                {locale === "ar" ? "لماذا تختار وتين بوك؟" : "Pourquoi choisir Wateen Book ?"}
               </h2>
             </CardTitle>
           </CardHeader>
 
-          <CardContent className="px-6 pb-8 pt-6 md:px-12">
-            <div className="space-y-5 leading-relaxed text-slate-600 dark:text-slate-300 text-base md:text-lg">
-              <p>{DICTIONARY_EN.about.p1}</p>
-              <p>{DICTIONARY_EN.about.p2}</p>
-              <p>{DICTIONARY_EN.about.p3}</p>
+          <CardContent className="px-6 pb-10 pt-8 md:px-12">
+            <div className="grid gap-6 md:grid-cols-3">
+              {points.map((pt, idx) => (
+                <div
+                  key={idx}
+                  className="p-5 rounded-2xl border border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/30 space-y-3 text-left"
+                >
+                  <div className="size-11 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                    <pt.icon className="size-5" />
+                  </div>
+                  <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
+                    {pt.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    {pt.desc}
+                  </p>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>

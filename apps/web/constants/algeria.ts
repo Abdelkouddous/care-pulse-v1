@@ -4,7 +4,19 @@ export interface Wilaya {
   arabicName: string;
 }
 
+/**
+ * Strictly targeted launch cities for VitalBook PostGIS Geolocation.
+ * Phase 1 strictly targets Algiers (16) and Tébessa (12).
+ */
 export const ALGERIAN_WILAYAS: Wilaya[] = [
+  { code: 16, name: "Alger", arabicName: "الجزائر" },
+  { code: 12, name: "Tébessa", arabicName: "تبسة" },
+];
+
+/**
+ * Historical/Full 58 Wilayas reference catalog.
+ */
+export const ALL_58_WILAYAS: Wilaya[] = [
   { code: 1, name: "Adrar", arabicName: "أدرار" },
   { code: 2, name: "Chlef", arabicName: "الشلف" },
   { code: 3, name: "Laghouat", arabicName: "الأغواط" },

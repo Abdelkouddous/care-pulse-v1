@@ -1,5 +1,5 @@
 
-Integrating these rules establishes a strict, enterprise-grade architecture for `mobile-app/` by anchoring your stack on Riverpod 2.x code generation, a headless Dio networking layer authenticated with Laravel Sanctum, and an immutable Design System mapped directly to Vital Soft's brand tokens.
+Integrating these rules establishes a strict, enterprise-grade architecture for `apps/mobile/` by anchoring your stack on Riverpod 3.x code generation, a headless Dio networking layer authenticated with Laravel Sanctum, and an immutable Design System mapped directly to Vital Soft's brand tokens.
 
 A beginner builds Flutter apps by mixing state management paradigms, scattering `ChangeNotifier` listeners across UI widgets, and writing inline colors and untyped HTTP calls. A professional systems architect enforces strict compile-time safety using Riverpod code generation (`@riverpod`), isolates infrastructure behind repository contracts, and binds routing declaratively to domain auth states.
 
@@ -198,12 +198,12 @@ Dio dio(DioRef ref) {
 
 ---
 
-## 3. Modular Feature Architecture (`mobile-app/`)
+## 3. Modular Feature Architecture (`apps/mobile/`)
 
 Your codebase must adhere to Clean Architecture with strict separation between Domain entities, Data providers, and Presentation widgets.
 
 ```text
-mobile-app/
+apps/mobile/
 ├── lib/
 │   ├── core/
 │   │   ├── network/            # Dio instance, interceptors, error parsers
@@ -229,9 +229,9 @@ mobile-app/
 
 ---
 
-## 4. Modern Riverpod 2.x State Management Pattern
+## 4. Modern Riverpod 3.x State Management Pattern
 
-In Riverpod 2.x with code generation, state mutations are encapsulated in `AsyncNotifier` or `Notifier` classes. Do not use legacy manual provider declarations.
+In Riverpod 3.x with code generation, state mutations are encapsulated in `AsyncNotifier` or `Notifier` classes. Do not use legacy manual provider declarations.
 
 ### Example: Appointment List Notifier (`lib/features/appointments/presentation/controllers/appointments_controller.dart`)
 

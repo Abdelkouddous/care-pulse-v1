@@ -1,9 +1,15 @@
 {
-  "name": "vitalbook-monorepo",
+  "name": "wateen-book-monorepo",
   "private": true,
   "workspaces": [
     "apps/web"
   ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/web",
+    "build": "npm run build --workspace=apps/web",
+    "lint": "npm run lint --workspace=apps/web",
+    "typecheck": "tsc --noEmit --project apps/web/tsconfig.json"
+  },
   "devDependencies": {
     "playwright-core": "^1.63.0"
   }

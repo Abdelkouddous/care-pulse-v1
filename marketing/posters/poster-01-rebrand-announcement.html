@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WateenSoft — Annonce Officielle de Renommage / Rebrand</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700;800&family=Poppins:wght@600;700;800;900&display=swap');
+
+    :root {
+      --brand-primary: #008668;
+      --brand-aqua: #33CCCC;
+      --brand-accent: #FF9B33;
+      --surface-dark: #0B131E;
+      --surface-dark-card: #111C2D;
+      --surface-light: #F8FAFC;
+      --card-white: #FFFFFF;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --border-light: #E2E8F0;
+      --border-dark: #1E293B;
+      --success: #10B981;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--surface-dark);
+      color: #F8FAFC;
+      width: 1200px;
+      min-height: 1600px;
+      margin: 0 auto;
+      padding: 56px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Ambient Glow Behind Poster */
+    .glow-teal {
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0, 134, 104, 0.35) 0%, rgba(51, 204, 204, 0.12) 50%, transparent 80%);
+      filter: blur(60px);
+      pointer-events: none;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-dark);
+      padding-bottom: 24px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-box {
+      width: 76px;
+      height: 76px;
+      filter: drop-shadow(0 8px 20px rgba(0, 134, 104, 0.45));
+    }
+    .logo-box svg { width: 100%; height: 100%; }
+
+    .brand-title h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+      color: #FFFFFF;
+    }
+    .brand-title h1 span { color: var(--brand-aqua); }
+    .brand-title p {
+      font-size: 13.5px;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .badge-bilingual {
+      background: rgba(0, 134, 104, 0.18);
+      border: 1.5px solid var(--brand-aqua);
+      color: var(--brand-aqua);
+      font-family: 'Cairo', 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 10px 24px;
+      border-radius: 9999px;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 16px rgba(51, 204, 204, 0.15);
+    }
+    .badge-bilingual .dot {
+      width: 10px;
+      height: 10px;
+      background-color: var(--brand-aqua);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--brand-aqua);
+    }
+
+    /* HERO SECTION */
+    .hero {
+      text-align: center;
+      margin: 36px 0 24px 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-pill {
+      display: inline-block;
+      background: rgba(255, 155, 51, 0.15);
+      border: 1.5px solid var(--brand-accent);
+      color: var(--brand-accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 800;
+      padding: 8px 24px;
+      border-radius: 30px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 50px;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -1.2px;
+      color: #FFFFFF;
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+    .hero-title .teal {
+      color: var(--brand-aqua);
+      background: linear-gradient(120deg, rgba(0, 134, 104, 0.25) 0%, rgba(51, 204, 204, 0.3) 100%);
+      padding: 0 12px;
+      border-radius: 8px;
+    }
+
+    .hero-arabic {
+      font-family: 'Cairo', sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: #E2E8F0;
+      margin-top: 14px;
+      direction: rtl;
+    }
+
+    .hero-sub {
+      font-size: 19px;
+      color: #94A3B8;
+      max-width: 900px;
+      margin: 18px auto 0 auto;
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    /* REBRAND TRANSITION CARD */
+    .transition-container {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+      background: var(--surface-dark-card);
+      border: 2px solid var(--border-dark);
+      border-radius: 24px;
+      padding: 32px 40px;
+      margin: 24px 0;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .entity-box {
+      background: rgba(11, 19, 30, 0.7);
+      border: 1.5px solid var(--border-dark);
+      border-radius: 18px;
+      padding: 24px;
+      text-align: center;
+    }
+    .entity-box.legacy {
+      opacity: 0.65;
+      border-style: dashed;
+    }
+    .entity-box.new {
+      border-color: var(--brand-primary);
+      background: linear-gradient(180deg, rgba(0, 134, 104, 0.12) 0%, rgba(17, 28, 45, 0.8) 100%);
+      box-shadow: 0 8px 30px rgba(0, 134, 104, 0.2);
+    }
+    .entity-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      color: #94A3B8;
+      margin-bottom: 8px;
+    }
+    .entity-box.new .entity-label { color: var(--brand-aqua); }
+    .entity-name {
+      font-family: 'Poppins', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+    .entity-arabic {
+      font-family: 'Cairo', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #CBD5E1;
+      margin-top: 4px;
+    }
+    .entity-meta {
+      font-size: 13px;
+      color: #64748B;
+      margin-top: 8px;
+    }
+
+    .arrow-divider {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .arrow-badge {
+      width: 54px;
+      height: 54px;
+      background: var(--brand-primary);
+      border: 2px solid var(--brand-aqua);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #FFFFFF;
+      box-shadow: 0 0 20px rgba(51, 204, 204, 0.4);
+    }
+
+    /* 4 VALUE PILLARS */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin: 16px 0 28px 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .pillar-card {
+      background: var(--surface-dark-card);
+      border: 1.5px solid var(--border-dark);
+      border-radius: 18px;
+      padding: 22px 20px;
+      transition: all 0.2s ease;
+    }
+    .pillar-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+    .pillar-card h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+    }
+    .pillar-card p {
+      font-size: 13px;
+      color: #94A3B8;
+      line-height: 1.45;
+    }
+
+    /* FOOTER */
+    .footer {
+      border-top: 2px solid var(--border-dark);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .footer-left {
+      font-size: 14px;
+      color: #94A3B8;
+      line-height: 1.5;
+    }
+    .footer-left strong {
+      color: #FFFFFF;
+      font-family: 'Poppins', sans-serif;
+    }
+    .footer-left .app-id {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--brand-aqua);
+      font-size: 12.5px;
+    }
+
+    .footer-cta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .cta-btn {
+      background: linear-gradient(135deg, var(--brand-primary) 0%, #006650 100%);
+      border: 1.5px solid var(--brand-aqua);
+      color: #FFFFFF;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      font-weight: 800;
+      padding: 14px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 4px 18px rgba(0, 134, 104, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow-teal"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="brand-group">
+      <div class="logo-box">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+          <defs>
+            <linearGradient id="p1-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#008668"/>
+              <stop offset="100%" stop-color="#33CCCC"/>
+            </linearGradient>
+          </defs>
+          <rect width="1024" height="1024" rx="240" fill="#0B131E"/>
+          <rect x="16" y="16" width="992" height="992" rx="224" fill="none" stroke="#33CCCC" stroke-opacity="0.3" stroke-width="12"/>
+          <path d="M512 140C680 230 820 230 860 360C900 620 760 840 512 940C264 840 124 620 164 360C204 230 344 230 512 140Z" fill="url(#p1-grad)"/>
+          <path d="M512 190C660 270 780 270 815 385C850 610 730 800 512 890C294 800 174 610 209 385C244 270 364 270 512 190Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.3" stroke-width="16"/>
+          <path d="M260 550H370L430 420L510 680L570 460L630 600L690 550H780" fill="none" stroke="#FFFFFF" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="570" cy="460" r="32" fill="#FFFFFF"/>
+        </svg>
+      </div>
+      <div class="brand-title">
+        <h1>Wateen<span>Soft</span></h1>
+        <p>HealthTech Solutions · Algérie & MENA</p>
+      </div>
+    </div>
+    <div class="badge-bilingual">
+      <div class="dot"></div>
+      <span>Évolution Officielle 2026 · إعلان رسمي</span>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-pill">Communiqué de Transition de Marque</div>
+    <h2 class="hero-title">
+      VitalBook devient officiellement <span class="teal">Wateen Book</span>
+    </h2>
+    <div class="hero-arabic">من «فايتل بوك» إلى «وتين بوك» — صحتك في صميم اهتمامنا</div>
+    <p class="hero-sub">
+      Inspiré du « Watīn » (الوتين) — le vaisseau central qui irrigue la vie — WateenSoft modernise la circulation clinique entre praticiens, établissements de santé et patients en Algérie et dans le monde arabe.
+    </p>
+  </section>
+
+  <!-- REBRAND TRANSITION MAPPING -->
+  <section class="transition-container">
+    <div class="entity-box legacy">
+      <div class="entity-label">Ancienne Appellation</div>
+      <div class="entity-name">VitalBook</div>
+      <div class="entity-arabic">فايتل بوك</div>
+      <div class="entity-meta">VitalSoft Group (V1 Pilot)</div>
+    </div>
+
+    <div class="arrow-divider">
+      <div class="arrow-badge">➔</div>
+    </div>
+
+    <div class="entity-box new">
+      <div class="entity-label">Nouveau Standard Clinique</div>
+      <div class="entity-name">Wateen Book</div>
+      <div class="entity-arabic">وتين بوك</div>
+      <div class="entity-meta">com.wateensoft.wateenbook · V2.0</div>
+    </div>
+  </section>
+
+  <!-- 4 VALUE PILLARS -->
+  <section class="pillars-grid">
+    <div class="pillar-card">
+      <div class="pillar-icon">🛡️</div>
+      <h3>Secret Médical & Loi 18-07</h3>
+      <p>Protection absolue de vos données de santé et conformité rigoureuse avec la législation algérienne.</p>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon">⚡</div>
+      <h3>Triage WhatsApp 2-Sens</h3>
+      <p>Confirmation instantanée par message interactif réduisant les rendez-vous manqués jusqu'à 85%.</p>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon">💳</div>
+      <h3>Carte Chifa & CNAS</h3>
+      <p>Identification immédiate de la couverture d'assurance et tarifs transparents en Dinars (DA).</p>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon">📱</div>
+      <h3>Expérience Trilingue</h3>
+      <p>Interface fluide et optimisée en Arabe (العربية), Français et Anglais pour tous les patients et praticiens.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-left">
+      <strong>WateenSoft HealthTech Solutions</strong> · Fondateur & Architecte : Hamel Aymen<br/>
+      Identifiant Bundle Officiel : <span class="app-id">com.wateensoft.wateenbook</span>
+    </div>
+    <div class="footer-cta">
+      <a href="https://book.wateensoft.com" class="cta-btn">book.wateensoft.com</a>
+    </div>
+  </footer>
+
+</body>
+</html>

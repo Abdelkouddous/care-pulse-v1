@@ -38,26 +38,26 @@ export default function AdminLoginPage() {
         TokenManager.setSession(res.token, "admin", res.user, false);
 
         if (typeof window !== "undefined") {
+          localStorage.setItem("wateenbook_token", res.token);
           localStorage.setItem("vitalbook_token", res.token);
-          localStorage.setItem("vitalbook_token", res.token);
+          localStorage.setItem("wateenbook_role", "admin");
           localStorage.setItem("vitalbook_role", "admin");
-          localStorage.setItem("vitalbook_role", "admin");
-          localStorage.removeItem("vitalbook_demo");
+          localStorage.removeItem("wateenbook_demo");
           localStorage.removeItem("vitalbook_demo");
           const userStr = JSON.stringify(res.user);
+          localStorage.setItem("wateenbook_user", userStr);
           localStorage.setItem("vitalbook_user", userStr);
-          localStorage.setItem("vitalbook_user", userStr);
+          document.cookie = `wateenbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
           document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
-          document.cookie = `vitalbook_token=${res.token}; path=/; max-age=86400; samesite=lax`;
+          document.cookie = `wateenbook_role=admin; path=/; max-age=86400; samesite=lax`;
           document.cookie = `vitalbook_role=admin; path=/; max-age=86400; samesite=lax`;
-          document.cookie = `vitalbook_role=admin; path=/; max-age=86400; samesite=lax`;
-          document.cookie = `vitalbook_demo=; path=/; max-age=0; samesite=lax`;
+          document.cookie = `wateenbook_demo=; path=/; max-age=0; samesite=lax`;
           document.cookie = `vitalbook_demo=; path=/; max-age=0; samesite=lax`;
         }
 
         toast({
           title: "Administrative Access Granted",
-          description: "Welcome to VitalBook Clinic Control Center.",
+          description: "Welcome to Wateen Book Clinic Control Center.",
         });
 
         router.push("/admin/dashboard");
@@ -120,7 +120,7 @@ export default function AdminLoginPage() {
 
           <div className="flex items-center gap-3 pt-4 border-t border-slate-800 text-xs text-slate-400">
             <Building2 className="size-4 text-emerald-400" />
-            <span>Tenant: VitalBook Medical Center (Algiers, DZ)</span>
+            <span>Tenant: Wateen Medical Center (Algiers, DZ)</span>
           </div>
         </div>
 

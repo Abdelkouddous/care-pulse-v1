@@ -6,7 +6,12 @@ module.exports = {
   content: [
     "./app/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
+    "./features/**/*.{ts,tsx}",
     "./lib/**/*.{ts,tsx}",
+    "./apps/web/app/**/*.{ts,tsx}",
+    "./apps/web/components/**/*.{ts,tsx}",
+    "./apps/web/features/**/*.{ts,tsx}",
+    "./apps/web/lib/**/*.{ts,tsx}",
   ],
   theme: {
     container: {
@@ -18,6 +23,14 @@ module.exports = {
     },
     extend: {
       colors: {
+        brand: {
+          primary: "#008668",
+          aqua: "#33CCCC",
+          accent: "#FF9B33",
+          "surface-light": "#F2F2F2",
+          "surface-dark": "#0B131E",
+          "surface-dark-secondary": "#111C2D",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -72,6 +85,8 @@ module.exports = {
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        heading: ["var(--font-heading)", "Poppins", "Cairo", ...fontFamily.sans],
+        arabic: ["'IBM Plex Sans Arabic'", "Cairo", ...fontFamily.sans],
       },
       keyframes: {
         "accordion-down": {

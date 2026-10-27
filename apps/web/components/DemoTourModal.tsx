@@ -116,7 +116,7 @@ export function DemoTourModal({ variant = "button", className }: DemoTourModalPr
                   Interactive MVP Tour
                 </span>
                 <p className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200">
-                  Evaluate VitalBook across Patient & Doctor roles in 1 click
+                  Evaluate Wateen Book across Patient & Doctor roles in 1 click
                 </p>
               </div>
             </div>
@@ -145,7 +145,7 @@ export function DemoTourModal({ variant = "button", className }: DemoTourModalPr
             </span>
           </div>
           <DialogTitle className="text-2xl font-extrabold text-foreground">
-            VitalBook Sandbox Environment
+            Wateen Book Sandbox Environment
           </DialogTitle>
           <DialogDescription className="text-xs sm:text-sm text-muted-foreground">
             Experience role-based clinical scheduling workflows in 1 click without manual registration.

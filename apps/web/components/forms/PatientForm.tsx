@@ -94,7 +94,7 @@ export function PatientForm() {
           </p>
           {/* Trust Metric Indicator */}
           <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
-            {DICTIONARY_EN.hero.trustBar}
+            {DICTIONARY_EN.common.freeForPatients}
           </p>
         </div>
 
@@ -105,10 +105,10 @@ export function PatientForm() {
               <form onSubmit={form.handleSubmit(onSubmit)} className="p-2 sm:p-4">
                 <CardHeader className="text-center space-y-1 pb-4 pt-4">
                   <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-                    {DICTIONARY_EN.hero.form.title}
+                    {DICTIONARY_EN.auth.fastTrackTitle}
                   </h2>
                   <p className="text-sm text-slate-500 dark:text-slate-400">
-                    {DICTIONARY_EN.hero.form.subtitle}
+                    {DICTIONARY_EN.auth.fastTrackSubtitle}
                   </p>
                 </CardHeader>
 
@@ -117,8 +117,8 @@ export function PatientForm() {
                     fieldType={FormFieldType.PHONE_INPUT}
                     control={form.control}
                     name="phone"
-                    label={DICTIONARY_EN.hero.form.phoneLabel}
-                    placeholder={DICTIONARY_EN.hero.form.phonePlaceholder}
+                    label={DICTIONARY_EN.auth.phoneLabel}
+                    placeholder={DICTIONARY_EN.auth.phonePlaceholder}
                     iconSrc="/assets/icons/user.svg"
                     iconAlt="user"
                     onKeyDown={handleKeyDown}
@@ -131,14 +131,14 @@ export function PatientForm() {
                     size="lg"
                     className="w-full font-bold shadow-lg"
                   >
-                    {DICTIONARY_EN.hero.form.submitButton}
+                    {DICTIONARY_EN.auth.continueButton}
                   </SubmitButton>
 
                   {/* Doctor Portal Navigation */}
                   <div className="border-t border-slate-200 pt-6 dark:border-slate-800">
                     <div className="text-center space-y-2">
                       <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                        {DICTIONARY_EN.hero.portals.doctorTitle}
+                        {DICTIONARY_EN.auth.practitionerPrompt}
                       </p>
                       <Link href="/?doctor=true" className="block">
                         <Button
@@ -147,7 +147,7 @@ export function PatientForm() {
                           size="default"
                           className="w-full"
                         >
-                          {DICTIONARY_EN.hero.portals.doctorAction}
+                          {DICTIONARY_EN.auth.practitionerLink}
                         </Button>
                       </Link>
                     </div>
@@ -161,7 +161,7 @@ export function PatientForm() {
           <div className="w-full md:max-w-md flex flex-col justify-center space-y-4">
             <div className="text-left space-y-1">
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                Evaluating VitalBook MVP?
+                Evaluating Wateen Book MVP?
               </span>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white">
                 Interactive Role Sandbox

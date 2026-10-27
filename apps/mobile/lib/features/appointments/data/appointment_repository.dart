@@ -67,7 +67,7 @@ class AppointmentRepository {
           firstName: 'Amine',
           lastName: 'Mansouri',
           name: 'Dr. Amine Mansouri',
-          email: 'dr.mansouri@vitalbook.com',
+          email: 'dr.mansouri@wateensoft.com',
           phone: '+213 550 11 22 33',
           consultationFeeCents: 450000,
           licenseNumber: 'DZ-MSPRH-16-10492',

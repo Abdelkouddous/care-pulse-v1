@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Phone } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
@@ -15,7 +15,8 @@ import { Button } from "@/components/ui/button";
 import { BrandLogo } from "@/components/BrandLogo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { DemoTourModal } from "@/components/DemoTourModal";
-import { DICTIONARY_EN } from "@/constants/locales/en";
+import { BilingualLanguageToggle } from "@/components/landing/BilingualLanguageToggle";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface MainNavProps {
   items?: NavItem[];
@@ -25,36 +26,56 @@ interface MainNavProps {
 export function MainNav({ items, userId }: MainNavProps) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const [activeSection, setActiveSection] = useState<string>("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState("patient");
+  const { t, locale, setLocale } = useLanguage();
   const { theme, setTheme } = useTheme();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const token =
         localStorage.getItem("vitalbook_token") ||
-        localStorage.getItem("vitalbook_token") ||
         localStorage.getItem("user_token");
-      const role =
-        localStorage.getItem("vitalbook_role") ||
-        localStorage.getItem("vitalbook_role") ||
-        "patient";
+      const role = localStorage.getItem("vitalbook_role") || "patient";
       setIsAuthenticated(!!token);
       setUserRole(role);
     }
   }, [pathname]);
 
+  // Scroll-spy to dynamically track active landing section
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolling(true);
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-      scrollTimeoutRef.current = setTimeout(() => setIsScrolling(false), 2000);
-      setLastScrollY(window.scrollY);
+    const sectionIds = ["how-it-works", "doctors", "clinics", "pricing", "contact"];
+
+    const handleScrollSpy = () => {
+      // If user is at top of page, no section is active
+      if (window.scrollY < 240) {
+        setActiveSection("");
+        return;
+      }
+
+      const scrollPosition = window.scrollY + 140; // offset for sticky header
+      let current = "";
+
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            current = id;
+            break;
+          }
+        }
+      }
+      setActiveSection(current);
     };
+
+    window.addEventListener("scroll", handleScrollSpy, { passive: true });
+    handleScrollSpy();
 
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -65,20 +86,21 @@ export function MainNav({ items, userId }: MainNavProps) {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScrollSpy);
       document.removeEventListener("mousedown", handleClickOutside);
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
     };
   }, []);
 
-  const baseNavItems = items || [
-    { title: DICTIONARY_EN.nav.home, href: "/" },
-    { title: DICTIONARY_EN.nav.about, href: "/#about" },
-    { title: DICTIONARY_EN.nav.doctors, href: "/#doctors" },
+  // Ordered strictly as: How it works -> Doctors -> Clinics -> Pricing -> Contact
+  const baseNavItems = [
+    { title: t.nav.howItWorks, href: "/#how-it-works", id: "how-it-works" },
+    { title: t.nav.doctors, href: "/#doctors", id: "doctors" },
+    { title: t.nav.clinics, href: "/#clinics", id: "clinics" },
+    { title: t.nav.pricing, href: "/#pricing", id: "pricing" },
+    { title: t.nav.contact, href: "/#contact", id: "contact" },
   ];
 
   const dashboardHref =
@@ -89,99 +111,115 @@ export function MainNav({ items, userId }: MainNavProps) {
       : "/patient/dashboard";
 
   const mainNavItems = isAuthenticated
-    ? [...baseNavItems, { title: "Dashboard", href: dashboardHref }]
+    ? [...baseNavItems, { title: t.nav.patientDashboard, href: dashboardHref, id: "dashboard" }]
     : baseNavItems;
 
   return (
     <nav
       ref={dropdownRef}
-      className={`sticky top-0 z-50 w-full ${
-        isScrolling ? "opacity-100" : "opacity-95"
-      } border-b border-slate-200 bg-white/80 backdrop-blur-md transition-all duration-300 ease-in-out dark:border-slate-800 dark:bg-slate-900/90`}
+      className="sticky top-0 z-50 w-full border-b border-slate-200/90 bg-white/95 backdrop-blur-md transition-all duration-300 ease-in-out dark:border-slate-800/90 dark:bg-slate-900/95 shadow-xs"
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Brand Logo */}
-          <BrandLogo size={38} />
+      <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-12">
+        <div className="flex h-16 items-center justify-between gap-x-4">
+          {/* Left Cluster: Brand Logo + Desktop Nav Links (Zero collision, no wrapping) */}
+          <div className="flex items-center gap-x-6 xl:gap-x-8 shrink-0 min-w-0">
+            <BrandLogo size={36} className="shrink-0" />
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden items-center space-x-6 md:flex">
-            {mainNavItems.map((item, index) => {
-              const href = item.href?.includes("$userId")
-                ? item.href.replace("$userId", userId || "")
-                : item.href || "#";
+            {/* Desktop Navigation Links with Scroll-Spy Active Indicators */}
+            <div className="hidden lg:flex items-center gap-x-4 xl:gap-x-6 text-xs xl:text-sm font-semibold whitespace-nowrap shrink-0">
+              {mainNavItems.map((item, index) => {
+                const isActive = activeSection === item.id;
 
-              return (
-                <Link
-                  key={index}
-                  href={href}
-                  className={cn(
-                    "text-sm font-medium text-slate-600 hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400 transition-colors",
-                    pathname === href &&
-                      "text-emerald-600 dark:text-emerald-400 font-semibold",
-                    item.disabled && "cursor-not-allowed opacity-50"
-                  )}
-                >
-                  {item.title}
-                </Link>
-              );
-            })}
+                return (
+                  <Link
+                    key={index}
+                    href={item.href}
+                    className={cn(
+                      "relative py-1 transition-colors whitespace-nowrap hover:text-emerald-600 dark:hover:text-emerald-400",
+                      isActive
+                        ? "font-bold text-emerald-600 dark:text-emerald-400"
+                        : "text-slate-600 dark:text-slate-300"
+                    )}
+                  >
+                    {item.title}
+                    {isActive && (
+                      <span className="absolute inset-x-0 -bottom-1 h-0.5 rounded-full bg-emerald-600 dark:bg-emerald-400" />
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
 
-          {/* Right Action Bar */}
-          <div className="flex items-center space-x-3">
-            {/* MVP Demo Sandbox Button */}
-            <div className="hidden sm:block">
-              <DemoTourModal />
-            </div>
+          {/* Right Action Bar (RTL-Safe gap) */}
+          <div className="flex items-center gap-x-2 sm:gap-x-2.5 shrink-0">
+            {/* Direct Phone Helpline Number (Visible on wide screens) */}
+            <a
+              href="tel:+213549882456"
+              className="hidden 2xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50/80 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-xs font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors whitespace-nowrap"
+              title="Ligne Téléphonique Directe"
+            >
+              <Phone className="size-3.5" />
+              <span>+213 549 88 24 56</span>
+            </a>
 
-            {/* Real Sign In / Patient Dashboard Button */}
+            {/* MVP Demo Sandbox Button (Gated behind NEXT_PUBLIC_DEMO_MODE) */}
+            {showDemoMode && (
+              <div className="hidden xl:block shrink-0">
+                <DemoTourModal />
+              </div>
+            )}
+
+            {/* Language Switcher (FR / عربي / EN) */}
+            <BilingualLanguageToggle className="hidden sm:inline-flex shrink-0" />
+
+            {/* Theme Toggle */}
+            <ThemeToggle className="size-9 rounded-xl border border-slate-200 dark:border-slate-800 shrink-0" />
+
+            {/* Auth CTA Actions */}
             {isAuthenticated ? (
-              <Link href={dashboardHref} className="hidden sm:block">
+              <Link href={dashboardHref} className="hidden sm:block shrink-0">
                 <Button
                   roleVariant="patient"
                   size="sm"
-                  className="rounded-xl text-xs font-bold px-3.5 shadow-sm bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer"
+                  className="rounded-xl text-xs font-bold px-3.5 shadow-sm bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer whitespace-nowrap"
                 >
                   {userRole === "doctor"
-                    ? "Doctor Portal"
+                    ? t.nav.doctorPortal
                     : userRole === "admin"
                     ? "Admin Portal"
-                    : "Patient Dashboard"}
+                    : t.nav.patientDashboard}
                 </Button>
               </Link>
             ) : (
-              <div className="hidden sm:flex items-center gap-2">
+              <div className="hidden sm:flex items-center gap-x-2 shrink-0">
                 <Link href="/login">
                   <Button
                     roleVariant="ghost"
                     size="sm"
-                    className="rounded-xl text-xs font-semibold px-3 text-slate-700 dark:text-slate-300 hover:text-emerald-500 cursor-pointer"
+                    className="rounded-xl text-xs font-semibold px-3 text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 cursor-pointer whitespace-nowrap"
                   >
-                    Sign In
+                    {t.nav.signIn}
                   </Button>
                 </Link>
                 <Link href="/register">
                   <Button
                     roleVariant="patient"
                     size="sm"
-                    className="rounded-xl text-xs font-bold px-3.5 shadow-sm bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer"
+                    className="rounded-xl text-xs font-bold px-3.5 shadow-sm bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer whitespace-nowrap"
                   >
-                    Register
+                    {t.nav.register}
                   </Button>
                 </Link>
               </div>
             )}
 
-            {/* Theme Toggle */}
-            <ThemeToggle className="size-9 rounded-xl border border-slate-200 dark:border-slate-800" />
-
-            {/* Mobile Navigation Toggle */}
+            {/* Mobile / Tablet Navigation Drawer Toggle (Triggered below lg: 1024px) */}
             <Button
               roleVariant="ghost"
               size="icon"
               onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-              className="rounded-xl p-2 hover:bg-slate-100 dark:hover:bg-slate-800 md:hidden"
+              className="rounded-xl p-2 hover:bg-slate-100 dark:hover:bg-slate-800 lg:hidden shrink-0"
               aria-label="Toggle menu"
             >
               <FiAlignJustify className="size-5 text-slate-600 dark:text-slate-300" />
@@ -189,23 +227,22 @@ export function MainNav({ items, userId }: MainNavProps) {
           </div>
         </div>
 
-        {/* Mobile Flyout Menu */}
+        {/* Mobile / Tablet Flyout Drawer Menu */}
         {isMobileMenuOpen && (
-          <div className="pb-4 md:hidden border-t border-slate-100 dark:border-slate-800">
+          <div className="pb-4 lg:hidden border-t border-slate-100 dark:border-slate-800">
             <div className="space-y-1 pt-3">
               {mainNavItems.map((item, index) => {
-                const href = item.href?.includes("$userId")
-                  ? item.href.replace("$userId", userId || "")
-                  : item.href || "#";
+                const isActive = activeSection === item.id;
 
                 return (
                   <Link
                     key={index}
-                    href={href}
+                    href={item.href}
                     className={cn(
-                      "block rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800",
-                      pathname === href &&
-                        "bg-emerald-50 text-emerald-600 dark:bg-slate-800 dark:text-emerald-400 font-bold"
+                      "block rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors",
+                      isActive
+                        ? "bg-emerald-50 text-emerald-600 dark:bg-slate-800 dark:text-emerald-400 font-bold"
+                        : "text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
                     )}
                     onClick={() => setMobileMenuOpen(false)}
                   >
@@ -214,9 +251,11 @@ export function MainNav({ items, userId }: MainNavProps) {
                 );
               })}
               <div className="pt-2 space-y-2">
-                <div className="w-full">
-                  <DemoTourModal className="w-full justify-center" />
-                </div>
+                {showDemoMode && (
+                  <div className="w-full">
+                    <DemoTourModal className="w-full justify-center" />
+                  </div>
+                )}
                 {isAuthenticated ? (
                   <Link
                     href={dashboardHref}
@@ -224,10 +263,10 @@ export function MainNav({ items, userId }: MainNavProps) {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {userRole === "doctor"
-                      ? "Doctor Portal"
+                      ? t.nav.doctorPortal
                       : userRole === "admin"
                       ? "Admin Portal"
-                      : "Patient Dashboard"}
+                      : t.nav.patientDashboard}
                   </Link>
                 ) : (
                   <div className="grid grid-cols-2 gap-2">
@@ -236,17 +275,28 @@ export function MainNav({ items, userId }: MainNavProps) {
                       className="block rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2.5 text-center text-sm font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      {DICTIONARY_EN.nav.signIn}
+                      {t.nav.signIn}
                     </Link>
                     <Link
                       href="/register"
                       className="block rounded-xl bg-emerald-600 px-3 py-2.5 text-center text-sm font-bold text-white hover:bg-emerald-700 shadow-md"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      Register
+                      {t.nav.register}
                     </Link>
                   </div>
                 )}
+                {/* Mobile Direct Helpline & Language Switcher */}
+                <div className="pt-2 flex flex-col items-center gap-2">
+                  <a
+                    href="tel:+213549882456"
+                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-xs font-bold"
+                  >
+                    <Phone className="size-4" />
+                    <span>Ligne Directe : +213 549 88 24 56</span>
+                  </a>
+                  <BilingualLanguageToggle />
+                </div>
               </div>
             </div>
           </div>
@@ -255,3 +305,5 @@ export function MainNav({ items, userId }: MainNavProps) {
     </nav>
   );
 }
+
+export default MainNav;

@@ -18,14 +18,14 @@ export const Icons = {
     <div className="inline-flex items-center gap-2.5">
       <Image
         src="/favicon.svg"
-        alt="VitalBook"
+        alt="Wateen Book"
         width={props.size || 38}
         height={props.size || 38}
         priority
       />
       <span className="font-sans text-lg font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
-        Vital
-        <span className="font-light text-teal-600 dark:text-teal-400">
+        Wateen
+        <span className="font-light text-[#33CCCC]">
           Book
         </span>
       </span>

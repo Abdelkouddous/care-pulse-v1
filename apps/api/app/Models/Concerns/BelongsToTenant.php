@@ -2,6 +2,7 @@
 
 namespace App\Models\Concerns;
 
+use App\Models\Clinic;
 use App\Services\TenantContext;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ class TenantScope implements Scope
         $tenantContext = app(TenantContext::class);
 
         if ($tenantContext->hasTenant()) {
-            $builder->where($model->getTable() . '.clinic_id', $tenantContext->getTenantId());
+            $builder->where($model->getTable().'.clinic_id', $tenantContext->getTenantId());
         }
     }
 }
@@ -35,6 +36,6 @@ trait BelongsToTenant
 
     public function clinic()
     {
-        return $this->belongsTo(\App\Models\Clinic::class, 'clinic_id');
+        return $this->belongsTo(Clinic::class, 'clinic_id');
     }
 }

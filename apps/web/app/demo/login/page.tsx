@@ -392,7 +392,7 @@ export default function DemoLoginPage() {
 
       {/* Footer */}
       <footer className="w-full border-t border-slate-200 dark:border-slate-800 py-6 px-4 text-center text-xs text-slate-500 dark:text-slate-400">
-        VitalBook™ Health System Architecture • Built strictly with Integer Money Guard & UUIDv4 Entity Modeling.
+        Wateen Book™ Health System Architecture • Built strictly with Integer Money Guard & UUIDv4 Entity Modeling.
       </footer>
     </div>
   );

@@ -16,11 +16,14 @@ class SendWhatsAppAppointmentReminderJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
-    public int $backoff = 30;
+
+    public array $backoff = [10, 30, 90];
 
     public function __construct(
         public string $appointmentId
-    ) {}
+    ) {
+        $this->onQueue('notifications');
+    }
 
     public function handle(WhatsAppNotificationService $whatsAppService): void
     {
@@ -30,9 +33,30 @@ class SendWhatsAppAppointmentReminderJob implements ShouldQueue
             Log::warning('[WhatsApp Job] Appointment not found for dispatch', [
                 'appointment_id' => $this->appointmentId,
             ]);
+
             return;
         }
 
-        $whatsAppService->sendAppointmentConfirmationRequest($appointment);
+        $result = $whatsAppService->sendAppointmentConfirmationRequest($appointment);
+
+        if (! ($result['success'] ?? false)) {
+            Log::warning('[WhatsApp Job] Gateway dispatch unsuccessful', [
+                'appointment_id' => $this->appointmentId,
+                'error' => $result['error'] ?? 'unknown',
+            ]);
+        }
+    }
+
+    public function failed(?\Throwable $exception): void
+    {
+        Log::error('[WhatsApp Job] All retry attempts exhausted', [
+            'appointment_id' => $this->appointmentId,
+            'exception' => $exception?->getMessage(),
+        ]);
+
+        $appointment = Appointment::find($this->appointmentId);
+        if ($appointment) {
+            $appointment->update(['whatsapp_status' => 'failed']);
+        }
     }
 }

@@ -5,7 +5,6 @@ namespace App\Services;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class FirebaseTokenService
 {
@@ -50,14 +49,14 @@ class FirebaseTokenService
 
         // 2. Verify Standard Claims (aud, iss, exp)
         $expectedAud = $this->projectId;
-        $expectedIss = 'https://securetoken.google.com/' . $this->projectId;
+        $expectedIss = 'https://securetoken.google.com/'.$this->projectId;
 
         if (($payload['aud'] ?? '') !== $expectedAud) {
-            throw new Exception("Audience mismatch: expected {$expectedAud}, got " . ($payload['aud'] ?? ''));
+            throw new Exception("Audience mismatch: expected {$expectedAud}, got ".($payload['aud'] ?? ''));
         }
 
         if (($payload['iss'] ?? '') !== $expectedIss) {
-            throw new Exception("Issuer mismatch: expected {$expectedIss}, got " . ($payload['iss'] ?? ''));
+            throw new Exception("Issuer mismatch: expected {$expectedIss}, got ".($payload['iss'] ?? ''));
         }
 
         if (isset($payload['exp']) && time() > $payload['exp']) {
@@ -70,6 +69,7 @@ class FirebaseTokenService
             if (! $res->successful()) {
                 throw new Exception('Failed to fetch Google public certificates.');
             }
+
             return $res->json();
         });
 
@@ -88,7 +88,7 @@ class FirebaseTokenService
         $publicKey = $certs[$kid];
 
         // 4. Verify Cryptographic Signature with OpenSSL
-        $dataToVerify = $headerB64 . '.' . $payloadB64;
+        $dataToVerify = $headerB64.'.'.$payloadB64;
         $verifyResult = openssl_verify($dataToVerify, $signature, $publicKey, OPENSSL_ALGO_SHA256);
 
         if ($verifyResult !== 1) {
@@ -108,6 +108,7 @@ class FirebaseTokenService
             $padLen = 4 - $remainder;
             $input .= str_repeat('=', $padLen);
         }
+
         return base64_decode(strtr($input, '-_', '+/'));
     }
 }

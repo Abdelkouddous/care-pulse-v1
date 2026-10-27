@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/api_endpoints.dart';
 import '../../../core/network/dio_client.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/vitalbook_logo.dart';
+import '../../../core/widgets/wateen_logo.dart';
 import 'auth_controller.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -26,7 +27,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
   // Splash typewriter state
   bool _isShowingSplash = true;
   String _typedText = '';
-  static const String _fullTargetText = 'VitalBook';
+  static const String _fullTargetText = 'Wateen Book';
   Timer? _typewriterTimer;
   bool _showCursor = true;
   Timer? _cursorTimer;
@@ -239,13 +240,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
                   children: [
                     // Unified Brand Icon
                     const Center(
-                      child: VitalBookLogoWidget(size: 72),
+                      child: WateenBookLogoWidget(size: 72),
                     ),
                     const SizedBox(height: 16),
 
-                    // Unified Brand Title (Vital [bold] + Book [light])
+                    // Unified Brand Title (Wateen [bold] + Book [aqua])
                     Center(
-                      child: VitalBookBrandText(
+                      child: WateenBrandText(
                         fontSize: 30,
                         isDark: isDark,
                       ),
@@ -356,7 +357,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
                       children: [
                         const Spacer(),
                         // Animated Brand Logo Entrance
-                        const VitalBookLogoWidget(size: 88),
+                        const WateenBookLogoWidget(size: 88),
                         const SizedBox(height: 24),
 
                         // Letter-by-letter Typewriter Text
@@ -364,7 +365,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
 
                         const SizedBox(height: 12),
                         Text(
-                          'HealthTech Solutions by Vital Soft',
+                          'HealthTech Solutions by WateenSoft',
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
@@ -385,7 +386,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
                                 height: 14,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0D9488)),
+                                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF008668)),
                                 ),
                               ),
                               const SizedBox(width: 10),
@@ -411,15 +412,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
   }
 
   Widget _buildTypewriterText(bool isDark) {
-    // Splits typed text between "Vital" (bold) and "Book" (light teal)
-    String vitalPart = '';
+    // Splits typed text between "Wateen" (bold) and "Book" (aqua)
+    String wateenPart = '';
     String bookPart = '';
 
-    if (_typedText.length <= 5) {
-      vitalPart = _typedText;
+    if (_typedText.length <= 6) {
+      wateenPart = _typedText;
     } else {
-      vitalPart = 'Vital';
-      bookPart = _typedText.substring(5);
+      wateenPart = 'Wateen ';
+      bookPart = _typedText.substring(math.min(7, _typedText.length));
     }
 
     return RichText(
@@ -427,11 +428,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
         style: const TextStyle(
           fontSize: 34,
           letterSpacing: -0.5,
-          fontFamily: 'Inter',
+          fontFamily: 'Poppins',
         ),
         children: [
           TextSpan(
-            text: vitalPart,
+            text: wateenPart,
             style: TextStyle(
               fontWeight: FontWeight.w800,
               color: isDark ? Colors.white : const Color(0xFF0F172A),
@@ -440,8 +441,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
           TextSpan(
             text: bookPart,
             style: const TextStyle(
-              fontWeight: FontWeight.w300,
-              color: Color(0xFF0D9488),
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF33CCCC),
             ),
           ),
           if (_showCursor)
@@ -449,7 +450,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
               text: '▎',
               style: TextStyle(
                 fontWeight: FontWeight.w400,
-                color: Color(0xFF0D9488),
+                color: Color(0xFF33CCCC),
                 fontSize: 30,
               ),
             ),

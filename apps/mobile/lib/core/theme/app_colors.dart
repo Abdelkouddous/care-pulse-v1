@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
+import '../config/brand_config.dart';
 
 class AppColors {
   AppColors._();
 
-  // Vital Soft Signature Brand Palette
-  static const Color vitalTeal = Color(0xFF006666);
-  static const Color aquaGreen = Color(0xFF33CCCC);
-  static const Color warmOrange = Color(0xFFFF9833);
-  static const Color softGray = Color(0xFFF2F2F2);
+  // WateenSoft Signature Brand Palette
+  static const Color wateenTeal = BrandConfig.brandPrimary; // #008668
+  static const Color pulseAqua = BrandConfig.brandAqua; // #33CCCC
+  static const Color warmOrange = BrandConfig.brandAccent; // #FF9B33
+  static const Color softGray = BrandConfig.brandSurfaceLight; // #F2F2F2
+  static const Color slateDark = BrandConfig.brandSurfaceDark; // #0B131E
+  static const Color slateDarkSecondary = BrandConfig.brandSurfaceDarkSecondary; // #111C2D
+  static const Color brandPrimary = wateenTeal;
+  static const Color brandAqua = pulseAqua;
+  static const Color brandAccent = warmOrange;
+
+  // Backwards-compatible aliases
+  static const Color vitalTeal = wateenTeal;
+  static const Color aquaGreen = pulseAqua;
 
   // Healthcare Light Theme Tokens (from Next.js globals.css)
-  static const Color lightPrimary = Color(0xFF0D9488);
+  static const Color lightPrimary = Color(0xFF008668);
   static const Color lightPrimaryForeground = Colors.white;
   static const Color lightBackground = Color(0xFFF8FAFC);
   static const Color lightForeground = Color(0xFF0F172A);
@@ -25,11 +35,11 @@ class AppColors {
   static const Color lightInput = Color(0xFFE2E8F0);
 
   // Healthcare Dark Theme Tokens (from Next.js globals.css)
-  static const Color darkPrimary = Color(0xFF14B8A6);
+  static const Color darkPrimary = Color(0xFF33CCCC);
   static const Color darkPrimaryForeground = Color(0xFF042F2E);
-  static const Color darkBackground = Color(0xFF090E17);
+  static const Color darkBackground = Color(0xFF0B131E);
   static const Color darkForeground = Color(0xFFF8FAFC);
-  static const Color darkCard = Color(0xFF0F172A);
+  static const Color darkCard = Color(0xFF111C2D);
   static const Color darkCardForeground = Color(0xFFF8FAFC);
   static const Color darkSecondary = Color(0xFF1E293B);
   static const Color darkSecondaryForeground = Color(0xFFF8FAFC);

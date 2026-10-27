@@ -51,4 +51,14 @@ return [
         ],
     ],
 
+    'sms' => [
+        'driver' => env('SMS_DRIVER', 'log'),
+        'from_number' => env('SMS_FROM_NUMBER', '+14155238886'),
+        'twilio' => [
+            'sid' => env('TWILIO_ACCOUNT_SID'),
+            'token' => env('TWILIO_AUTH_TOKEN'),
+            'from' => env('TWILIO_SMS_FROM', '+14155238886'),
+        ],
+    ],
+
 ];

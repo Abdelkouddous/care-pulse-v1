@@ -17,7 +17,7 @@ apiClient.interceptors.request.use(
   (config) => {
     if (typeof window !== "undefined") {
       const token =
-        localStorage.getItem("vitalbook_token") ||
+        localStorage.getItem("wateenbook_token") ||
         localStorage.getItem("vitalbook_token") ||
         localStorage.getItem("user_token");
       if (token) {
@@ -25,7 +25,7 @@ apiClient.interceptors.request.use(
       }
 
       const clinicId =
-        localStorage.getItem("vitalbook_clinic_id") ||
+        localStorage.getItem("wateenbook_clinic_id") ||
         localStorage.getItem("vitalbook_clinic_id") ||
         process.env.NEXT_PUBLIC_DEFAULT_CLINIC_ID;
       if (clinicId) {

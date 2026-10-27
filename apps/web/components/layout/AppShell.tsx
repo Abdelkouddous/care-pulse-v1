@@ -145,6 +145,11 @@ export function AppShell({
         icon: Calendar,
       },
       {
+        label: "Activity Feed",
+        href: "/doctors/dashboard/activity",
+        icon: Activity,
+      },
+      {
         label: "Patients",
         href: "/doctors/dashboard#patients",
         icon: Users,
@@ -262,7 +267,7 @@ export function AppShell({
     setMobileMenuOpen(false);
   }, [pathname]);
 
-  const notificationsList = [
+  const [notificationsList, setNotificationsList] = useState([
     {
       id: "n1",
       title: "Consultation Confirmed",
@@ -284,7 +289,30 @@ export function AppShell({
       time: "1d ago",
       read: true,
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    const handleNotificationEvent = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail) {
+        setNotificationsList((prev) => [
+          {
+            id: `n-${Date.now()}`,
+            title: customEvent.detail.title || "New Appointment Booked",
+            desc: customEvent.detail.message || "You have a new appointment.",
+            time: "Just now",
+            read: false,
+          },
+          ...prev,
+        ]);
+      }
+    };
+
+    window.addEventListener("vitalbook:notification", handleNotificationEvent);
+    return () => window.removeEventListener("vitalbook:notification", handleNotificationEvent);
+  }, []);
+
+  const unreadNotificationsCount = notificationsList.filter((item) => !item.read).length;
 
   const isItemActive = (href: string) => {
     const [itemPath, itemHash] = href.split("#");
@@ -391,14 +419,14 @@ export function AppShell({
             )}
           >
             <Avatar className="size-8 rounded-lg shrink-0">
-              <AvatarFallback className="bg-primary/20 text-primary text-xs font-bold rounded-lg">
+              <AvatarFallback suppressHydrationWarning className="bg-primary/20 text-primary text-xs font-bold rounded-lg">
                 {userInitials}
               </AvatarFallback>
             </Avatar>
 
             {!isCollapsed && (
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-foreground truncate">
+                <p suppressHydrationWarning className="text-xs font-semibold text-foreground truncate">
                   {userName}
                 </p>
                 <p className="text-[10px] text-muted-foreground capitalize truncate">
@@ -486,12 +514,12 @@ export function AppShell({
             <div className="pt-4 border-t border-border flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Avatar className="size-9 rounded-lg">
-                  <AvatarFallback className="bg-primary/20 text-primary font-bold text-xs">
+                  <AvatarFallback suppressHydrationWarning className="bg-primary/20 text-primary font-bold text-xs">
                     {userInitials}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="text-xs font-semibold text-foreground truncate max-w-[120px]">
+                  <p suppressHydrationWarning className="text-xs font-semibold text-foreground truncate max-w-[120px]">
                     {userName}
                   </p>
                   <p className="text-[10px] text-muted-foreground capitalize">{detectedRole}</p>
@@ -530,7 +558,7 @@ export function AppShell({
             {/* Breadcrumb Trail */}
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Link href="/" className="hover:text-foreground transition-colors font-medium">
-                VitalBook
+                Wateen Book
               </Link>
               <ChevronRight className="size-3 text-muted-foreground/60" />
               <span className="font-semibold text-foreground capitalize">
@@ -565,29 +593,59 @@ export function AppShell({
                   aria-label="Open notifications"
                 >
                   <Bell className="size-4 text-foreground" />
-                  <span className="absolute top-1.5 right-1.5 size-2 bg-emerald-500 rounded-full ring-2 ring-background" />
+                  {unreadNotificationsCount > 0 ? (
+                    <span
+                      data-testid="notification-badge"
+                      className="absolute -top-1 -right-1 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-rose-500 rounded-full ring-2 ring-background animate-pulse shadow-sm"
+                    >
+                      {unreadNotificationsCount > 9 ? "9+" : unreadNotificationsCount}
+                    </span>
+                  ) : (
+                    <span className="absolute top-1.5 right-1.5 size-2 bg-emerald-500 rounded-full ring-2 ring-background opacity-60" />
+                  )}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-80 p-0 rounded-2xl border border-border shadow-xl">
                 <div className="p-3 border-b border-border flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-foreground">
-                    Notifications
-                  </span>
-                  <span className="text-[10px] font-semibold text-primary px-2 py-0.5 rounded-full bg-primary/10">
-                    2 New
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold uppercase tracking-wider text-foreground">
+                      Notifications
+                    </span>
+                    {unreadNotificationsCount > 0 && (
+                      <span className="text-[10px] font-bold text-white px-1.5 py-0.5 rounded-full bg-rose-500">
+                        {unreadNotificationsCount} New
+                      </span>
+                    )}
+                  </div>
+                  {unreadNotificationsCount > 0 && (
+                    <button
+                      onClick={() =>
+                        setNotificationsList((prev) => prev.map((n) => ({ ...n, read: true })))
+                      }
+                      className="text-[10px] font-semibold text-primary hover:underline"
+                    >
+                      Mark all read
+                    </button>
+                  )}
                 </div>
                 <div className="divide-y divide-border/60 max-h-72 overflow-y-auto">
                   {notificationsList.map((item) => (
                     <div
                       key={item.id}
+                      onClick={() =>
+                        setNotificationsList((prev) =>
+                          prev.map((n) => (n.id === item.id ? { ...n, read: true } : n))
+                        )
+                      }
                       className={cn(
                         "p-3 space-y-1 hover:bg-secondary/40 transition-colors cursor-pointer text-xs",
                         !item.read && "bg-primary/5"
                       )}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-foreground">{item.title}</span>
+                        <span className={cn("text-foreground", !item.read ? "font-bold" : "font-medium")}>
+                          {item.title}
+                        </span>
                         <span className="text-[10px] text-muted-foreground">{item.time}</span>
                       </div>
                       <p className="text-muted-foreground line-clamp-2">{item.desc}</p>
@@ -596,7 +654,13 @@ export function AppShell({
                 </div>
                 <div className="p-2 border-t border-border text-center">
                   <Link
-                    href={detectedRole === "patient" ? "/patient/dashboard/appointments" : "#"}
+                    href={
+                      detectedRole === "doctor"
+                        ? "/doctors/dashboard/activity"
+                        : detectedRole === "patient"
+                        ? "/patient/dashboard/appointments"
+                        : "/admin/dashboard"
+                    }
                     onClick={() => setNotificationsOpen(false)}
                     className="text-[11px] font-semibold text-primary hover:underline"
                   >
@@ -617,7 +681,7 @@ export function AppShell({
                   className="p-0 size-8 rounded-lg hover:ring-2 hover:ring-primary/40 transition-all"
                 >
                   <Avatar className="size-8 rounded-lg border border-border">
-                    <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold rounded-lg">
+                    <AvatarFallback suppressHydrationWarning className="bg-primary/10 text-primary text-xs font-bold rounded-lg">
                       {userInitials}
                     </AvatarFallback>
                   </Avatar>
@@ -625,7 +689,7 @@ export function AppShell({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 rounded-2xl p-1.5 border border-border shadow-xl">
                 <DropdownMenuLabel className="px-3 py-2">
-                  <p className="text-xs font-bold text-foreground truncate">{userName}</p>
+                  <p suppressHydrationWarning className="text-xs font-bold text-foreground truncate">{userName}</p>
                   <p className="text-[10px] text-muted-foreground capitalize">{detectedRole} Account</p>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -724,7 +788,7 @@ export function AppShell({
         )}
 
         {/* Page Content Body */}
-        <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        <main className="flex-1 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-8 sm:py-10">
           {children}
         </main>
       </div>

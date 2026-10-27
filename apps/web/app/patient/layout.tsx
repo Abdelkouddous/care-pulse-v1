@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Patient Portal | VitalBook",
+  title: "Patient Portal | Wateen Book",
   description: "Manage your consultations, clinical records, and appointments.",
 };
 

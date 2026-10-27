@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BookAppointmentRequest;
 use App\Http\Requests\CancelAppointmentRequest;
 use App\Http\Resources\AppointmentResource;
+use App\Models\Admin;
+use App\Models\Doctor;
 use App\Services\AppointmentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -47,6 +49,8 @@ class AppointmentController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
 
+        $this->authorize('view', $appointment);
+
         return response()->json([
             'data' => new AppointmentResource($appointment),
         ]);
@@ -54,12 +58,27 @@ class AppointmentController extends Controller
 
     public function cancel(string $id, CancelAppointmentRequest $request): JsonResponse
     {
+        $appointment = $this->appointmentService->getAppointment($id);
+        if (! $appointment) {
+            return response()->json([
+                'errors' => [
+                    [
+                        'status' => '404',
+                        'title' => 'Not Found',
+                        'detail' => 'Appointment not found or could not be cancelled.',
+                    ],
+                ],
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $this->authorize('cancel', $appointment);
+
         $user = $request->user();
         $cancelledBy = 'patient';
 
-        if ($user instanceof \App\Models\Doctor) {
+        if ($user instanceof Doctor) {
             $cancelledBy = 'doctor';
-        } elseif ($user instanceof \App\Models\Admin) {
+        } elseif ($user instanceof Admin) {
             $cancelledBy = 'admin';
         }
 

@@ -1,44 +1,36 @@
+import BRAND_CONFIG from "./brand.config";
+
 export const siteConfig = {
-  name: "VitalBook",
-  description: "VitalBook — Enterprise Healthcare Appointment & Practice Management Platform by Vital Soft",
+  name: BRAND_CONFIG.app.name,
+  nameArabic: BRAND_CONFIG.app.nameArabic,
+  description: BRAND_CONFIG.app.description,
+  company: BRAND_CONFIG.company.name,
   mainNav: [
     {
-      title: "Home",
-      href: "/",
-    },
-
-    {
-      title: "About",
-      href: "/#about",
+      title: "How it works",
+      href: "/#how-it-works",
     },
     {
       title: "Doctors",
       href: "/#doctors",
     },
     {
-      title: "Services",
-      href: "/#services",
+      title: "Clinics",
+      href: "/#clinics",
+    },
+    {
+      title: "Pricing",
+      href: "/#pricing",
     },
     {
       title: "Contact",
       href: "/#contact",
     },
-
-    // isLoggedIn
-    //   ? {
-    //       title: "My Appointments",
-    //       href: `patients/${""}/new-appointment`,
-    //     }
-    //   : ((isLoggedIn = true),
-    //     {
-    //       title: "Login",
-    //       href: "/",
-    //     }),
   ],
   links: {
-    // twitter: "https://twitter.com/shadcn",
-    // github: "https://github.com/shadcn/ui",
-    // docs: "https://ui.shadcn.com",
+    support: `mailto:${BRAND_CONFIG.company.supportEmail}`,
+    contact: `mailto:${BRAND_CONFIG.company.contactEmail}`,
   },
 };
+
 export default siteConfig;

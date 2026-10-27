@@ -13,11 +13,12 @@ class TokenStorage {
               aOptions: AndroidOptions(),
               iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
               webOptions: WebOptions(
-                dbName: 'vitalbook_secure_storage',
-                publicKey: 'vitalbook_public_key',
+                dbName: 'wateenbook_secure_storage',
+                publicKey: 'wateenbook_public_key',
               ),
             );
 
+  static const String _wateenBookTokenKey = 'wateenbook_token';
   static const String _vitalBookTokenKey = 'vitalbook_token';
   static const String _userTokenKey = 'user_token';
   static const String _userRoleKey = 'user_role';
@@ -27,12 +28,14 @@ class TokenStorage {
     required String userToken,
     String? role,
   }) async {
+    _memoryCache[_wateenBookTokenKey] = vitalBookToken;
     _memoryCache[_vitalBookTokenKey] = vitalBookToken;
     _memoryCache[_userTokenKey] = userToken;
     if (role != null) _memoryCache[_userRoleKey] = role;
 
     try {
       await Future.wait([
+        _storage.write(key: _wateenBookTokenKey, value: vitalBookToken),
         _storage.write(key: _vitalBookTokenKey, value: vitalBookToken),
         _storage.write(key: _userTokenKey, value: userToken),
         if (role != null) _storage.write(key: _userRoleKey, value: role),
@@ -40,18 +43,25 @@ class TokenStorage {
     } catch (_) {}
   }
 
-  Future<String?> getVitalBookToken() async {
-    if (_memoryCache.containsKey(_vitalBookTokenKey)) {
-      return _memoryCache[_vitalBookTokenKey];
+  Future<String?> getWateenBookToken() async {
+    if (_memoryCache.containsKey(_wateenBookTokenKey)) {
+      return _memoryCache[_wateenBookTokenKey];
     }
     try {
-      final token = await _storage.read(key: _vitalBookTokenKey);
-      if (token != null) _memoryCache[_vitalBookTokenKey] = token;
+      String? token = await _storage.read(key: _wateenBookTokenKey);
+      token ??= await _storage.read(key: _vitalBookTokenKey);
+      if (token != null) {
+        _memoryCache[_wateenBookTokenKey] = token;
+        _memoryCache[_vitalBookTokenKey] = token;
+      }
       return token;
     } catch (_) {
       return null;
     }
   }
+
+  /// Backward-compatible alias for existing callers
+  Future<String?> getVitalBookToken() => getWateenBookToken();
 
   Future<String?> getUserToken() async {
     if (_memoryCache.containsKey(_userTokenKey)) {
@@ -81,7 +91,7 @@ class TokenStorage {
 
   Future<bool> hasValidToken() async {
     try {
-      final token = await getVitalBookToken();
+      final token = await getWateenBookToken();
       return token != null && token.isNotEmpty;
     } catch (_) {
       return false;
@@ -92,6 +102,7 @@ class TokenStorage {
     _memoryCache.clear();
     try {
       await Future.wait([
+        _storage.delete(key: _wateenBookTokenKey),
         _storage.delete(key: _vitalBookTokenKey),
         _storage.delete(key: _userTokenKey),
         _storage.delete(key: _userRoleKey),
